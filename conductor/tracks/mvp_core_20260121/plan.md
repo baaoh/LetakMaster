@@ -22,7 +22,7 @@
     - [ ] Write tests: Upload file -> Check DB records.
 
 ## Phase 3: PSD Automation Core
-- [ ] Task: Implement PSD Manipulation Service.
+- [x] Task: Implement PSD Manipulation Service. [b06fd2c]
     - [ ] Create `PSDService` using `psd-tools2`.
     - [ ] Implement `update_layers(template_path, data_mapping)`: Open PSD, find layers, update text.
     - [ ] Implement `read_layers(psd_path)`: Extract current values from a PSD.
