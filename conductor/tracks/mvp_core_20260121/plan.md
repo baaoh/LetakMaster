@@ -19,20 +19,20 @@
     - [ ] API: Endpoints for `/config`, `/sync`, `/history`, `/diff/{id1}/{id2}`.
 
 ## Phase 4: GUI - Tabbed Dashboard & Config
-- [ ] Task: Implement Tabbed Layout.
-    - [ ] Create `MainLayout` with Bootstrap Tabs.
-    - [ ] Create `DataInputTab` component.
-- [ ] Task: Implement Configuration & Sync UI.
-    - [ ] Form to set "Master Excel Path" and "Sheet Name".
-    - [ ] "Sync Now" button with status indicator.
-    - [ ] List of "History States" (timestamps).
+- [x] Task: Implement Tabbed Layout. [e50aab5]
+    - [x] Create `MainLayout` with Bootstrap Tabs.
+    - [x] Create `DataInputTab` component.
+- [x] Task: Implement Configuration & Sync UI. [e50aab5]
+    - [x] Form to set "Master Excel Path" and "Sheet Name".
+    - [x] "Sync Now" button with status indicator.
+    - [x] List of "History States" (timestamps).
 
 ## Phase 5: GUI - Data Visualization & Context
-- [ ] Task: Implement Data Grid & Diff View.
-    - [ ] Display the JSON data of the *Active State* in a virtualized grid (if large) or simple table.
-    - [ ] Visual indicator for "Current vs Live" status.
+- [x] Task: Implement Data Grid & Diff View. [632b1f8]
+    - [x] Display the JSON data of the *Active State* in a virtualized grid (if large) or simple table.
+    - [x] Visual indicator for "Current vs Live" status.
     - [ ] (Bonus) Highlight changes in the grid.
 
 ## Phase 6: Final Verification
-- [ ] Task: End-to-End Test.
-    - [ ] Set path -> Sync -> Edit Excel -> Sync again -> Verify new state created -> Load old state -> Verify Grid updates.
+- [x] Task: End-to-End Test. [b930070]
+    - [x] Set path -> Sync -> Edit Excel -> Sync again -> Verify new state created -> Load old state -> Verify Grid updates.
