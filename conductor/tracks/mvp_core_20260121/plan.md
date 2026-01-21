@@ -29,7 +29,7 @@
     - [ ] Write tests: Generate dummy PSD -> Verify layer text changed.
 
 ## Phase 4: The "Bridging" Logic & Verification
-- [ ] Task: Implement Integration Logic.
+- [x] Task: Implement Integration Logic. [dc8673f]
     - [ ] Create `BridgeService`.
     - [ ] Implement `generate_psd_from_data(row_id, template_id)`: Orchestrate DB fetch -> PSD update -> Save file -> Update `PSDFile` record.
     - [ ] Implement `verify_psd(psd_id)`: Read PSD layers -> Compare with DB -> Return diff report.
