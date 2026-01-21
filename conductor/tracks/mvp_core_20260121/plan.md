@@ -12,7 +12,7 @@
     - [ ] Write tests for schema relationships.
 
 ## Phase 2: Excel Ingestion Engine
-- [ ] Task: Implement Excel Parsing Service.
+- [x] Task: Implement Excel Parsing Service. [721bbb7]
     - [ ] Create `ExcelService` class using `xlwings` (or `openpyxl` as fallback for server-side headless).
     - [ ] Implement `parse_file` method to extract data AND basic formatting (hex colors, bold).
     - [ ] Write tests: Parse sample Excel -> Verify JSON output structure.
