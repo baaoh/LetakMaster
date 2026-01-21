@@ -66,18 +66,69 @@ async def set_config(config: ConfigRequest, db: Session = Depends(get_db)):
     else:
         sheet_conf.value = config.watched_sheet_name or ""
 
-    # Upsert password
-    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
-    if not pass_conf:
-        pass_conf = AppConfig(key="excel_password", value=config.excel_password or "")
-        db.add(pass_conf)
-    else:
-        pass_conf.value = config.excel_password or ""
-    
-    db.commit()
-    return {"status": "updated"}
+        
 
-@app.post("/sync")
+        # Upsert password
+
+        pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+
+        if not pass_conf:
+
+            pass_conf = AppConfig(key="excel_password", value=config.excel_password or "")
+
+            db.add(pass_conf)
+
+        else:
+
+            pass_conf.value = config.excel_password or ""
+
+        
+
+        db.commit()
+
+        return {"status": "updated"}
+
+    
+
+    @app.delete("/state/{state_id}")
+
+    async def delete_state(state_id: int, password: str, db: Session = Depends(get_db)):
+
+        # Simple protection: Match the excel_password or a hardcoded 'admin'
+
+        # Fetch configured password
+
+        conf_pass = db.query(AppConfig).filter_by(key="excel_password").first()
+
+        stored_pass = conf_pass.value if conf_pass else ""
+
+        
+
+        if password != stored_pass and password != "admin":
+
+            raise HTTPException(status_code=403, detail="Invalid password")
+
+    
+
+        state = db.query(ProjectState).get(state_id)
+
+        if not state:
+
+            raise HTTPException(status_code=404, detail="State not found")
+
+            
+
+        db.delete(state)
+
+        db.commit()
+
+        return {"status": "deleted"}
+
+    
+
+    @app.post("/sync")
+
+    
 async def trigger_sync(db: Session = Depends(get_db)):
     # For MVP, user_id is hardcoded or comes from auth later
     syncer = SyncService(db)

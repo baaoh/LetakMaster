@@ -89,6 +89,23 @@ export function DataInputTab() {
     }
   }
 
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation() // Prevent row selection
+    const password = window.prompt("Enter Admin/Excel Password to delete:")
+    if (!password) return
+
+    try {
+      await axios.delete(`${API_BASE}/state/${id}`, { params: { password } })
+      fetchHistory()
+      if (selectedStateId === id) {
+        setSelectedStateId(null)
+        setStateData([])
+      }
+    } catch (err) {
+      alert("Failed to delete. Incorrect password?")
+    }
+  }
+
   return (
     <Row>
       <Col md={4}>
@@ -149,7 +166,10 @@ export function DataInputTab() {
                     <strong>State #{state.id}</strong>
                     <div className="small text-muted">{new Date(state.created_at).toLocaleString()}</div>
                   </div>
-                  <Badge bg="secondary">{state.excel_hash.substring(0, 7)}</Badge>
+                  <div className="d-flex align-items-center gap-2">
+                    <Badge bg="secondary">{state.excel_hash.substring(0, 7)}</Badge>
+                    <Button size="sm" variant="danger" onClick={(e) => handleDelete(e, state.id)}>X</Button>
+                  </div>
                 </div>
               </ListGroup.Item>
             ))}
