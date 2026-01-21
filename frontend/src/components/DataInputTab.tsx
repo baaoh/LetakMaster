@@ -131,8 +131,12 @@ export function DataInputTab() {
     setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  // Define regex outside JSX to avoid parser confusion
-  const PATH_SPLIT_REGEX = /[/\]/
+  // Helper to extract filename safely
+  const getFilename = (path: string) => {
+    // Replace backslashes with forward slashes, then split
+    // Regex: /[/\\]/g (matches forward or backslash globally)
+    return path.replace(/\\/g, '/').split('/').pop()
+  }
 
   return (
     <Row>
@@ -191,7 +195,7 @@ export function DataInputTab() {
               return (
                 <div key={groupKey} className="border-bottom">
                   <div className="p-2 bg-light text-muted small fw-bold text-truncate" title={`${path} (${sheet})`}>
-                    {path.split(PATH_SPLIT_REGEX).pop()} - {sheet}
+                    {getFilename(path)} - {sheet}
                   </div>
                   {visibleStates.map(state => (
                     <ListGroup.Item 
