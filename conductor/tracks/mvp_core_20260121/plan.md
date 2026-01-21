@@ -4,7 +4,7 @@
 - [x] Task: Initialize FastAPI project structure with TaskIQ and SQLAlchemy. [477038e]
     - [ ] Initialize git repo (already done) and create folder structure (`app/`, `tests/`, `scripts/`).
     - [ ] Configure `poetry` or `pip` requirements (`fastapi`, `sqlalchemy`, `xlwings`, `psd-tools2`, `taskiq`).
-- [ ] Task: Define Database Schema (The "Bridging DB").
+- [x] Task: Define Database Schema (The "Bridging DB"). [e48064a]
     - [ ] Create `SourceFile` model (tracker for uploaded Excel files).
     - [ ] Create `SourceData` model (stores parsed rows/cells).
     - [ ] Create `PSDFile` model.
