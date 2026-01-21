@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+sqlalchemy
+xlwings
+psd-tools2
+taskiq
+taskiq-fastapi

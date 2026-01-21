@@ -1,0 +1,24 @@
+# Environments
+python_embed/
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Conductor & Gemini
+.gemini/
+conductor/setup_state.json
+
+# IDEs
+.vscode/
+.idea/
