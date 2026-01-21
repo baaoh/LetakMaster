@@ -34,7 +34,7 @@
     - [ ] Implement `generate_psd_from_data(row_id, template_id)`: Orchestrate DB fetch -> PSD update -> Save file -> Update `PSDFile` record.
     - [ ] Implement `verify_psd(psd_id)`: Read PSD layers -> Compare with DB -> Return diff report.
     - [ ] Implement `correct_psd(psd_id)`: Force update PSD from DB.
-- [ ] Task: Background Task Configuration.
+- [x] Task: Background Task Configuration. [6f75921]
     - [ ] Wrap generation/verification methods in TaskIQ tasks.
     - [ ] Create API endpoints to trigger these tasks.
 
