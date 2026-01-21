@@ -16,7 +16,8 @@ I plan to use Python libraries like pandas/openpyxl for Excel, psd-tools for PSD
 - **Data Integrity:** Maintain strict consistency between Excel source data, the internal database, and the resulting PSD files.
 
 ## Key Features
-- **Excel-to-PSD Automation:** Parse Excel files to dynamically create and populate PSD layers within defined templates.
+- **Stateful Excel Sync:** Watch a master Excel file for changes, automatically decrypting and parsing content to track historical states.
+- **Excel-to-PSD Automation:** Use stored state data to dynamically create and populate PSD layers within defined templates.
 - **Catalogue Page Generation:** Automatically design full catalogue pages based on structured input data.
 - **Concurrency & Management:** Support multiple users simultaneously with role-based access and manage resource-intensive tasks (like PSD processing) in the background.
 - **Data Verification:** Tools to verify PSD content against original Excel data.

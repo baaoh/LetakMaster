@@ -13,6 +13,7 @@
 
 ## Core Libraries
 - **Excel Integration:** xlwings (For deep Excel integration and automation)
-- **PSD Automation:** psd-tools2 (For advanced Photoshop scripting and layer manipulation)
+- **Excel Decryption:** msoffcrypto-tool (For handling password-protected legacy .xls files)
+- **PSD Automation:** psd-tools (For advanced Photoshop scripting and layer manipulation)
 - **Data Parsing & Matching:** fuzzywuzzy / difflib (For nuanced, fuzzy data parsing and matching beyond strict regex)
 - **Data Processing:** pandas (For efficient data handling)
