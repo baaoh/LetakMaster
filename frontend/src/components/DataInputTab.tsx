@@ -30,7 +30,94 @@ export function DataInputTab() {
   const [msg, setMsg] = useState<{ type: 'success' | 'danger', text: string } | null>(null)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
 
-  // ... (existing functions) ...
+  useEffect(() => {
+    fetchConfig()
+    fetchHistory()
+  }, [])
+
+  const fetchConfig = async () => {
+    try {
+      const resp = await axios.get(`${API_BASE}/config`)
+      setConfig(resp.data)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const fetchHistory = async () => {
+    try {
+      const resp = await axios.get(`${API_BASE}/history`)
+      setHistory(resp.data)
+      // Auto-select latest if nothing selected
+      if (resp.data.length > 0 && !selectedStateId) {
+        loadState(resp.data[0].id)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  const loadState = async (id: number) => {
+    setSelectedStateId(id)
+    try {
+      // Add timestamp to prevent caching
+      const resp = await axios.get(`${API_BASE}/state/${id}/data?t=${new Date().getTime()}`)
+      setStateData(resp.data)
+    } catch (err) {
+      console.error(err)
+      setMsg({ type: 'danger', text: 'Failed to load state data.' })
+    }
+  }
+
+  const handleSaveConfig = async () => {
+    try {
+      await axios.post(`${API_BASE}/config`, config)
+      setMsg({ type: 'success', text: 'Configuration saved.' })
+    } catch (err) {
+      setMsg({ type: 'danger', text: 'Failed to save config.' })
+    }
+  }
+
+  const handleSync = async () => {
+    setLoading(true)
+    setMsg(null)
+    try {
+      const resp = await axios.post(`${API_BASE}/sync`)
+      if (resp.data.status === 'updated') {
+        setMsg({ type: 'success', text: 'New state recorded!' })
+        fetchHistory()
+        if (resp.data.new_state_id) loadState(resp.data.new_state_id)
+      } else {
+        setMsg({ type: 'success', text: 'No changes detected. Loaded latest state.' })
+        if (resp.data.latest_id) {
+            if (selectedStateId !== resp.data.latest_id) {
+                loadState(resp.data.latest_id)
+            }
+        }
+      }
+    } catch (err: any) {
+      setMsg({ type: 'danger', text: err.response?.data?.detail || 'Sync failed.' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDelete = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation() // Prevent row selection
+    const password = window.prompt("Enter Admin/Excel Password to delete:")
+    if (!password) return
+
+    try {
+      await axios.delete(`${API_BASE}/state/${id}`, { params: { password } })
+      fetchHistory()
+      if (selectedStateId === id) {
+        setSelectedStateId(null)
+        setStateData([])
+      }
+    } catch (err) {
+      alert("Failed to delete. Incorrect password?")
+    }
+  }
 
   // Grouping Logic
   const groupedHistory = history.reduce((acc, state) => {
@@ -44,11 +131,13 @@ export function DataInputTab() {
     setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
+  // Define regex outside JSX to avoid parser confusion
+  const PATH_SPLIT_REGEX = /[/\]/
+
   return (
     <Row>
       <Col md={4}>
         <Card className="mb-4">
-          {/* ... Config Form ... */}
           <Card.Header>Source Configuration</Card.Header>
           <Card.Body>
             <Form>
@@ -102,7 +191,7 @@ export function DataInputTab() {
               return (
                 <div key={groupKey} className="border-bottom">
                   <div className="p-2 bg-light text-muted small fw-bold text-truncate" title={`${path} (${sheet})`}>
-                    {path.split(/[/\]/).pop()} - {sheet}
+                    {path.split(PATH_SPLIT_REGEX).pop()} - {sheet}
                   </div>
                   {visibleStates.map(state => (
                     <ListGroup.Item 
@@ -141,7 +230,6 @@ export function DataInputTab() {
         </Card>
       </Col>
 
-      
       <Col md={8}>
         <Card>
           <Card.Header>
