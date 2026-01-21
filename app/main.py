@@ -5,24 +5,17 @@ import os
 import shutil
 import json
 from contextlib import asynccontextmanager
-from app.database import Base, engine as prod_engine, SessionLocal, get_db, SourceFile, SourceData, PSDFile, LayerMapping
+from app.database import Base, engine, get_db, SourceFile, SourceData, PSDFile, LayerMapping, AppConfig, ProjectState
 from app.excel_service import ExcelService
+from app.sync_service import SyncService, DiffService
 from app.tkq import broker, generate_psd_task, verify_psd_task
+from pydantic import BaseModel
 
-def get_engine():
-    return prod_engine
-
-def create_tables(engine_to_use=None):
-    if engine_to_use is None:
-        engine_to_use = get_engine()
-    Base.metadata.create_all(bind=engine_to_use)
+# Initialize DB tables at startup
+Base.metadata.create_all(bind=engine)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialize DB tables only if not explicitly disabled (e.g. for testing)
-    if os.getenv("SKIP_DB_INIT") != "1":
-        create_tables()
-    
     if not broker.is_worker_process:
         await broker.startup()
     yield
@@ -38,6 +31,87 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class ConfigRequest(BaseModel):
+    master_excel_path: str
+    watched_sheet_name: str | None = None
+
+@app.get("/config")
+async def get_config(db: Session = Depends(get_db)):
+    path = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    sheet = db.query(AppConfig).filter_by(key="watched_sheet_name").first()
+    return {
+        "master_excel_path": path.value if path else None,
+        "watched_sheet_name": sheet.value if sheet else None
+    }
+
+@app.post("/config")
+async def set_config(config: ConfigRequest, db: Session = Depends(get_db)):
+    # Upsert path
+    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    if not path_conf:
+        path_conf = AppConfig(key="master_excel_path", value=config.master_excel_path)
+        db.add(path_conf)
+    else:
+        path_conf.value = config.master_excel_path
+        
+    # Upsert sheet
+    sheet_conf = db.query(AppConfig).filter_by(key="watched_sheet_name").first()
+    if not sheet_conf:
+        sheet_conf = AppConfig(key="watched_sheet_name", value=config.watched_sheet_name or "")
+        db.add(sheet_conf)
+    else:
+        sheet_conf.value = config.watched_sheet_name or ""
+    
+    db.commit()
+    return {"status": "updated"}
+
+@app.post("/sync")
+async def trigger_sync(db: Session = Depends(get_db)):
+    # For MVP, user_id is hardcoded or comes from auth later
+    syncer = SyncService(db)
+    try:
+        result = syncer.sync_now("current_user")
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/history")
+async def get_history(db: Session = Depends(get_db)):
+    states = db.query(ProjectState).order_by(ProjectState.created_at.desc()).all()
+    return states
+
+@app.get("/diff/{id1}/{id2}")
+async def get_diff(id1: int, id2: int, db: Session = Depends(get_db)):
+    s1 = db.query(ProjectState).get(id1)
+    s2 = db.query(ProjectState).get(id2)
+    if not s1 or not s2:
+        raise HTTPException(status_code=404, detail="State not found")
+    
+    differ = DiffService()
+    # Flattening logic might be needed here depending on how we stored it?
+    # SyncService stores the raw output of ExcelService (list of dicts).
+    data1 = json.loads(s1.data_snapshot_json)
+    data2 = json.loads(s2.data_snapshot_json)
+    
+    # We assume 'column_name' isn't key, but we need a key.
+    # ExcelService returns: [{"ColA": {val:..., fmt:...}, "ColB": ...}, ...]
+    # This structure is hard to diff directly with generic diff logic requiring a PK.
+    # For MVP Diff, we can try to "flatten" it to just values for comparison:
+    # [{"ColA": "valA", "ColB": "valB"}, ...]
+    
+    def flatten(rows):
+        flat = []
+        for r in rows:
+            item = {}
+            for k, v in r.items():
+                item[k] = v.get("value")
+            flat.append(item)
+        return flat
+
+    return differ.compare(flatten(data1), flatten(data2)) # No key_field, so naive comparison
 
 @app.get("/health")
 
