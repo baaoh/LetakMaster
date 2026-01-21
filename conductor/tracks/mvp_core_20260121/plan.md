@@ -7,7 +7,7 @@
     - [ ] Test: Verify new models can store/retrieve configuration and large JSON blobs.
 
 ## Phase 2: Refactor Excel Service for Local Sync
-- [ ] Task: Update ExcelService for "Watch Mode".
+- [x] Task: Update ExcelService for "Watch Mode". [2c2ea37]
     - [ ] Modify `parse_file` to accept a sheet name parameter.
     - [ ] Add `calculate_hash` method to quickly verify changes.
     - [ ] Test: Point to a local file, verify parsing of specific sheet.
