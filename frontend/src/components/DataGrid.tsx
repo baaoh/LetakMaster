@@ -32,7 +32,8 @@ export function DataGrid({ data }: DataGridProps) {
                 // cell has {value, formatting}
                 const style = cell.formatting ? {
                   fontWeight: cell.formatting.bold ? 'bold' : 'normal',
-                  color: cell.formatting.color || 'inherit'
+                  backgroundColor: cell.formatting.color || 'inherit',
+                  border: cell.formatting.border ? '1px solid #000' : '1px solid #dee2e6'
                 } : {}
                 
                 return <td key={col} style={style}>{cell.value}</td>

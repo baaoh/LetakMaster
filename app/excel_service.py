@@ -47,16 +47,20 @@ class ExcelService:
         actual_path = file_path
         
         try:
+            print(f"DEBUG: Attempting to unlock file: {file_path} (Password provided: {bool(password)})")
             actual_path, is_temp = self._unlock_file(file_path, password)
+            print(f"DEBUG: Unlock successful. Reading from: {actual_path} (Temp: {is_temp})")
         except Exception as e:
-            print(f"Decryption failed: {e}")
+            print(f"DEBUG: Decryption failed: {e}")
             # If decryption fails (maybe it wasn't encrypted?), try original
             actual_path = file_path
 
         app = xw.App(visible=False)
         try:
+            print("DEBUG: Opening workbook with xlwings...")
             # Open without password, as we decrypted it
             wb = app.books.open(actual_path)
+            print("DEBUG: Workbook opened.")
             
             if sheet_name:
                 try:
@@ -90,10 +94,25 @@ class ExcelService:
                     for c_idx, value in enumerate(row_values):
                         col_name = headers[c_idx]
                         cell = row_range[c_idx]
+                        # Extract formatting
+                        # cell.color is background color
+                        bg_color = self._rgb_to_hex(cell.color)
                         
+                        # Borders (simplified) - check if any border exists
+                        # Accessing api directly can be slow in bulk loops. 
+                        # For MVP, let's try to be efficient or minimal.
+                        # cell.api.Borders.LineStyle != -4142 (xlNone)
+                        has_border = False
+                        try:
+                            if cell.api.Borders.LineStyle != -4142:
+                                has_border = True
+                        except:
+                            pass
+
                         formatting = {
                             "bold": cell.api.Font.Bold,
-                            "color": self._rgb_to_hex(cell.color)
+                            "color": bg_color, # Background
+                            "border": has_border
                         }
                         
                         row_data[col_name] = {
@@ -124,14 +143,18 @@ class ExcelService:
         actual_path = file_path
         
         try:
+            print(f"DEBUG: HASH - Attempting to unlock file: {file_path}")
             actual_path, is_temp = self._unlock_file(file_path, password)
+            print(f"DEBUG: HASH - Unlock successful.")
         except Exception as e:
-            print(f"Decryption failed: {e}")
+            print(f"DEBUG: HASH - Decryption failed: {e}")
             actual_path = file_path
 
         app = xw.App(visible=False)
         try:
+            print("DEBUG: HASH - Opening workbook...")
             wb = app.books.open(actual_path)
+            print("DEBUG: HASH - Workbook opened.")
             if sheet_name:
                 sheet = wb.sheets[sheet_name]
             else:
