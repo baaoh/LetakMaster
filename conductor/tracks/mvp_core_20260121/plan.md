@@ -13,7 +13,7 @@
     - [ ] Test: Point to a local file, verify parsing of specific sheet.
 
 ## Phase 3: State Management Logic
-- [ ] Task: Implement Sync & Diff Service.
+- [x] Task: Implement Sync & Diff Service. [4739185]
     - [ ] `SyncService.sync_now()`: Read file -> Hash -> Save State if changed.
     - [ ] `DiffService.compare(state_a, state_b)`: Return basic added/modified/removed report.
     - [ ] API: Endpoints for `/config`, `/sync`, `/history`, `/diff/{id1}/{id2}`.
