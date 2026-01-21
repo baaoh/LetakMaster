@@ -1,10 +1,24 @@
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import ForeignKey, String, Integer, DateTime, Text
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy import create_engine, ForeignKey, String, Integer, DateTime, Text
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./letak_master.db"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Base(DeclarativeBase):
     pass
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 class SourceFile(Base):
     __tablename__ = "source_files"
