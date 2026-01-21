@@ -1,43 +1,50 @@
-# Specification: MVP Core Excel-to-PSD Automation & Bridging Database
+# Specification: MVP Stateful Excel Sync & Bridging Database
 
 ## Overview
-This track focuses on building the core engine of the system: the "Bridging Database" that connects Excel input data with Photoshop (PSD) layers. It includes the backend logic to parse Excel files, the database schema to store this data alongside PSD metadata, and the automation scripts to generate and update PSD files. It also includes a basic GUI to visualize this data and trigger operations.
+This track builds the core "Bridging Database" engine but pivots from a file-upload model to a **Stateful Synchronization** model. The system watches a specific, administrator-defined Excel file path. It tracks changes to specific sheets over time, recording distinct "States". Users can browse this history, see diffs (GitHub-style), and select a specific State as their "Current Context" for design operations.
+
+The UI will be a **Tabbed Dashboard** (Data Input, Design/Layers, Settings).
 
 ## User Stories
-- **As a Data Manager**, I want to upload an Excel file and have its data (including formatting) parsed and stored in the database so that it can be used for design generation.
-- **As a Graphic Designer**, I want to generate PSD files from the stored data using predefined templates, where specific columns map to specific layers.
-- **As a Graphic Designer**, I want to "verify" a PSD file against the database to see if any manual changes were made or if data is out of sync.
-- **As a User**, I want to view the Excel data in the web interface, preserving its original look/formatting, along with the status of generated PSDs.
-- **As a User**, I want to click a button to "Correct" a PSD, forcing its layers to match the current database values.
+- **As an Admin**, I want to set a local/network path to the "Master Excel File" and specify which sheet to watch.
+- **As a User**, I want to click "Sync Now" to read the current Master Excel. If changes are detected compared to the latest recorded state, a new "State" is saved to the DB with a timestamp.
+- **As a User**, I want to see a history of States (e.g., "State #5 - 2026-01-21 14:00 - 15 rows changed").
+- **As a User**, I want to see a visual diff between two states or between a state and the live file.
+- **As a User**, I want to "Load" a specific past State so that when I generate PSDs, it uses that specific data snapshot.
+- **As a User**, I want a visual indicator (Green/Red dot) showing if my loaded state matches the live Excel file.
 
 ## Technical Requirements
 
-### 1. Bridging Database (SQLite)
-- **Schema Design:**
-    - `SourceData`: Stores raw product/supplier data from Excel.
-    - `PSDFile`: Metadata about generated or managed PSD files (path, name, last_updated).
-    - `LayerMapping`: The core "bridge". Maps a `SourceData` field (row/col) to a specific `PSDLayer` (layer name/ID) in a `PSDFile`.
-- **Integrity:** Ensure cascading updates if source data changes.
+### 1. Database Schema Updates
+- `AppConfig`: Singleton table to store `master_excel_path` and `watched_sheet_name`.
+- `ProjectState`: Stores a version snapshot.
+    - `id`: Int
+    - `created_at`: Datetime
+    - `created_by`: User (String for now)
+    - `excel_hash`: Hash of the sheet content (to detect no-op syncs)
+    - `data_snapshot`: JSON blob of the entire sheet data (optimized later).
+- `UserSession`: Tracks which `project_state_id` is active for a user/session.
 
-### 2. Excel Ingestion (xlwings / pandas)
-- Use `xlwings` or `pandas` to read Excel files.
-- **Critical:** Extract not just values but relevant formatting (e.g., cell color, bold text) to display in the GUI.
-- Fuzzy matching (using `fuzzywuzzy` or `difflib`) might be needed for mapping columns to layer names if they aren't exact matches.
+### 2. Backend Logic (Excel & Diffing)
+- **ExcelService:** Refactor to `read_sheet_from_path(path, sheet_name)`.
+- **DiffService:** Compare two JSON datasets and return added/removed/modified rows/cells.
+- **Sync Logic:**
+    1. Read Live File.
+    2. Compare hash with latest `ProjectState`.
+    3. If different -> Create new `ProjectState`.
 
-### 3. PSD Automation (psd-tools2)
-- Service to load a PSD template.
-- Traverse layer hierarchy to find named layers matching the data mapping.
-- Update text/content of layers.
-- Save the modified PSD.
+### 3. Frontend (Tabbed Dashboard)
+- **Framework:** React + Bootstrap Tabs.
+- **Tabs:**
+    1.  **Data Input:**
+        -   Config form (Path, Sheet).
+        -   Sync Actions.
+        -   History List (Click to load).
+        -   Diff Viewer (Modal or split view).
+        -   Data Grid (ReadOnly, showing loaded state).
+    2.  **Design (Placeholder):** Future PSD controls.
+- **Status Bar:** Persistent footer/header showing "Active State: #5 (Live)" or "Active State: #3 (Outdated)".
 
-### 4. Verification Logic
-- **Reverse Check:** Open a PSD, read layer content, compare with `SourceData` via `LayerMapping`.
-- **Correction:** Overwrite PSD layer content with `SourceData` values.
-
-### 5. GUI & Backend (FastAPI + React)
-- **Backend:** API endpoints for file upload, data retrieval, task triggering (TaskIQ).
-- **Frontend:**
-    - Data Grid: Shows Excel data.
-    - Formatting Support: The grid should visually mimic the Excel input (basic styles).
-    - Actions: "Generate PSD", "Verify", "Correct".
-    - Task Monitor: Real-time status of background jobs.
+### 4. Storage Strategy
+- For the MVP, we will store the parsed data as a generic JSON blob in `ProjectState` to allow flexibility.
+- We will rely on row indices or a primary key column (if defined) for diffing.

@@ -1,56 +1,38 @@
-# Implementation Plan - MVP: Core Excel-to-PSD Automation & Bridging Database
+# Implementation Plan - MVP: Stateful Excel Sync & Bridging Database
 
-## Phase 1: Project Setup & Database Design [checkpoint: 14c237f]
-- [x] Task: Initialize FastAPI project structure with TaskIQ and SQLAlchemy. [477038e]
-    - [ ] Initialize git repo (already done) and create folder structure (`app/`, `tests/`, `scripts/`).
-    - [ ] Configure `poetry` or `pip` requirements (`fastapi`, `sqlalchemy`, `xlwings`, `psd-tools2`, `taskiq`).
-- [x] Task: Define Database Schema (The "Bridging DB"). [e48064a]
-    - [ ] Create `SourceFile` model (tracker for uploaded Excel files).
-    - [ ] Create `SourceData` model (stores parsed rows/cells).
-    - [ ] Create `PSDFile` model.
-    - [ ] Create `LayerMapping` model (FK to SourceData and PSDFile + layer_name).
-    - [ ] Write tests for schema relationships.
+## Phase 1: Database Refactoring & Config
+- [ ] Task: Update Database Schema for State Management.
+    - [ ] Add `AppConfig` (key-value storage) and `ProjectState` (json snapshots) models.
+    - [ ] Create migration script or drop/recreate tables (MVP style).
+    - [ ] Test: Verify new models can store/retrieve configuration and large JSON blobs.
 
-## Phase 2: Excel Ingestion Engine
-- [x] Task: Implement Excel Parsing Service. [721bbb7]
-    - [ ] Create `ExcelService` class using `xlwings` (or `openpyxl` as fallback for server-side headless).
-    - [ ] Implement `parse_file` method to extract data AND basic formatting (hex colors, bold).
-    - [ ] Write tests: Parse sample Excel -> Verify JSON output structure.
-- [x] Task: Implement Data Ingestion API. [c318220]
-    - [ ] Create POST endpoint `/upload/excel`.
-    - [ ] Connect parsing service to DB: Store parsed data into `SourceData`.
-    - [ ] Write tests: Upload file -> Check DB records.
+## Phase 2: Refactor Excel Service for Local Sync
+- [ ] Task: Update ExcelService for "Watch Mode".
+    - [ ] Modify `parse_file` to accept a sheet name parameter.
+    - [ ] Add `calculate_hash` method to quickly verify changes.
+    - [ ] Test: Point to a local file, verify parsing of specific sheet.
 
-## Phase 3: PSD Automation Core
-- [x] Task: Implement PSD Manipulation Service. [b06fd2c]
-    - [ ] Create `PSDService` using `psd-tools2`.
-    - [ ] Implement `update_layers(template_path, data_mapping)`: Open PSD, find layers, update text.
-    - [ ] Implement `read_layers(psd_path)`: Extract current values from a PSD.
-    - [ ] Write tests: Generate dummy PSD -> Verify layer text changed.
+## Phase 3: State Management Logic
+- [ ] Task: Implement Sync & Diff Service.
+    - [ ] `SyncService.sync_now()`: Read file -> Hash -> Save State if changed.
+    - [ ] `DiffService.compare(state_a, state_b)`: Return basic added/modified/removed report.
+    - [ ] API: Endpoints for `/config`, `/sync`, `/history`, `/diff/{id1}/{id2}`.
 
-## Phase 4: The "Bridging" Logic & Verification
-- [x] Task: Implement Integration Logic. [dc8673f]
-    - [ ] Create `BridgeService`.
-    - [ ] Implement `generate_psd_from_data(row_id, template_id)`: Orchestrate DB fetch -> PSD update -> Save file -> Update `PSDFile` record.
-    - [ ] Implement `verify_psd(psd_id)`: Read PSD layers -> Compare with DB -> Return diff report.
-    - [ ] Implement `correct_psd(psd_id)`: Force update PSD from DB.
-- [x] Task: Background Task Configuration. [6f75921]
-    - [ ] Wrap generation/verification methods in TaskIQ tasks.
-    - [ ] Create API endpoints to trigger these tasks.
+## Phase 4: GUI - Tabbed Dashboard & Config
+- [ ] Task: Implement Tabbed Layout.
+    - [ ] Create `MainLayout` with Bootstrap Tabs.
+    - [ ] Create `DataInputTab` component.
+- [ ] Task: Implement Configuration & Sync UI.
+    - [ ] Form to set "Master Excel Path" and "Sheet Name".
+    - [ ] "Sync Now" button with status indicator.
+    - [ ] List of "History States" (timestamps).
 
-## Phase 5: GUI Implementation
-- [ ] Task: Setup React Frontend.
-    - [ ] Initialize React app (Vite recommended).
-    - [ ] Setup API client (axios/fetch).
-- [ ] Task: Build Data Explorer View.
-    - [ ] Create "Excel Grid" component.
-    - [ ] Implement style rendering (apply colors/bold from DB data).
-- [ ] Task: Build Control Dashboard.
-    - [ ] Add buttons for "Generate", "Verify", "Correct".
-    - [ ] Create "Task Monitor" widget to poll/stream TaskIQ status.
+## Phase 5: GUI - Data Visualization & Context
+- [ ] Task: Implement Data Grid & Diff View.
+    - [ ] Display the JSON data of the *Active State* in a virtualized grid (if large) or simple table.
+    - [ ] Visual indicator for "Current vs Live" status.
+    - [ ] (Bonus) Highlight changes in the grid.
 
-## Phase 6: End-to-End Verification
-- [ ] Task: Integration Testing.
-    - [ ] Manual Test: Upload real Excel -> View in GUI -> Generate PSD -> Open in Photoshop to verify.
-    - [ ] Manual Test: Change text in Photoshop -> Run "Verify" in GUI -> See mismatch.
-    - [ ] Manual Test: Run "Correct" -> Verify PSD matches Excel again.
+## Phase 6: Final Verification
+- [ ] Task: End-to-End Test.
+    - [ ] Set path -> Sync -> Edit Excel -> Sync again -> Verify new state created -> Load old state -> Verify Grid updates.
