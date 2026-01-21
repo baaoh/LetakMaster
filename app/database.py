@@ -63,3 +63,26 @@ class LayerMapping(Base):
     
     source_data: Mapped["SourceData"] = relationship(back_populates="layer_mappings")
     psd_file: Mapped["PSDFile"] = relationship(back_populates="layer_mappings")
+
+class AppConfig(Base):
+    __tablename__ = "app_config"
+    
+    key: Mapped[str] = mapped_column(String(50), primary_key=True)
+    value: Mapped[str] = mapped_column(Text)
+
+class ProjectState(Base):
+    __tablename__ = "project_states"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_by: Mapped[str] = mapped_column(String(100))
+    excel_hash: Mapped[str] = mapped_column(String(64))
+    data_snapshot_json: Mapped[str] = mapped_column(Text) # Large JSON blob
+
+class UserSession(Base):
+    __tablename__ = "user_sessions"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[str] = mapped_column(String(100))
+    active_project_state_id: Mapped[int] = mapped_column(ForeignKey("project_states.id"))
+    last_active: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
