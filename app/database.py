@@ -75,7 +75,13 @@ class ProjectState(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    created_by: Mapped[str] = mapped_column(String(100))
+    created_by: Mapped[str] = mapped_column(String(100)) # System user who triggered sync
+    
+    # Source Metadata
+    source_path: Mapped[Optional[str]] = mapped_column(String(1024))
+    source_sheet: Mapped[Optional[str]] = mapped_column(String(255))
+    excel_last_modified_by: Mapped[Optional[str]] = mapped_column(String(255)) # Excel's "Last Author"
+    
     excel_hash: Mapped[str] = mapped_column(String(64))
     data_snapshot_json: Mapped[str] = mapped_column(Text) # Large JSON blob
 

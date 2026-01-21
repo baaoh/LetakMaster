@@ -16,6 +16,9 @@ interface ProjectState {
   created_at: string
   created_by: string
   excel_hash: string
+  source_path: string | null
+  source_sheet: string | null
+  excel_last_modified_by: string | null
 }
 
 export function DataInputTab() {
@@ -25,91 +28,27 @@ export function DataInputTab() {
   const [stateData, setStateData] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [msg, setMsg] = useState<{ type: 'success' | 'danger', text: string } | null>(null)
+  const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
 
-  useEffect(() => {
-    fetchConfig()
-    fetchHistory()
-  }, [])
+  // ... (existing functions) ...
 
-  const fetchConfig = async () => {
-    try {
-      const resp = await axios.get(`${API_BASE}/config`)
-      setConfig(resp.data)
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  // Grouping Logic
+  const groupedHistory = history.reduce((acc, state) => {
+    const key = `${state.source_path || 'Unknown'}::${state.source_sheet || 'Default'}`
+    if (!acc[key]) acc[key] = []
+    acc[key].push(state)
+    return acc
+  }, {} as Record<string, ProjectState[]>)
 
-  const fetchHistory = async () => {
-    try {
-      const resp = await axios.get(`${API_BASE}/history`)
-      setHistory(resp.data)
-    } catch (err) {
-      console.error(err)
-    }
-  }
-
-  const loadState = async (id: number) => {
-    setSelectedStateId(id)
-    try {
-      const resp = await axios.get(`${API_BASE}/state/${id}/data`)
-      setStateData(resp.data)
-    } catch (err) {
-      console.error(err)
-      setMsg({ type: 'danger', text: 'Failed to load state data.' })
-    }
-  }
-
-  const handleSaveConfig = async () => {
-    try {
-      await axios.post(`${API_BASE}/config`, config)
-      setMsg({ type: 'success', text: 'Configuration saved.' })
-    } catch (err) {
-      setMsg({ type: 'danger', text: 'Failed to save config.' })
-    }
-  }
-
-  const handleSync = async () => {
-    setLoading(true)
-    setMsg(null)
-    try {
-      const resp = await axios.post(`${API_BASE}/sync`)
-      if (resp.data.status === 'updated') {
-        setMsg({ type: 'success', text: 'New state recorded!' })
-        fetchHistory()
-        // Auto-load new state
-        if (resp.data.new_state_id) loadState(resp.data.new_state_id)
-      } else {
-        setMsg({ type: 'success', text: 'No changes detected.' })
-      }
-    } catch (err: any) {
-      setMsg({ type: 'danger', text: err.response?.data?.detail || 'Sync failed.' })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleDelete = async (e: React.MouseEvent, id: number) => {
-    e.stopPropagation() // Prevent row selection
-    const password = window.prompt("Enter Admin/Excel Password to delete:")
-    if (!password) return
-
-    try {
-      await axios.delete(`${API_BASE}/state/${id}`, { params: { password } })
-      fetchHistory()
-      if (selectedStateId === id) {
-        setSelectedStateId(null)
-        setStateData([])
-      }
-    } catch (err) {
-      alert("Failed to delete. Incorrect password?")
-    }
+  const toggleGroup = (key: string) => {
+    setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
   return (
     <Row>
       <Col md={4}>
         <Card className="mb-4">
+          {/* ... Config Form ... */}
           <Card.Header>Source Configuration</Card.Header>
           <Card.Body>
             <Form>
@@ -153,30 +92,55 @@ export function DataInputTab() {
 
         <Card>
           <Card.Header>State History</Card.Header>
-          <ListGroup variant="flush" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            {history.map(state => (
-              <ListGroup.Item 
-                key={state.id} 
-                action 
-                active={selectedStateId === state.id}
-                onClick={() => loadState(state.id)}
-              >
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <strong>State #{state.id}</strong>
-                    <div className="small text-muted">{new Date(state.created_at).toLocaleString()}</div>
+          <ListGroup variant="flush" style={{ maxHeight: '600px', overflowY: 'auto' }}>
+            {Object.keys(groupedHistory).map(groupKey => {
+              const [path, sheet] = groupKey.split('::')
+              const states = groupedHistory[groupKey]
+              const isExpanded = expandedGroups[groupKey]
+              const visibleStates = isExpanded ? states : states.slice(0, 5)
+              
+              return (
+                <div key={groupKey} className="border-bottom">
+                  <div className="p-2 bg-light text-muted small fw-bold text-truncate" title={`${path} (${sheet})`}>
+                    {path.split(/[/\]/).pop()} - {sheet}
                   </div>
-                  <div className="d-flex align-items-center gap-2">
-                    <Badge bg="secondary">{state.excel_hash.substring(0, 7)}</Badge>
-                    <Button size="sm" variant="danger" onClick={(e) => handleDelete(e, state.id)}>X</Button>
-                  </div>
+                  {visibleStates.map(state => (
+                    <ListGroup.Item 
+                      key={state.id} 
+                      action 
+                      active={selectedStateId === state.id}
+                      onClick={() => loadState(state.id)}
+                      className="border-0 border-bottom"
+                    >
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div>
+                          <strong>#{state.id}</strong> <span className="small text-muted">{new Date(state.created_at).toLocaleString()}</span>
+                          {state.excel_last_modified_by && (
+                            <div className="small text-primary">Last Edit: {state.excel_last_modified_by}</div>
+                          )}
+                        </div>
+                        <div className="d-flex align-items-center gap-2">
+                          <Badge bg="secondary">{state.excel_hash.substring(0, 5)}</Badge>
+                          <Button size="sm" variant="danger" style={{padding: '0px 6px'}} onClick={(e) => handleDelete(e, state.id)}>×</Button>
+                        </div>
+                      </div>
+                    </ListGroup.Item>
+                  ))}
+                  {states.length > 5 && (
+                    <div className="text-center p-1">
+                      <Button variant="link" size="sm" onClick={() => toggleGroup(groupKey)}>
+                        {isExpanded ? 'Show Less' : `Show ${states.length - 5} More...`}
+                      </Button>
+                    </div>
+                  )}
                 </div>
-              </ListGroup.Item>
-            ))}
+              )
+            })}
             {history.length === 0 && <div className="p-3 text-muted">No history yet. Sync to create a state.</div>}
           </ListGroup>
         </Card>
       </Col>
+
       
       <Col md={8}>
         <Card>

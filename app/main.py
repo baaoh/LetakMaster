@@ -66,69 +66,36 @@ async def set_config(config: ConfigRequest, db: Session = Depends(get_db)):
     else:
         sheet_conf.value = config.watched_sheet_name or ""
 
+    # Upsert password
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    if not pass_conf:
+        pass_conf = AppConfig(key="excel_password", value=config.excel_password or "")
+        db.add(pass_conf)
+    else:
+        pass_conf.value = config.excel_password or ""
+    
+    db.commit()
+    return {"status": "updated"}
+
+@app.delete("/state/{state_id}")
+async def delete_state(state_id: int, password: str, db: Session = Depends(get_db)):
+    # Simple protection: Match the excel_password or a hardcoded 'admin'
+    # Fetch configured password
+    conf_pass = db.query(AppConfig).filter_by(key="excel_password").first()
+    stored_pass = conf_pass.value if conf_pass else ""
+    
+    if password != stored_pass and password != "admin":
+        raise HTTPException(status_code=403, detail="Invalid password")
+
+    state = db.query(ProjectState).get(state_id)
+    if not state:
+        raise HTTPException(status_code=404, detail="State not found")
         
+    db.delete(state)
+    db.commit()
+    return {"status": "deleted"}
 
-        # Upsert password
-
-        pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
-
-        if not pass_conf:
-
-            pass_conf = AppConfig(key="excel_password", value=config.excel_password or "")
-
-            db.add(pass_conf)
-
-        else:
-
-            pass_conf.value = config.excel_password or ""
-
-        
-
-        db.commit()
-
-        return {"status": "updated"}
-
-    
-
-    @app.delete("/state/{state_id}")
-
-    async def delete_state(state_id: int, password: str, db: Session = Depends(get_db)):
-
-        # Simple protection: Match the excel_password or a hardcoded 'admin'
-
-        # Fetch configured password
-
-        conf_pass = db.query(AppConfig).filter_by(key="excel_password").first()
-
-        stored_pass = conf_pass.value if conf_pass else ""
-
-        
-
-        if password != stored_pass and password != "admin":
-
-            raise HTTPException(status_code=403, detail="Invalid password")
-
-    
-
-        state = db.query(ProjectState).get(state_id)
-
-        if not state:
-
-            raise HTTPException(status_code=404, detail="State not found")
-
-            
-
-        db.delete(state)
-
-        db.commit()
-
-        return {"status": "deleted"}
-
-    
-
-    @app.post("/sync")
-
-    
+@app.post("/sync")
 async def trigger_sync(db: Session = Depends(get_db)):
     # For MVP, user_id is hardcoded or comes from auth later
     syncer = SyncService(db)
@@ -144,7 +111,15 @@ async def trigger_sync(db: Session = Depends(get_db)):
 async def get_history(db: Session = Depends(get_db)):
     states = db.query(ProjectState).order_by(ProjectState.created_at.desc()).all()
     # Don't send large blob in list
-    return [{"id": s.id, "created_at": s.created_at, "created_by": s.created_by, "excel_hash": s.excel_hash} for s in states]
+    return [{
+        "id": s.id, 
+        "created_at": s.created_at, 
+        "created_by": s.created_by, 
+        "excel_hash": s.excel_hash,
+        "source_path": s.source_path,
+        "source_sheet": s.source_sheet,
+        "excel_last_modified_by": s.excel_last_modified_by
+    } for s in states]
 
 @app.get("/state/{state_id}/data")
 async def get_state_data(state_id: int, db: Session = Depends(get_db)):

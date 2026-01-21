@@ -73,9 +73,46 @@ class ExcelService:
             # 1. Get headers
             header_range = sheet.range(f"{header_row}:{header_row}")
             headers_raw = header_range.value
-            headers = [h for h in headers_raw if h is not None]
-            num_cols = len(headers)
-            print(f"DEBUG: Found {num_cols} headers at row {header_row}: {headers}")
+            
+            # Preserve indices. Generate default name if missing.
+            headers = []
+            valid_indices = [] # Track which columns we actually want to read
+            
+            for idx, h in enumerate(headers_raw):
+                if h is not None and str(h).strip():
+                    headers.append(str(h).strip())
+                    valid_indices.append(idx)
+                else:
+                    # If header is empty, do we skip data? 
+                    # User says "there is no header but there is data".
+                    # So we should probably capture it.
+                    # Let's generate a placeholder.
+                    headers.append(f"Column_{idx+1}")
+                    valid_indices.append(idx)
+
+            num_cols = len(headers_raw) # Read all columns up to the end of the used range in that row? 
+            # Actually headers_raw comes from range("6:6") which is the WHOLE row (16384 cols). 
+            # We need to trim trailing empty headers.
+            
+            # Refined strategy: Find last used column in header row
+            last_col_idx = -1
+            for i in range(len(headers_raw) - 1, -1, -1):
+                if headers_raw[i] is not None:
+                    last_col_idx = i
+                    break
+            
+            # Slice headers to relevant range
+            relevant_headers = headers_raw[:last_col_idx+1]
+            final_headers = []
+            
+            for i, h in enumerate(relevant_headers):
+                if h is None:
+                    final_headers.append(f"Column_{i+1}")
+                else:
+                    final_headers.append(str(h))
+            
+            num_read_cols = len(final_headers)
+            print(f"DEBUG: Found {num_read_cols} headers (trimmed): {final_headers}")
             
             # 2. Find last row
             last_row = sheet.range('A' + str(sheet.cells.last_cell.row)).end('up').row
@@ -88,11 +125,19 @@ class ExcelService:
                 # 3. Read data
                 for r in range(header_row + 1, last_row + 1):
                     row_data = {}
-                    row_range = sheet.range((r, 1), (r, num_cols))
+                    # Read only up to the number of headers we identified
+                    row_range = sheet.range((r, 1), (r, num_read_cols))
                     row_values = row_range.value
                     
-                    for c_idx, value in enumerate(row_values):
-                        col_name = headers[c_idx]
+                    # Ensure row_values is a list (if single cell, it might be scalar)
+                    if not isinstance(row_values, (list, tuple)):
+                        row_values = [row_values]
+                    
+                    for c_idx in range(num_read_cols):
+                        col_name = final_headers[c_idx]
+                        
+                        # Handle case where row might be shorter than headers (though range read should prevent this)
+                        value = row_values[c_idx] if c_idx < len(row_values) else None
                         cell = row_range[c_idx]
                         # Extract formatting
                         # cell.color is background color
@@ -173,3 +218,52 @@ class ExcelService:
                     os.remove(actual_path)
                 except:
                     pass
+
+    def get_file_metadata(self, file_path: str, password: str = None):
+        """
+        Extracts metadata (Last Author) from the Excel file.
+        """
+        if not os.path.exists(file_path):
+            return {}
+
+        is_temp = False
+        actual_path = file_path
+        
+        try:
+            actual_path, is_temp = self._unlock_file(file_path, password)
+        except Exception:
+            actual_path = file_path
+
+        app = xw.App(visible=False)
+        metadata = {}
+        try:
+            if password:
+                wb = app.books.open(actual_path, password=password)
+            else:
+                wb = app.books.open(actual_path)
+            
+            # Access Builtin properties
+            # This is specific to the COM object (Windows Excel)
+            try:
+                # 7 corresponds to "Last Author" / "Last Saved By" in MsoDocProperties
+                # Or access by name if supported by the wrapper
+                # xlwings book.api returns the native object
+                doc_props = wb.api.BuiltinDocumentProperties
+                last_author = doc_props("Last Author").Value
+                metadata["last_modified_by"] = str(last_author)
+            except Exception as e:
+                print(f"DEBUG: Could not read metadata: {e}")
+                metadata["last_modified_by"] = None
+            
+            wb.close()
+        except Exception as e:
+            print(f"DEBUG: Metadata fetch error: {e}")
+        finally:
+            app.quit()
+            if is_temp and os.path.exists(actual_path):
+                try:
+                    os.remove(actual_path)
+                except:
+                    pass
+        
+        return metadata

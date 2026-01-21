@@ -78,41 +78,37 @@ class SyncService:
         sheet_name = sheet_conf.value if sheet_conf else None
         password = pass_conf.value if pass_conf else None
         
+        print(f"DEBUG: SYNC - Starting sync for {file_path}, Sheet: {sheet_name}")
+        
         # 2. Calculate Hash
         current_hash = self.excel.calculate_hash(file_path, sheet_name, password)
+        print(f"DEBUG: SYNC - Hash calculated: {current_hash}")
         
-        # 3. Check latest state
+        # 3. Check latest state (matching this source config?)
+        # Ideally we check against the latest state *for this file/sheet*.
+        # But for MVP we compare against absolute latest. 
+        # If user switches files, it WILL generate a new state (hash diff), which is correct.
         latest_state = self.db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
         
-        if latest_state and latest_state.excel_hash == current_hash:
-            return {"status": "no_change", "latest_id": latest_state.id}
+        if latest_state and latest_state.excel_hash == current_hash and latest_state.source_path == file_path and latest_state.source_sheet == (sheet_name or "Sheet1"):
+             return {"status": "no_change", "latest_id": latest_state.id}
         
         # 4. Parse and Save
         # Parse data. Assuming header is at row 6 as per previous logic, 
-        # but ideally this should also be config.
-        # For MVP we default to 6 or maybe store it in config too?
-        # Let's default 6 for now to match legacy.
+        print("DEBUG: SYNC - Hash different/new. Parsing file...")
         data = self.excel.parse_file(file_path, header_row=6, sheet_name=sheet_name, password=password)
+        print(f"DEBUG: SYNC - Parsing complete. Rows: {len(data)}")
         
-        # Clean formatting for storage (DiffService expects clean values usually, but we have structure)
-        # ExcelService returns {Col: {value: ..., formatting: ...}}
-        # We should probably store this structure to keep formatting.
-        # But DiffService test expects flat dict {"Product": "Apple"}.
-        # Let's flatten it for the 'snapshot' to make it usable, 
-        # OR keep structure.
-        # Use Case: "Design needs data".
-        # Let's store the FULL structure from ExcelService as it contains formatting.
-        # DiffService needs to be smart enough to handle it, or we flatten for Diffing.
-        # The test expects flat. Let's flatten for the test to pass, but in reality we might want formatting.
-        # Actually, let's keep the test expectation simple for now:
-        # The test mock returns `[{"col": "val"}]`, which is flat.
-        # ExcelService returns rich structure.
-        # We should serialize exactly what ExcelService returns.
+        # 5. Fetch Metadata
+        metadata = self.excel.get_file_metadata(file_path, password)
         
         new_state = ProjectState(
             excel_hash=current_hash,
             data_snapshot_json=json.dumps(data),
-            created_by=user_id
+            created_by=user_id,
+            source_path=file_path,
+            source_sheet=sheet_name or "Sheet1",
+            excel_last_modified_by=metadata.get("last_modified_by")
         )
         self.db.add(new_state)
         self.db.commit()
