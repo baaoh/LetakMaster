@@ -1,7 +1,7 @@
 # Implementation Plan - MVP: Core Excel-to-PSD Automation & Bridging Database
 
 ## Phase 1: Project Setup & Database Design
-- [ ] Task: Initialize FastAPI project structure with TaskIQ and SQLAlchemy.
+- [x] Task: Initialize FastAPI project structure with TaskIQ and SQLAlchemy. [477038e]
     - [ ] Initialize git repo (already done) and create folder structure (`app/`, `tests/`, `scripts/`).
     - [ ] Configure `poetry` or `pip` requirements (`fastapi`, `sqlalchemy`, `xlwings`, `psd-tools2`, `taskiq`).
 - [ ] Task: Define Database Schema (The "Bridging DB").
