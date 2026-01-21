@@ -1,18 +1,28 @@
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
 import shutil
 import json
 from contextlib import asynccontextmanager
-from app.database import Base, engine, get_db, SourceFile, SourceData, PSDFile, LayerMapping
+from app.database import Base, engine as prod_engine, SessionLocal, get_db, SourceFile, SourceData, PSDFile, LayerMapping
 from app.excel_service import ExcelService
 from app.tkq import broker, generate_psd_task, verify_psd_task
 
-# Initialize DB
-Base.metadata.create_all(bind=engine)
+def get_engine():
+    return prod_engine
+
+def create_tables(engine_to_use=None):
+    if engine_to_use is None:
+        engine_to_use = get_engine()
+    Base.metadata.create_all(bind=engine_to_use)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Initialize DB tables only if not explicitly disabled (e.g. for testing)
+    if os.getenv("SKIP_DB_INIT") != "1":
+        create_tables()
+    
     if not broker.is_worker_process:
         await broker.startup()
     yield
@@ -20,6 +30,20 @@ async def lifespan(app: FastAPI):
         await broker.shutdown()
 
 app = FastAPI(title="LetakMaster API", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/health")
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 UPLOAD_DIR = "uploads"
 if not os.path.exists(UPLOAD_DIR):
@@ -87,3 +111,15 @@ async def get_task_status(task_id: str):
     # in the same way Redis does, but for MVP it works in-memory.
     # Note: In a real multi-process env, this would need a ResultBackend.
     return {"status": "In-memory tasks are executed immediately by InMemoryBroker"}
+
+@app.get("/source-files")
+async def list_source_files(db: Session = Depends(get_db)):
+    return db.query(SourceFile).all()
+
+@app.get("/psd-files")
+async def list_psd_files(db: Session = Depends(get_db)):
+    return db.query(PSDFile).all()
+
+@app.get("/source-files/{file_id}/data")
+async def get_source_file_data(file_id: int, db: Session = Depends(get_db)):
+    return db.query(SourceData).filter(SourceData.source_file_id == file_id).all()
