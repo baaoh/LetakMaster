@@ -9,7 +9,7 @@ class ExcelService:
             return None
         return '#%02x%02x%02x' % (int(rgb_tuple[0]), int(rgb_tuple[1]), int(rgb_tuple[2]))
 
-    def parse_file(self, file_path: str, header_row: int = 6, sheet_name: str = None):
+    def parse_file(self, file_path: str, header_row: int = 6, sheet_name: str = None, password: str = None):
         """
         Parses an Excel file starting from header_row.
         Uses bulk reading for speed and extracts formatting.
@@ -21,7 +21,11 @@ class ExcelService:
         
         app = xw.App(visible=False)
         try:
-            wb = app.books.open(file_path)
+            if password:
+                wb = app.books.open(file_path, password=password)
+            else:
+                wb = app.books.open(file_path)
+            
             if sheet_name:
                 try:
                     sheet = wb.sheets[sheet_name]
@@ -77,7 +81,7 @@ class ExcelService:
             
         return results
 
-    def calculate_hash(self, file_path: str, sheet_name: str = None) -> str:
+    def calculate_hash(self, file_path: str, sheet_name: str = None, password: str = None) -> str:
         """
         Calculates a SHA256 hash of the sheet's data content (values only)
         to quickly detect changes.
@@ -87,7 +91,11 @@ class ExcelService:
 
         app = xw.App(visible=False)
         try:
-            wb = app.books.open(file_path)
+            if password:
+                wb = app.books.open(file_path, password=password)
+            else:
+                wb = app.books.open(file_path)
+            
             if sheet_name:
                 sheet = wb.sheets[sheet_name]
             else:

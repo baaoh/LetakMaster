@@ -69,15 +69,17 @@ class SyncService:
         # 1. Get Config
         path_conf = self.db.query(AppConfig).filter_by(key="master_excel_path").first()
         sheet_conf = self.db.query(AppConfig).filter_by(key="watched_sheet_name").first()
+        pass_conf = self.db.query(AppConfig).filter_by(key="excel_password").first()
         
         if not path_conf or not path_conf.value:
             raise ValueError("Master Excel Path not configured")
         
         file_path = path_conf.value
         sheet_name = sheet_conf.value if sheet_conf else None
+        password = pass_conf.value if pass_conf else None
         
         # 2. Calculate Hash
-        current_hash = self.excel.calculate_hash(file_path, sheet_name)
+        current_hash = self.excel.calculate_hash(file_path, sheet_name, password)
         
         # 3. Check latest state
         latest_state = self.db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
@@ -90,7 +92,7 @@ class SyncService:
         # but ideally this should also be config.
         # For MVP we default to 6 or maybe store it in config too?
         # Let's default 6 for now to match legacy.
-        data = self.excel.parse_file(file_path, header_row=6, sheet_name=sheet_name)
+        data = self.excel.parse_file(file_path, header_row=6, sheet_name=sheet_name, password=password)
         
         # Clean formatting for storage (DiffService expects clean values usually, but we have structure)
         # ExcelService returns {Col: {value: ..., formatting: ...}}

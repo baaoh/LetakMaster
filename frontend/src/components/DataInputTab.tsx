@@ -8,6 +8,7 @@ const API_BASE = 'http://localhost:8000'
 interface AppConfig {
   master_excel_path: string | null
   watched_sheet_name: string | null
+  excel_password: string | null
 }
 
 interface ProjectState {
@@ -18,7 +19,7 @@ interface ProjectState {
 }
 
 export function DataInputTab() {
-  const [config, setConfig] = useState<AppConfig>({ master_excel_path: '', watched_sheet_name: '' })
+  const [config, setConfig] = useState<AppConfig>({ master_excel_path: '', watched_sheet_name: '', excel_password: '' })
   const [history, setHistory] = useState<ProjectState[]>([])
   const [selectedStateId, setSelectedStateId] = useState<number | null>(null)
   const [stateData, setStateData] = useState<any[]>([])
@@ -111,6 +112,15 @@ export function DataInputTab() {
                   value={config.watched_sheet_name || ''} 
                   onChange={e => setConfig({ ...config, watched_sheet_name: e.target.value })}
                   placeholder="Sheet1"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Excel Password (Optional)</Form.Label>
+                <Form.Control 
+                  type="password" 
+                  value={config.excel_password || ''} 
+                  onChange={e => setConfig({ ...config, excel_password: e.target.value })}
+                  placeholder="Enter password if protected"
                 />
               </Form.Group>
               <div className="d-flex justify-content-between">

@@ -35,14 +35,17 @@ app.add_middleware(
 class ConfigRequest(BaseModel):
     master_excel_path: str
     watched_sheet_name: str | None = None
+    excel_password: str | None = None
 
 @app.get("/config")
 async def get_config(db: Session = Depends(get_db)):
     path = db.query(AppConfig).filter_by(key="master_excel_path").first()
     sheet = db.query(AppConfig).filter_by(key="watched_sheet_name").first()
+    password = db.query(AppConfig).filter_by(key="excel_password").first()
     return {
         "master_excel_path": path.value if path else None,
-        "watched_sheet_name": sheet.value if sheet else None
+        "watched_sheet_name": sheet.value if sheet else None,
+        "excel_password": password.value if password else None
     }
 
 @app.post("/config")
@@ -62,6 +65,14 @@ async def set_config(config: ConfigRequest, db: Session = Depends(get_db)):
         db.add(sheet_conf)
     else:
         sheet_conf.value = config.watched_sheet_name or ""
+
+    # Upsert password
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    if not pass_conf:
+        pass_conf = AppConfig(key="excel_password", value=config.excel_password or "")
+        db.add(pass_conf)
+    else:
+        pass_conf.value = config.excel_password or ""
     
     db.commit()
     return {"status": "updated"}
