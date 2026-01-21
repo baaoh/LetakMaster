@@ -1,7 +1,7 @@
 # Implementation Plan - MVP: Stateful Excel Sync & Bridging Database
 
 ## Phase 1: Database Refactoring & Config
-- [ ] Task: Update Database Schema for State Management.
+- [x] Task: Update Database Schema for State Management. [4b0e807]
     - [ ] Add `AppConfig` (key-value storage) and `ProjectState` (json snapshots) models.
     - [ ] Create migration script or drop/recreate tables (MVP style).
     - [ ] Test: Verify new models can store/retrieve configuration and large JSON blobs.
