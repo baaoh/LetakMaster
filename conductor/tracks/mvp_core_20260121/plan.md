@@ -16,7 +16,7 @@
     - [ ] Create `ExcelService` class using `xlwings` (or `openpyxl` as fallback for server-side headless).
     - [ ] Implement `parse_file` method to extract data AND basic formatting (hex colors, bold).
     - [ ] Write tests: Parse sample Excel -> Verify JSON output structure.
-- [ ] Task: Implement Data Ingestion API.
+- [x] Task: Implement Data Ingestion API. [c318220]
     - [ ] Create POST endpoint `/upload/excel`.
     - [ ] Connect parsing service to DB: Store parsed data into `SourceData`.
     - [ ] Write tests: Upload file -> Check DB records.
