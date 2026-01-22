@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Button, Form, ListGroup, Row, Col, Alert, Spinner, Badge } from 'react-bootstrap'
+import { Card, Button, Form, ListGroup, Row, Col, Alert, Spinner, Badge, InputGroup } from 'react-bootstrap'
 import axios from 'axios'
 import { DataGrid } from './DataGrid'
 
@@ -30,16 +30,31 @@ export function DataInputTab() {
   const [msg, setMsg] = useState<{ type: 'success' | 'danger', text: string } | null>(null)
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({})
   const [showSidebar, setShowSidebar] = useState(true)
+  const [availableSheets, setAvailableSheets] = useState<string[]>([])
 
   useEffect(() => {
     fetchConfig()
     fetchHistory()
   }, [])
 
+  // Auto-list sheets when config loads if path exists
+  useEffect(() => {
+      if (config.master_excel_path) {
+          // Don't auto-call too aggressively, maybe just once or when user asks
+          // But if we have a path, we want to populate the dropdown.
+          // handleListSheets() 
+          // Better: Only call if availableSheets is empty?
+      }
+  }, [config.master_excel_path])
+
   const fetchConfig = async () => {
     try {
       const resp = await axios.get(`${API_BASE}/config`)
       setConfig(resp.data)
+      if (resp.data.master_excel_path) {
+          // Try to load sheets immediately
+          handleListSheets(resp.data.master_excel_path, resp.data.excel_password)
+      }
     } catch (err) {
       console.error(err)
     }
@@ -124,6 +139,33 @@ export function DataInputTab() {
     }
   }
 
+  const handleBrowse = async () => {
+    try {
+        const resp = await axios.post(`${API_BASE}/system/browse-file`)
+        if (resp.data.path) {
+            setConfig(prev => ({ ...prev, master_excel_path: resp.data.path }))
+            // Auto-load sheets
+            handleListSheets(resp.data.path, config.excel_password)
+        }
+    } catch (err) {
+        console.error(err)
+    }
+  }
+
+  const handleListSheets = async (path?: string | null, password?: string | null) => {
+      const p = path || config.master_excel_path
+      const pw = password || config.excel_password
+      if (!p) return
+      
+      try {
+          const resp = await axios.post(`${API_BASE}/excel/sheets`, { path: p, password: pw })
+          setAvailableSheets(resp.data)
+      } catch (err) {
+          console.error("Failed to list sheets")
+          // Silent fail or toast? Silent for now to avoid spam on load
+      }
+  }
+
   const groupedHistory = history.reduce((acc, state) => {
     const key = `${state.source_path || 'Unknown'}::${state.source_sheet || 'Default'}`
     if (!acc[key]) acc[key] = []
@@ -148,31 +190,51 @@ export function DataInputTab() {
                 <Form>
                 <Form.Group className="mb-3">
                     <Form.Label>Master Excel Path</Form.Label>
-                    <Form.Control 
-                    type="text" 
-                    value={config.master_excel_path || ''} 
-                    onChange={e => setConfig({ ...config, master_excel_path: e.target.value })}
-                    placeholder="C:/Data/Master.xlsx"
-                    />
+                    <InputGroup>
+                        <Form.Control 
+                        type="text" 
+                        value={config.master_excel_path || ''} 
+                        onChange={e => setConfig({ ...config, master_excel_path: e.target.value })}
+                        placeholder="C:/path/to/file.xls"
+                        />
+                        <Button variant="secondary" onClick={handleBrowse}>Browse...</Button>
+                    </InputGroup>
                 </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Watched Sheet Name</Form.Label>
-                    <Form.Control 
-                    type="text" 
-                    value={config.watched_sheet_name || ''} 
-                    onChange={e => setConfig({ ...config, watched_sheet_name: e.target.value })}
-                    placeholder="Sheet1"
-                    />
-                </Form.Group>
+                
                 <Form.Group className="mb-3">
                     <Form.Label>Excel Password (Optional)</Form.Label>
                     <Form.Control 
                     type="password" 
                     value={config.excel_password || ''} 
-                    onChange={e => setConfig({ ...config, excel_password: e.target.value })}
+                    onChange={e => {
+                        setConfig({ ...config, excel_password: e.target.value })
+                        // If user types password, maybe we should reload sheets?
+                        // But typing triggers many renders. Add a button instead.
+                    }}
                     placeholder="Enter password if protected"
                     />
                 </Form.Group>
+
+                <Form.Group className="mb-3">
+                    <Form.Label>Watched Sheet Name</Form.Label>
+                    <InputGroup>
+                        <Form.Select 
+                            value={config.watched_sheet_name || ''}
+                            onChange={e => setConfig({ ...config, watched_sheet_name: e.target.value })}
+                        >
+                            <option value="">-- Select Sheet --</option>
+                            {availableSheets.map(s => <option key={s} value={s}>{s}</option>)}
+                            {/* Keep current value even if not in list (legacy) */}
+                            {config.watched_sheet_name && !availableSheets.includes(config.watched_sheet_name) && (
+                                <option value={config.watched_sheet_name}>{config.watched_sheet_name}</option>
+                            )}
+                        </Form.Select>
+                        <Button variant="outline-secondary" onClick={() => handleListSheets()}>
+                            ⟳
+                        </Button>
+                    </InputGroup>
+                </Form.Group>
+
                 <div className="d-flex justify-content-between">
                     <Button variant="outline-primary" onClick={handleSaveConfig}>Save Config</Button>
                     <Button variant="success" onClick={handleSync} disabled={loading}>
@@ -239,11 +301,19 @@ export function DataInputTab() {
       {/* Main Content */}
       <div className="flex-grow-1 d-flex flex-column p-3 bg-white">
         <div className="d-flex justify-content-between mb-3 align-items-center">
-            <Button variant="outline-secondary" onClick={() => setShowSidebar(!showSidebar)}>
-                {showSidebar ? 'Hide Sidebar' : 'Show Sidebar'}
-            </Button>
-            <div>
-                {selectedStateId && <span className="text-muted me-3">Viewing State #{selectedStateId}</span>}
+            <div className="d-flex align-items-center gap-3">
+                <Button variant="outline-secondary" onClick={() => setShowSidebar(!showSidebar)}>
+                    {showSidebar ? 'Hide Sidebar' : 'Show Sidebar'}
+                </Button>
+                {config.watched_sheet_name && (
+                    <h4 className="m-0 text-primary">
+                        Sheet: <strong>{config.watched_sheet_name}</strong>
+                    </h4>
+                )}
+            </div>
+            
+            <div className="d-flex align-items-center gap-2">
+                {selectedStateId && <span className="text-muted small">State #{selectedStateId}</span>}
                 <Button variant="primary" onClick={handleOpenExcel}>
                     Open Master Excel
                 </Button>

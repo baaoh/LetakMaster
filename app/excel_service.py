@@ -286,6 +286,41 @@ class ExcelService:
         
         return metadata
 
+    def get_sheet_names(self, file_path: str, password: str = None):
+        """
+        Returns a list of sheet names from the Excel file.
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+
+        is_temp = False
+        actual_path = file_path
+        
+        try:
+            actual_path, is_temp = self._unlock_file(file_path, password)
+        except Exception:
+            actual_path = file_path
+
+        app = xw.App(visible=False)
+        sheet_names = []
+        try:
+            if password:
+                wb = app.books.open(actual_path, password=password)
+            else:
+                wb = app.books.open(actual_path)
+            
+            sheet_names = [sheet.name for sheet in wb.sheets]
+            wb.close()
+        finally:
+            app.quit()
+            if is_temp and os.path.exists(actual_path):
+                try:
+                    os.remove(actual_path)
+                except:
+                    pass
+        
+        return sheet_names
+
     def open_file_in_gui(self, file_path: str, password: str = None):
         """
         Opens the file in the visible Excel application.

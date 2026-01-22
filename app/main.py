@@ -9,6 +9,7 @@ from app.database import Base, engine, get_db, SourceFile, SourceData, PSDFile, 
 from app.excel_service import ExcelService
 from app.sync_service import SyncService, DiffService
 from app.tkq import broker, generate_psd_task, verify_psd_task
+from app.utils import open_file_dialog
 from pydantic import BaseModel
 
 # Initialize DB tables at startup
@@ -36,6 +37,26 @@ class ConfigRequest(BaseModel):
     master_excel_path: str
     watched_sheet_name: str | None = None
     excel_password: str | None = None
+
+class SheetRequest(BaseModel):
+    path: str
+    password: str | None = None
+
+@app.post("/system/browse-file")
+async def browse_file():
+    path = open_file_dialog()
+    if path:
+        return {"path": path}
+    return {"path": None}
+
+@app.post("/excel/sheets")
+async def list_sheets(req: SheetRequest):
+    service = ExcelService()
+    try:
+        sheets = service.get_sheet_names(req.path, req.password)
+        return sheets
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/config")
 async def get_config(db: Session = Depends(get_db)):
