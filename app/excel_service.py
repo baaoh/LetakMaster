@@ -120,51 +120,69 @@ class ExcelService:
             
             if last_row <= header_row:
                 print("DEBUG: No data rows found.")
-                # Don't return yet, ensure cleanup
             else:
-                # 3. Read data
-                for r in range(header_row + 1, last_row + 1):
+                # 3. Bulk Read Data (Values & Colors)
+                # Define the full data range
+                data_range = sheet.range((header_row + 1, 1), (last_row, num_read_cols))
+                
+                print("DEBUG: Bulk reading values...")
+                all_values = data_range.value
+                
+                print("DEBUG: Bulk reading colors...")
+                all_colors = data_range.color
+                
+                # Normalize all_values to list of lists if single row
+                if not isinstance(all_values[0], (list, tuple)):
+                    all_values = [all_values]
+                    all_colors = [all_colors]
+                
+                print(f"DEBUG: Processing {len(all_values)} rows in memory...")
+
+                for r_idx, row_vals in enumerate(all_values):
                     row_data = {}
-                    # Read only up to the number of headers we identified
-                    row_range = sheet.range((r, 1), (r, num_read_cols))
-                    row_values = row_range.value
                     
-                    # Ensure row_values is a list (if single cell, it might be scalar)
-                    if not isinstance(row_values, (list, tuple)):
-                        row_values = [row_values]
+                    # Ensure row_vals is iterable (if single col, it might be scalar? xlwings usually handles this with options(ndim=2) but we used default)
+                    # If num_read_cols == 1, row_vals might be a scalar value per row? 
+                    # Let's ensure safety.
+                    current_row_vals = row_vals if isinstance(row_vals, (list, tuple)) else [row_vals]
                     
-                    for c_idx in range(num_read_cols):
-                        col_name = final_headers[c_idx]
+                    for c_idx, col_name in enumerate(final_headers):
+                        if c_idx >= len(current_row_vals):
+                            break
+                            
+                        val = current_row_vals[c_idx]
                         
-                        # Handle case where row might be shorter than headers (though range read should prevent this)
-                        value = row_values[c_idx] if c_idx < len(row_values) else None
-                        cell = row_range[c_idx]
-                        # Extract formatting
-                        # cell.color is background color
-                        bg_color = self._rgb_to_hex(cell.color)
-                        
-                        # Borders (simplified) - check if any border exists
-                        # Accessing api directly can be slow in bulk loops. 
-                        # For MVP, let's try to be efficient or minimal.
-                        # cell.api.Borders.LineStyle != -4142 (xlNone)
-                        has_border = False
+                        # Color extraction
+                        # all_colors structure matches all_values
+                        # If single col/row, xlwings might flatten. 
+                        # Assuming 2D consistency for now, but adding safety.
+                        bg_color = None
                         try:
-                            if cell.api.Borders.LineStyle != -4142:
-                                has_border = True
-                        except:
+                            if all_colors:
+                                # Access safely
+                                if r_idx < len(all_colors):
+                                    row_colors = all_colors[r_idx]
+                                    if isinstance(row_colors, (list, tuple)) and c_idx < len(row_colors):
+                                        bg_color = self._rgb_to_hex(row_colors[c_idx])
+                                    elif not isinstance(row_colors, (list, tuple)) and c_idx == 0:
+                                         # Single column case, row_colors might be the tuple directly
+                                         bg_color = self._rgb_to_hex(row_colors)
+                        except Exception:
                             pass
 
+                        # NOTE: borders and bold removed for performance (requires slow cell-by-cell API calls)
                         formatting = {
-                            "bold": cell.api.Font.Bold,
-                            "color": bg_color, # Background
-                            "border": has_border
+                            "bold": False,
+                            "color": bg_color,
+                            "border": False
                         }
                         
                         row_data[col_name] = {
-                            "value": value,
+                            "value": val,
                             "formatting": formatting
                         }
                     results.append(row_data)
+                print("DEBUG: Processing complete.")
                 
             wb.close()
         finally:
@@ -267,3 +285,34 @@ class ExcelService:
                     pass
         
         return metadata
+
+    def open_file_in_gui(self, file_path: str, password: str = None):
+        """
+        Opens the file in the visible Excel application.
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"File not found: {file_path}")
+
+        # Use xlwings to open (visible=True by default for main app, 
+        # but our service usually creates visible=False apps.
+        # We want to use the USER'S active Excel or start one.)
+        
+        # xw.Book(file_path) connects to active or opens.
+        # But we want to handle password.
+        
+        try:
+            app = xw.App(visible=True, add_book=False)
+            app.activate(steal_focus=True)
+            
+            if password:
+                wb = app.books.open(file_path, password=password)
+            else:
+                wb = app.books.open(file_path)
+                
+            wb.activate()
+            return True
+        except Exception as e:
+            print(f"Failed to open Excel GUI: {e}")
+            # Fallback to OS shell (user will be prompted for password)
+            os.startfile(file_path)
+            return False

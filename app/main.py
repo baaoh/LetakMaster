@@ -107,6 +107,21 @@ async def trigger_sync(db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/open-excel")
+async def open_excel(db: Session = Depends(get_db)):
+    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    
+    if not path_conf or not path_conf.value:
+        raise HTTPException(status_code=400, detail="Master Excel Path not configured")
+    
+    service = ExcelService()
+    try:
+        service.open_file_in_gui(path_conf.value, pass_conf.value if pass_conf else None)
+        return {"status": "opened"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/history")
 async def get_history(db: Session = Depends(get_db)):
     states = db.query(ProjectState).order_by(ProjectState.created_at.desc()).all()
