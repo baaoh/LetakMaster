@@ -20,9 +20,8 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
 ## 📋 Prerequisites
 
 *   **OS:** Windows 10/11 (Required for Photoshop COM automation)
-*   **Python:** Version 3.10 or higher
-*   **Node.js:** Version 18 or higher (for frontend)
 *   **Adobe Photoshop:** CC 2024 or newer
+*   *(Optional - For Developers only)* **Node.js:** Version 18+ (if you want to modify the frontend code)
 
 ## 📦 Installation
 
@@ -32,30 +31,31 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
     cd LetakMaster
     ```
 
-2.  **Environment Setup**
-    This project comes with a **Portable Python Environment** (`python_embed/`). You do **not** need to install Python or create a virtual environment. All backend dependencies are pre-installed in this embedded distribution.
-
-3.  **Frontend Setup**
-    Navigate to the frontend directory and install dependencies (Node.js required):
-    ```bash
-    cd frontend
-    npm install
-    cd ..
-    ```
+2.  **That's it!**
+    This project comes with a **Portable Python Environment** (`python_embed/`) and pre-built frontend assets. You do **not** need to install Python, Node.js, or create any virtual environments to use the application.
 
 ## ▶️ Usage
 
-### Quick Start
-The easiest way to start the application is using the provided batch script:
+### Quick Start (User Mode)
+Double-click the portable launcher script:
 ```bash
-./start_servers.bat
+./start_app_portable.bat
 ```
-This will launch both the Python backend API (using the embedded Python) and the React frontend.
+This will:
+1.  Launch the Python backend (using the embedded runtime).
+2.  Serve the pre-built user interface.
+3.  Automatically open your web browser to `http://localhost:8000`.
+
+### Developer Mode (Optional)
+If you want to modify the React frontend code:
+1.  Install Node.js.
+2.  Run `cd frontend && npm install`.
+3.  Use `./start_servers.bat` to run the backend and the Vite dev server with hot-reloading.
 
 ### Manual Workflow
 
 #### 1. Data Ingestion
-1.  Open the web dashboard (usually `http://localhost:5173`).
+1.  Open the web dashboard (`http://localhost:8000`).
 2.  Go to the **Data Input** tab.
 3.  Select your master Excel file (e.g., `Copy of letak prodejna 2026 NEW FINAL.xls`).
 4.  The system will ingest the data and create a new "State".
