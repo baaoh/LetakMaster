@@ -25,34 +25,40 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
 
 ## 📦 Installation
 
+### Option A: From Source (Git Clone)
+Use this if you want the latest code.
+
 1.  **Clone the Repository**
     ```bash
     git clone https://github.com/baaoh/LetakMaster.git
     cd LetakMaster
     ```
 
-2.  **That's it!**
-    This project comes with a **Portable Python Environment** (`python_embed/`) and pre-built frontend assets. You do **not** need to install Python, Node.js, or create any virtual environments to use the application.
+2.  **Run Installer**
+    Double-click `install.bat`.
+    *   This will check for Python, create a virtual environment, and install all dependencies.
+    *   *Note: You do NOT need to install Node.js.*
+
+3.  **Start Application**
+    Double-click `start_app.bat` (created by the installer).
+
+### Option B: Portable Release (If available)
+If you downloaded a Release `.zip` that includes the `python_embed` folder:
+1.  Extract the zip.
+2.  Double-click `start_app_portable.bat`.
+3.  No installation required.
 
 ## ▶️ Usage
 
-### Quick Start (User Mode)
-Double-click the portable launcher script:
-```bash
-./start_app_portable.bat
-```
-This will:
-1.  Launch the Python backend (using the embedded runtime).
-2.  Serve the pre-built user interface.
-3.  Automatically open your web browser to `http://localhost:8000`.
-
-### Developer Mode (Optional)
-If you want to modify the React frontend code:
-1.  Install Node.js.
-2.  Run `cd frontend && npm install`.
-3.  Use `./start_servers.bat` to run the backend and the Vite dev server with hot-reloading.
+### Dashboard
+Once the application starts, it will open your browser to `http://localhost:8000`.
+Use the **Data Input** tab to upload your master Excel file and begin.
 
 ### Manual Workflow
+If you need to run specific scripts manually (e.g., for debugging):
+
+*   **Git Users:** Activate venv first: `venv\Scripts\activate` then run `python scripts/script_name.py`.
+*   **Portable Users:** Use `python_embed\python.exe scripts/script_name.py`.
 
 #### 1. Data Ingestion
 1.  Open the web dashboard (`http://localhost:8000`).
