@@ -32,19 +32,15 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
     cd LetakMaster
     ```
 
-2.  **Backend Setup**
-    Create a virtual environment and install dependencies:
-    ```bash
-    python -m venv venv
-    venv\Scripts\activate
-    pip install -r requirements.txt
-    ```
+2.  **Environment Setup**
+    This project comes with a **Portable Python Environment** (`python_embed/`). You do **not** need to install Python or create a virtual environment. All backend dependencies are pre-installed in this embedded distribution.
 
 3.  **Frontend Setup**
-    Navigate to the frontend directory and install dependencies:
+    Navigate to the frontend directory and install dependencies (Node.js required):
     ```bash
     cd frontend
     npm install
+    cd ..
     ```
 
 ## ▶️ Usage
@@ -54,7 +50,7 @@ The easiest way to start the application is using the provided batch script:
 ```bash
 ./start_servers.bat
 ```
-This will launch both the Python backend API and the React frontend.
+This will launch both the Python backend API (using the embedded Python) and the React frontend.
 
 ### Manual Workflow
 
@@ -68,8 +64,8 @@ This will launch both the Python backend API and the React frontend.
 1.  The system calculates the layout for every page using the **Enrichment** process. This writes a `PSD_Allocation` value (e.g., `P25_01A`) to the Excel data.
 2.  Generate a **Build Plan** for a specific page (e.g., Page 25). This creates a JSON file containing all the text and logic needed for Photoshop.
     ```bash
-    # Example manual command
-    python scripts/generate_build_json.py 25
+    # Example manual command using embedded python
+    python_embed\python.exe scripts/generate_build_json.py 25
     ```
 
 #### 3. Photoshop Automation
