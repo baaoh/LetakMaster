@@ -1,0 +1,20 @@
+' --- LetakMaster VBA Trigger ---
+' Copy this code into the 'ThisWorkbook' module of your Excel workspace.
+' This will prompt you to update layouts automatically when you open the file.
+
+Private Sub Workbook_Open()
+    Dim result As VbMsgBoxResult
+    result = MsgBox("Do you want to calculate layouts now?", vbYesNo + vbQuestion, "LetakMaster Automation")
+    
+    If result = vbYes Then
+        On Error Resume Next
+        ' This requires the xlwings add-in to be installed and 'RunPython' to be available.
+        ' It calls the Python backend to calculate mapping and write to columns AM-AY.
+        RunPython "import app.automation; app.automation.enrich_active_book()"
+        
+        If Err.Number <> 0 Then
+            MsgBox "Failed to trigger automation. Ensure LetakMaster is running and xlwings is configured." & vbCrLf & "Error: " & Err.Description, vbExclamation
+        End If
+        On Error GoTo 0
+    End If
+End Sub

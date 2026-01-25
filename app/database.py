@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import create_engine, ForeignKey, String, Integer, DateTime, Text
+from sqlalchemy import create_engine, ForeignKey, String, Integer, DateTime, Text, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///./letak_master.db"
@@ -8,6 +8,14 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./letak_master.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
+
+# Enable Write-Ahead Logging (WAL) for concurrency
+@event.listens_for(engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.close()
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Base(DeclarativeBase):
@@ -82,8 +90,17 @@ class ProjectState(Base):
     source_sheet: Mapped[Optional[str]] = mapped_column(String(255))
     excel_last_modified_by: Mapped[Optional[str]] = mapped_column(String(255)) # Excel's "Last Author"
     
+    archive_path: Mapped[Optional[str]] = mapped_column(String(1024)) # Path to full backup of source file
+    
     excel_hash: Mapped[str] = mapped_column(String(64))
     data_snapshot_json: Mapped[str] = mapped_column(Text) # Large JSON blob
+    page_metadata_json: Mapped[Optional[str]] = mapped_column(Text) # JSON: {"1": "Grid8", "2": "A4", ...}
+    
+    # User's local workspace file for this state
+    last_workspace_path: Mapped[Optional[str]] = mapped_column(String(1024))
+    
+    # Path to the build plans directory for this state
+    last_build_plans_path: Mapped[Optional[str]] = mapped_column(String(1024))
 
 class UserSession(Base):
     __tablename__ = "user_sessions"
@@ -92,3 +109,30 @@ class UserSession(Base):
     user_id: Mapped[str] = mapped_column(String(100))
     active_project_state_id: Mapped[int] = mapped_column(ForeignKey("project_states.id"))
     last_active: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class ProductIndex(Base):
+    __tablename__ = "product_index"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    project_state_id: Mapped[int] = mapped_column(ForeignKey("project_states.id"), index=True)
+    page_number: Mapped[int] = mapped_column(Integer, index=True)
+    
+    # Core Data
+    product_name: Mapped[Optional[str]] = mapped_column(String(255), index=True)
+    supplier_name: Mapped[Optional[str]] = mapped_column(String(255), index=True)
+    ean: Mapped[Optional[str]] = mapped_column(String(50))
+    psd_group: Mapped[Optional[str]] = mapped_column(String(50)) # e.g. Product_01
+    
+    # Relationships
+    project_state: Mapped["ProjectState"] = relationship()
+
+class PageAsset(Base):
+    __tablename__ = "page_assets"
+    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    page_number: Mapped[int] = mapped_column(Integer, unique=True)
+    
+    psd_filename: Mapped[str] = mapped_column(String(255))
+    psd_path: Mapped[str] = mapped_column(String(1024))
+    preview_path: Mapped[Optional[str]] = mapped_column(String(1024))
+    last_rendered: Mapped[Optional[datetime]] = mapped_column(DateTime)

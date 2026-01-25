@@ -6,3 +6,4 @@ psd-tools
 Pillow
 taskiq
 taskiq-fastapi
+openpyxl

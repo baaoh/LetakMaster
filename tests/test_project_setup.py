@@ -14,7 +14,7 @@ def test_requirements_file():
         'fastapi', 
         'sqlalchemy', 
         'xlwings', 
-        'psd-tools2', 
+        'psd-tools', 
         'taskiq'
     ]
     

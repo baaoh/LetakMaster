@@ -1,0 +1,67 @@
+{
+  "template_id": "letak_4x4_v2",
+  "description": "Standard 16-product grid layout",
+  "grid": {
+    "rows": 4,
+    "cols": 4,
+    "total_slots": 16
+  },
+  "group_naming_convention": "Product_{nn}",
+  "group_range": [1, 16],
+  "layers": [
+    {
+      "logical_name": "Product Name",
+      "layer_suffix": "nazev_XXA",
+      "type": "text",
+      "description": "Main bold name of the product"
+    },
+    {
+      "logical_name": "Product Details",
+      "layer_suffix": "nazev_XXB",
+      "type": "text",
+      "description": "Secondary text, weight, or variants"
+    },
+    {
+      "logical_name": "Price (Integer)",
+      "layer_suffix": "Pricetag_XX/cena_XX/cena_XXA",
+      "type": "text",
+      "description": "Main price big number"
+    },
+    {
+      "logical_name": "Price (Decimal)",
+      "layer_suffix": "Pricetag_XX/cena_XX/cena_XXB",
+      "type": "text",
+      "description": "Small decimal number"
+    },
+    {
+      "logical_name": "Card Price Label",
+      "layer_suffix": "Pricetag_XX/cenaskartou_XX",
+      "type": "text",
+      "description": "Text 'cena s kartou' or similar"
+    },
+    {
+      "logical_name": "From Label",
+      "layer_suffix": "Pricetag_XX/od_XX",
+      "type": "text",
+      "description": "Text 'od'"
+    },
+    {
+      "logical_name": "EAN Code",
+      "layer_suffix": "EAN-number_XX",
+      "type": "text",
+      "description": "Numeric EAN code"
+    },
+    {
+      "logical_name": "Availability",
+      "layer_suffix": "dostupnost_XX",
+      "type": "text",
+      "description": "Availability info (e.g. 'Not in Brno')"
+    },
+    {
+      "logical_name": "Product Image",
+      "layer_suffix": "obrazy_XX/obraz_XXA",
+      "type": "image",
+      "description": "Main product image placeholder"
+    }
+  ]
+}

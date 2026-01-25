@@ -1,0 +1,11 @@
+/* Reset basic styles to let Bootstrap handle layout */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Ensure full width */
+#root {
+  width: 100%;
+}
