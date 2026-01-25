@@ -1,0 +1,84 @@
+{
+  "page": 16,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Cellarium Bisencii",
+        "nazev_01B": "Víno 0,75L",
+        "cena_01A": "68",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "234393",
+        "EAN:_01": "Všechny druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "1061329"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Borgomori",
+        "nazev_03B": "Prosecco 0,75L",
+        "cena_03A": "99",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "069876",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "1063399"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "The Standard",
+        "nazev_09B": "Vodka 1L",
+        "cena_09A": "479",
+        "od_09": "od",
+        "EAN-number_09": "094797",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "1022236"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Jagoš",
+        "nazev_11B": "Víno 1L",
+        "cena_11A": "44",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "903492",
+        "EAN:_11": "Všechny druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "1061493"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "page": 11,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "od_01": "od",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•není dostupné na TDE"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": true
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "od_03": "od",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•není dostupné na TDE"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": true
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "od_09": "od",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•není dostupné na TDE"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": true
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "od_11": "od",
+        "EAN:_11": "EAN:",
+        "dostupnost_11": "•není dostupné na TDE"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": true,
+        "dostupnost_11": true
+      }
+    }
+  ]
+}

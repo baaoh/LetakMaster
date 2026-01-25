@@ -173,22 +173,93 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
         raise HTTPException(status_code=404, detail="builder.jsx not found")
         
     with open(script_path, "r", encoding="utf-8") as f:
-        script_content = f.read()
+        # Read lines and filter out #target directives which break DoScript (JS Eval)
+        lines = f.readlines()
+        safe_lines = [line for line in lines if not line.strip().startswith("#target")]
+        script_content = "".join(safe_lines)
         
     injection = f'var g_injected_images_dir = "{images_dir_js}";\nvar g_injected_json_dir = "{json_dir_js}";\nvar g_injected_automation = true;'
     final_script = injection + "\n" + script_content
     
+    # We still write this for debugging purposes, though we run the string directly
     run_script_path = os.path.abspath(os.path.join("scripts", "run_autogen.jsx"))
+    
+    # Re-add target directive for file-based execution
+    file_content = "#target photoshop\n" + final_script
+    
     with open(run_script_path, "w", encoding="utf-8") as f:
-        f.write(final_script)
+        f.write(file_content)
         
     def _run_ps():
-        import win32com.client
+        import win32com.client.dynamic
         import pythoncom
+        import traceback
+        import subprocess
         pythoncom.CoInitialize() # Required for threadpool COM usage
+        
+        # Normalize path for Photoshop (Forward slashes are safer)
+        js_path = run_script_path.replace("\\", "/")
+        ps = None
+        
         try:
-            ps = win32com.client.Dispatch("Photoshop.Application")
-            ps.DoJavaScriptFile(run_script_path)
+            # Attempt 1: COM Automation
+            ps = win32com.client.dynamic.Dispatch("Photoshop.Application")
+            # Pass all arguments explicitly: Path, Args Array, Mode (1=Debug/Immediate)
+            ps.DoJavaScriptFile(js_path, [], 1) 
+            
+        except Exception as e:
+            # CAPTURE ERROR
+            tb = traceback.format_exc()
+            error_detail = str(e)
+            com_desc = "N/A"
+            if hasattr(e, 'excepinfo') and e.excepinfo:
+                 com_desc = e.excepinfo[2] if len(e.excepinfo) > 2 else "Unknown COM Error"
+                 error_detail = f"{com_desc} (COM Error)"
+            
+            # LOG IT
+            print(f"COM Execution Failed. Switch to Fallback. Error: {error_detail}")
+            try:
+                with open("debug_error.log", "w", encoding="utf-8") as log:
+                    log.write(f"COM Failed: {error_detail}\n{tb}\nAttempting explicit executable fallback...\n")
+            except: pass
+            
+            # Attempt 2: Explicit Executable Launch
+            # COM properties like ps.FullName are failing. We must find the EXE manually.
+            try:
+                import glob
+                
+                def find_photoshop_exe():
+                    # Common paths
+                    candidates = [
+                        r"C:\Program Files\Adobe\Adobe Photoshop 2025\Photoshop.exe",
+                        r"C:\Program Files\Adobe\Adobe Photoshop 2024\Photoshop.exe",
+                        r"C:\Program Files\Adobe\Adobe Photoshop 2023\Photoshop.exe",
+                        r"C:\Program Files\Adobe\Adobe Photoshop 2022\Photoshop.exe",
+                    ]
+                    for c in candidates:
+                        if os.path.exists(c):
+                            return c
+                    
+                    # Wildcard fallback
+                    wildcards = glob.glob(r"C:\Program Files\Adobe\Adobe Photoshop*\Photoshop.exe")
+                    if wildcards:
+                        return wildcards[-1] # Newest version usually
+                    return None
+
+                exe_path = find_photoshop_exe()
+                
+                if exe_path:
+                    print(f"Launching via detected executable: {exe_path}")
+                    subprocess.Popen([exe_path, run_script_path])
+                else:
+                    # If COM failed so bad we don't even have the app object, try generic command
+                    print("Launching via generic 'photoshop' command (PATH)...")
+                    subprocess.Popen(["photoshop", run_script_path], shell=True)
+                    
+            except Exception as e2:
+                # If both fail, then we raise
+                raise RuntimeError(f"Both COM and OS execution failed. COM: {error_detail} | OS: {e2}")
+                
         finally:
             pythoncom.CoUninitialize()
 
@@ -196,16 +267,21 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
         await run_in_threadpool(_run_ps)
         return {"status": "success", "message": "Dynamic script execution triggered."}
     except Exception as e:
+        # e will now contain our detailed message
         raise HTTPException(status_code=500, detail=f"Failed to run script: {e}")
 
 @app.post("/system/open-photoshop")
 def open_photoshop():
+    import pythoncom
+    import win32com.client
+    pythoncom.CoInitialize()
     try:
-        import win32com.client
         app = win32com.client.Dispatch("Photoshop.Application")
         return {"status": "success", "message": "Photoshop launched/connected."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to launch Photoshop: {e}")
+    finally:
+        pythoncom.CoUninitialize()
 
 # --- Config & State Management ---
 

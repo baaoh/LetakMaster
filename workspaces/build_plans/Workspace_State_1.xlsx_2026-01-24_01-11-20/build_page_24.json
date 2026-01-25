@@ -1,0 +1,85 @@
+{
+  "page": 24,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Nestlé",
+        "nazev_01B": "tyčinka 22g, 25g",
+        "cena_01A": "8",
+        "cena_01B": "20",
+        "od_01": "od",
+        "EAN-number_01": "007437",
+        "EAN:_01": "Všechny druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "2050138"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "BonaVita",
+        "nazev_03B": "dětská cereálie 375g",
+        "cena_03A": "34",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "561698",
+        "EAN:_03": "Více druhů",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "2050146"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": false,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Emco ",
+        "nazev_09B": "mysli sušenky 60g",
+        "cena_09A": "10",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "144793",
+        "EAN:_09": "Více druhů",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "2010419"
+      },
+      "visibility": {
+        "od_09": true,
+        "EAN-number_09": false,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "MaxSport",
+        "nazev_11B": "Royal Protein  60g",
+        "cena_11A": "23",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "618129",
+        "EAN:_11": "Více druhů",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "2051142"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

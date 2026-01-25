@@ -1,0 +1,1035 @@
+18:15:16 GMT+0100: Script Started
+18:15:16 GMT+0100: Mode: select
+18:16:24 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_10.json
+18:16:24 GMT+0100: JSON Parsed. Actions: 0
+18:16:24 GMT+0100: runBuild Started for Page 10
+18:16:26 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_11.json
+18:16:26 GMT+0100: JSON Parsed. Actions: 4
+18:16:26 GMT+0100: runBuild Started for Page 11
+18:16:26 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:16:26 GMT+0100: Updating Text: Product_01 / nazev_01A -> Kubík play
+18:16:26 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:16:26 GMT+0100: Updating Text: Product_01 / nazev_01B -> Voda 0,4L
+18:16:26 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:16:26 GMT+0100: Updating Text: Product_01 / cena_01A -> 12
+18:16:26 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:16:26 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:16:26 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:16:26 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:16:27 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:16:27 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 206715
+18:16:27 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:16:27 GMT+0100: Updating Text: Product_01 / EAN:_01 -> Všechny druhy
+18:16:27 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:16:27 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:16:28 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:16:28 GMT+0100: Updating Text: Product_03 / nazev_03A -> Maxi Vita Exclusive
+18:16:28 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / nazev_03B -> Šumivé tablety 80g
+18:16:28 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / cena_03A -> 34
+18:16:28 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:16:28 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:16:28 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 131550
+18:16:28 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:16:28 GMT+0100: Updating Text: Product_03 / EAN:_03 -> Všechny druhy
+18:16:29 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:16:29 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:16:30 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:16:30 GMT+0100: Updating Text: Product_09 / nazev_09A -> Ahmad Tea
+18:16:30 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:16:30 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:16:30 GMT+0100: Updating Text: Product_09 / cena_09A -> 36
+18:16:30 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:16:30 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:16:31 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:16:31 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:16:31 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:16:31 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 009690
+18:16:31 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:16:31 GMT+0100: Updating Text: Product_09 / EAN:_09 -> 4 druhy
+18:16:31 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:16:31 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:16:33 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:16:33 GMT+0100: Updating Text: Product_11 / nazev_11A -> Pfanner
+18:16:33 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:16:33 GMT+0100: Updating Text: Product_11 / nazev_11B -> ICE TEA 0,33L
+18:16:34 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:16:34 GMT+0100: Updating Text: Product_11 / cena_11A -> 11
+18:16:34 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:16:34 GMT+0100: Updating Text: Product_11 / cena_11B -> 50
+18:16:34 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:16:34 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:16:34 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:16:34 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 069970
+18:16:34 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:16:34 GMT+0100: Updating Text: Product_11 / EAN:_11 -> 3 druhy
+18:16:35 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:16:35 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:16:39 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_12.json
+18:16:39 GMT+0100: JSON Parsed. Actions: 4
+18:16:39 GMT+0100: runBuild Started for Page 12
+18:16:41 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_13.json
+18:16:41 GMT+0100: JSON Parsed. Actions: 4
+18:16:42 GMT+0100: runBuild Started for Page 13
+18:16:42 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:16:42 GMT+0100: Updating Text: Product_01 / nazev_01A -> Koli
+18:16:42 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / nazev_01B -> Sirup 0,7L
+18:16:42 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / cena_01A -> 34
+18:16:42 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:16:42 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:16:42 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 848468
+18:16:42 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:16:42 GMT+0100: Updating Text: Product_01 / EAN:_01 -> Všechny druhy
+18:16:42 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:16:43 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:16:43 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:16:43 GMT+0100: Updating Text: Product_03 / nazev_03A -> Coca Cola
+18:16:43 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:16:43 GMT+0100: Updating Text: Product_03 / nazev_03B -> 1L
+18:16:44 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:16:44 GMT+0100: Updating Text: Product_03 / cena_03A -> 21
+18:16:44 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:16:44 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:16:44 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:16:44 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:16:44 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:16:44 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 054227
+18:16:44 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:16:44 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 4 druhy
+18:16:44 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:16:44 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:16:46 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:16:46 GMT+0100: Updating Text: Product_09 / nazev_09A -> Monster
+18:16:46 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:16:46 GMT+0100: Updating Text: Product_09 / nazev_09B -> Energetický nápoj 0,5L
+18:16:46 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:16:46 GMT+0100: Updating Text: Product_09 / cena_09A -> 22
+18:16:46 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:16:46 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:16:47 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:16:47 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:16:47 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:16:47 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 943949
+18:16:47 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:16:47 GMT+0100: Updating Text: Product_09 / EAN:_09 -> Všechny druhy
+18:16:47 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:16:47 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:16:49 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:16:49 GMT+0100: Updating Text: Product_11 / nazev_11A -> Hell
+18:16:50 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:16:50 GMT+0100: Updating Text: Product_11 / nazev_11B -> Energetický nápoj 0,25L
+18:16:50 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:16:50 GMT+0100: Updating Text: Product_11 / cena_11A -> 17
+18:16:50 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:16:50 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:16:50 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:16:50 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:16:51 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:16:51 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 034612
+18:16:51 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:16:51 GMT+0100: Updating Text: Product_11 / EAN:_11 -> Všechny druhy
+18:16:51 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:16:51 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:16:57 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_14.json
+18:16:57 GMT+0100: JSON Parsed. Actions: 0
+18:16:57 GMT+0100: runBuild Started for Page 14
+18:16:59 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_15.json
+18:16:59 GMT+0100: JSON Parsed. Actions: 0
+18:16:59 GMT+0100: runBuild Started for Page 15
+18:17:02 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_16.json
+18:17:02 GMT+0100: JSON Parsed. Actions: 4
+18:17:02 GMT+0100: runBuild Started for Page 16
+18:17:03 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_17.json
+18:17:03 GMT+0100: JSON Parsed. Actions: 0
+18:17:03 GMT+0100: runBuild Started for Page 17
+18:17:04 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_18.json
+18:17:04 GMT+0100: JSON Parsed. Actions: 0
+18:17:04 GMT+0100: runBuild Started for Page 18
+18:17:06 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_21.json
+18:17:06 GMT+0100: JSON Parsed. Actions: 0
+18:17:06 GMT+0100: runBuild Started for Page 21
+18:17:08 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_40.json
+18:17:08 GMT+0100: JSON Parsed. Actions: 4
+18:17:08 GMT+0100: runBuild Started for Page 40
+18:17:09 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:17:09 GMT+0100: Updating Text: Product_01 / nazev_01A -> Maggi
+18:17:09 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / nazev_01B -> RTH od 97g - 153g
+18:17:09 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / cena_01A -> 29
+18:17:09 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:17:09 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:17:09 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 443304
+18:17:09 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:17:09 GMT+0100: Updating Text: Product_01 / EAN:_01 -> Všechny druhy
+18:17:09 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:17:09 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:17:10 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:17:10 GMT+0100: Updating Text: Product_03 / nazev_03A -> Spak
+18:17:10 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:17:10 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:17:10 GMT+0100: Updating Text: Product_03 / cena_03A -> 47
+18:17:11 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:17:11 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:17:11 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:17:11 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:17:11 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:17:11 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 419574
+18:17:11 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:17:11 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:17:11 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:17:13 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:17:13 GMT+0100: Updating Text: Product_09 / nazev_09A -> Avokádo
+18:17:13 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:17:13 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:17:13 GMT+0100: Updating Text: Product_09 / cena_09A -> 4
+18:17:13 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:17:13 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:17:14 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:17:14 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:17:14 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:17:14 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 020143
+18:17:14 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:17:14 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:17:14 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:17:18 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:17:18 GMT+0100: Updating Text: Product_11 / nazev_11A -> Vitana
+18:17:18 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:17:18 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:17:18 GMT+0100: Updating Text: Product_11 / cena_11A -> 8
+18:17:19 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:17:19 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:17:19 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:17:19 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:17:19 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:17:19 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 244041
+18:17:19 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:17:19 GMT+0100: Updating Text: Product_11 / EAN:_11 -> Všechny druhy
+18:17:20 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:17:20 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:17:26 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_41.json
+18:17:26 GMT+0100: JSON Parsed. Actions: 10
+18:17:26 GMT+0100: runBuild Started for Page 41
+18:17:26 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:17:26 GMT+0100: Updating Text: Product_01 / nazev_01A -> Mei Ning
+18:17:26 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:17:27 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:17:27 GMT+0100: Updating Text: Product_01 / cena_01A -> 37
+18:17:27 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:17:27 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:17:27 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:17:27 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:17:27 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:17:27 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 443111
+18:17:27 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:17:27 GMT+0100: Updating Text: Product_01 / EAN:_01 -> EAN:
+18:17:27 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:17:27 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:17:28 GMT+0100: Data Keys for Product_02: nazev_02A, nazev_02B, cena_02A, cena_02B, od_02, EAN-number_02, EAN:_02, dostupnost_02, image_02
+18:17:28 GMT+0100: Updating Text: Product_02 / nazev_02A -> Ning Shai
+18:17:28 GMT+0100: SUCCESS: Updated nazev_02A via Direct
+18:17:28 GMT+0100: SUCCESS: Updated nazev_02B via Direct
+18:17:28 GMT+0100: Updating Text: Product_02 / cena_02A -> 27
+18:17:29 GMT+0100: SUCCESS: Updated cena_02A via Direct
+18:17:29 GMT+0100: Updating Text: Product_02 / cena_02B -> 90
+18:17:29 GMT+0100: SUCCESS: Updated cena_02B via Direct
+18:17:29 GMT+0100: Updating Text: Product_02 / od_02 -> od
+18:17:29 GMT+0100: SUCCESS: Updated od_02 via Direct
+18:17:29 GMT+0100: Updating Text: Product_02 / EAN-number_02 -> 434149
+18:17:29 GMT+0100: SUCCESS: Updated EAN-number_02 via Direct
+18:17:29 GMT+0100: Updating Text: Product_02 / EAN:_02 -> EAN:
+18:17:29 GMT+0100: SUCCESS: Updated EAN:_02 via Direct
+18:17:29 GMT+0100: SUCCESS: Updated dostupnost_02 via Direct
+18:17:30 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:17:30 GMT+0100: Updating Text: Product_03 / nazev_03A -> Nekton
+18:17:31 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:17:31 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:17:31 GMT+0100: Updating Text: Product_03 / cena_03A -> 33
+18:17:31 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:17:31 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:17:31 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:17:31 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:17:31 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:17:31 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 063460
+18:17:31 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:17:31 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 3 druhy
+18:17:31 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:17:32 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:17:33 GMT+0100: Data Keys for Product_04: nazev_04A, nazev_04B, cena_04A, cena_04B, od_04, EAN-number_04, EAN:_04, dostupnost_04, image_04
+18:17:33 GMT+0100: Updating Text: Product_04 / nazev_04A -> Bahák
+18:17:33 GMT+0100: SUCCESS: Updated nazev_04A via Direct
+18:17:33 GMT+0100: Updating Text: Product_04 / nazev_04B -> salát 500g
+18:17:33 GMT+0100: SUCCESS: Updated nazev_04B via Direct
+18:17:33 GMT+0100: Updating Text: Product_04 / cena_04A -> 23
+18:17:33 GMT+0100: SUCCESS: Updated cena_04A via Direct
+18:17:33 GMT+0100: Updating Text: Product_04 / cena_04B -> 90
+18:17:33 GMT+0100: SUCCESS: Updated cena_04B via Direct
+18:17:33 GMT+0100: Updating Text: Product_04 / od_04 -> od
+18:17:34 GMT+0100: SUCCESS: Updated od_04 via Direct
+18:17:34 GMT+0100: Updating Text: Product_04 / EAN-number_04 -> 101510
+18:17:34 GMT+0100: SUCCESS: Updated EAN-number_04 via Direct
+18:17:34 GMT+0100: Updating Text: Product_04 / EAN:_04 -> 3 druhy
+18:17:34 GMT+0100: SUCCESS: Updated EAN:_04 via Direct
+18:17:34 GMT+0100: SUCCESS: Updated dostupnost_04 via Direct
+18:17:36 GMT+0100: Data Keys for Product_05: nazev_05A, nazev_05B, cena_05A, cena_05B, od_05, EAN-number_05, EAN:_05, dostupnost_05, image_05
+18:17:36 GMT+0100: Updating Text: Product_05 / nazev_05A -> Labeta 
+18:17:36 GMT+0100: SUCCESS: Updated nazev_05A via Direct
+18:17:36 GMT+0100: Updating Text: Product_05 / nazev_05B -> jedlá soda  50g
+18:17:36 GMT+0100: SUCCESS: Updated nazev_05B via Direct
+18:17:36 GMT+0100: Updating Text: Product_05 / cena_05A -> 4
+18:17:36 GMT+0100: SUCCESS: Updated cena_05A via Direct
+18:17:36 GMT+0100: Updating Text: Product_05 / cena_05B -> 50
+18:17:36 GMT+0100: SUCCESS: Updated cena_05B via Direct
+18:17:36 GMT+0100: Updating Text: Product_05 / od_05 -> od
+18:17:36 GMT+0100: SUCCESS: Updated od_05 via Direct
+18:17:36 GMT+0100: Updating Text: Product_05 / EAN-number_05 -> 160060
+18:17:37 GMT+0100: SUCCESS: Updated EAN-number_05 via Direct
+18:17:37 GMT+0100: Updating Text: Product_05 / EAN:_05 -> EAN:
+18:17:37 GMT+0100: SUCCESS: Updated EAN:_05 via Direct
+18:17:37 GMT+0100: SUCCESS: Updated dostupnost_05 via Direct
+18:17:38 GMT+0100: Data Keys for Product_06: nazev_06A, nazev_06B, cena_06A, cena_06B, od_06, EAN-number_06, EAN:_06, dostupnost_06, image_06
+18:17:38 GMT+0100: Updating Text: Product_06 / nazev_06A -> Essa
+18:17:39 GMT+0100: SUCCESS: Updated nazev_06A via Direct
+18:17:39 GMT+0100: SUCCESS: Updated nazev_06B via Direct
+18:17:39 GMT+0100: Updating Text: Product_06 / cena_06A -> 12
+18:17:39 GMT+0100: SUCCESS: Updated cena_06A via Direct
+18:17:39 GMT+0100: Updating Text: Product_06 / cena_06B -> 90
+18:17:39 GMT+0100: SUCCESS: Updated cena_06B via Direct
+18:17:39 GMT+0100: Updating Text: Product_06 / od_06 -> od
+18:17:39 GMT+0100: SUCCESS: Updated od_06 via Direct
+18:17:39 GMT+0100: Updating Text: Product_06 / EAN-number_06 -> 332819
+18:17:39 GMT+0100: SUCCESS: Updated EAN-number_06 via Direct
+18:17:39 GMT+0100: Updating Text: Product_06 / EAN:_06 -> EAN:
+18:17:40 GMT+0100: SUCCESS: Updated EAN:_06 via Direct
+18:17:40 GMT+0100: SUCCESS: Updated dostupnost_06 via Direct
+18:17:42 GMT+0100: Data Keys for Product_07: nazev_07A, nazev_07B, cena_07A, cena_07B, od_07, EAN-number_07, EAN:_07, dostupnost_07, image_07
+18:17:42 GMT+0100: Updating Text: Product_07 / nazev_07A -> Essa
+18:17:42 GMT+0100: SUCCESS: Updated nazev_07A via Direct
+18:17:42 GMT+0100: SUCCESS: Updated nazev_07B via Direct
+18:17:42 GMT+0100: Updating Text: Product_07 / cena_07A -> 7
+18:17:42 GMT+0100: SUCCESS: Updated cena_07A via Direct
+18:17:42 GMT+0100: Updating Text: Product_07 / cena_07B -> 90
+18:17:42 GMT+0100: SUCCESS: Updated cena_07B via Direct
+18:17:42 GMT+0100: Updating Text: Product_07 / od_07 -> od
+18:17:43 GMT+0100: SUCCESS: Updated od_07 via Direct
+18:17:43 GMT+0100: Updating Text: Product_07 / EAN-number_07 -> 332437
+18:17:43 GMT+0100: SUCCESS: Updated EAN-number_07 via Direct
+18:17:43 GMT+0100: Updating Text: Product_07 / EAN:_07 -> EAN:
+18:17:43 GMT+0100: SUCCESS: Updated EAN:_07 via Direct
+18:17:43 GMT+0100: SUCCESS: Updated dostupnost_07 via Direct
+18:17:45 GMT+0100: Data Keys for Product_08: nazev_08A, nazev_08B, cena_08A, cena_08B, od_08, EAN-number_08, EAN:_08, dostupnost_08, image_08
+18:17:45 GMT+0100: Updating Text: Product_08 / nazev_08A -> Kotányi
+18:17:45 GMT+0100: SUCCESS: Updated nazev_08A via Direct
+18:17:45 GMT+0100: SUCCESS: Updated nazev_08B via Direct
+18:17:45 GMT+0100: Updating Text: Product_08 / cena_08A -> 13
+18:17:46 GMT+0100: SUCCESS: Updated cena_08A via Direct
+18:17:46 GMT+0100: Updating Text: Product_08 / cena_08B -> 90
+18:17:46 GMT+0100: SUCCESS: Updated cena_08B via Direct
+18:17:46 GMT+0100: Updating Text: Product_08 / od_08 -> od
+18:17:46 GMT+0100: SUCCESS: Updated od_08 via Direct
+18:17:46 GMT+0100: Updating Text: Product_08 / EAN-number_08 -> 017981
+18:17:46 GMT+0100: SUCCESS: Updated EAN-number_08 via Direct
+18:17:46 GMT+0100: Updating Text: Product_08 / EAN:_08 -> EAN:
+18:17:46 GMT+0100: SUCCESS: Updated EAN:_08 via Direct
+18:17:47 GMT+0100: SUCCESS: Updated dostupnost_08 via Direct
+18:17:49 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:17:49 GMT+0100: Updating Text: Product_09 / nazev_09A -> Bad Ischler 
+18:17:49 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:17:49 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:17:49 GMT+0100: Updating Text: Product_09 / cena_09A -> 11
+18:17:50 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:17:50 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:17:50 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:17:50 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:17:50 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:17:50 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 977285
+18:17:50 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:17:50 GMT+0100: Updating Text: Product_09 / EAN:_09 -> EAN:
+18:17:51 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:17:51 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:17:54 GMT+0100: Data Keys for Product_11: nazev_11A, od_11, EAN:_11, dostupnost_11
+18:17:54 GMT+0100: Updating Text: Product_11 / nazev_11A -> Retrio
+18:17:54 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:17:54 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:17:54 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:17:54 GMT+0100: Updating Text: Product_11 / EAN:_11 -> EAN:
+18:17:54 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:17:54 GMT+0100: Updating Text: Product_11 / dostupnost_11 -> •není dostupné na TDE
+18:17:54 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:17:57 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_42.json
+18:17:57 GMT+0100: JSON Parsed. Actions: 4
+18:17:57 GMT+0100: runBuild Started for Page 42
+18:17:57 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:17:57 GMT+0100: Updating Text: Product_01 / nazev_01A -> Orient 
+18:17:58 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:17:58 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:17:58 GMT+0100: Updating Text: Product_01 / cena_01A -> 7
+18:17:58 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:17:58 GMT+0100: Updating Text: Product_01 / cena_01B -> 50
+18:17:58 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:17:58 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:17:58 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:17:58 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 013020
+18:17:58 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:17:58 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:17:58 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:17:59 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:17:59 GMT+0100: Updating Text: Product_03 / nazev_03A -> Giana
+18:18:00 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:18:00 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:18:00 GMT+0100: Updating Text: Product_03 / cena_03A -> 12
+18:18:00 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:18:00 GMT+0100: Updating Text: Product_03 / cena_03B -> 50
+18:18:00 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:18:00 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:18:00 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:18:00 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 795372
+18:18:00 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:18:00 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 2 druhy
+18:18:00 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:18:00 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:18:02 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:18:02 GMT+0100: Updating Text: Product_09 / nazev_09A -> Giana
+18:18:02 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:18:02 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:18:02 GMT+0100: Updating Text: Product_09 / cena_09A -> 36
+18:18:02 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:18:02 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:18:03 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:18:03 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:18:03 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:18:03 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 503349
+18:18:03 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:18:03 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:18:03 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:18:06 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:18:06 GMT+0100: Updating Text: Product_11 / nazev_11A -> Dr.Oetker  
+18:18:06 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:18:06 GMT+0100: Updating Text: Product_11 / nazev_11B -> solamyl 400g
+18:18:06 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:18:06 GMT+0100: Updating Text: Product_11 / cena_11A -> 41
+18:18:07 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:18:07 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:18:07 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:18:07 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:18:07 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:18:07 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 635646
+18:18:07 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:18:07 GMT+0100: Updating Text: Product_11 / EAN:_11 -> 2 druhy
+18:18:08 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:18:08 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:18:12 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_43.json
+18:18:12 GMT+0100: JSON Parsed. Actions: 0
+18:18:12 GMT+0100: runBuild Started for Page 43
+18:18:15 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_44.json
+18:18:15 GMT+0100: JSON Parsed. Actions: 0
+18:18:15 GMT+0100: runBuild Started for Page 44
+18:18:17 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_45.json
+18:18:17 GMT+0100: JSON Parsed. Actions: 4
+18:18:17 GMT+0100: runBuild Started for Page 45
+18:18:21 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_46.json
+18:18:21 GMT+0100: JSON Parsed. Actions: 12
+18:18:21 GMT+0100: runBuild Started for Page 46
+18:18:21 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:18:21 GMT+0100: Updating Text: Product_01 / nazev_01A -> DH Foods
+18:18:21 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:18:22 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:18:22 GMT+0100: Updating Text: Product_01 / cena_01A -> 24
+18:18:22 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:18:22 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:18:22 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:18:22 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:18:22 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:18:22 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 284367
+18:18:22 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:18:22 GMT+0100: Updating Text: Product_01 / EAN:_01 -> EAN:
+18:18:22 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:18:22 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:18:23 GMT+0100: Data Keys for Product_02: nazev_02A, nazev_02B, cena_02A, cena_02B, od_02, EAN-number_02, EAN:_02, dostupnost_02, image_02
+18:18:23 GMT+0100: Updating Text: Product_02 / nazev_02A -> DH Foods
+18:18:23 GMT+0100: SUCCESS: Updated nazev_02A via Direct
+18:18:23 GMT+0100: SUCCESS: Updated nazev_02B via Direct
+18:18:23 GMT+0100: Updating Text: Product_02 / cena_02A -> 24
+18:18:24 GMT+0100: SUCCESS: Updated cena_02A via Direct
+18:18:24 GMT+0100: Updating Text: Product_02 / cena_02B -> 90
+18:18:24 GMT+0100: SUCCESS: Updated cena_02B via Direct
+18:18:24 GMT+0100: Updating Text: Product_02 / od_02 -> od
+18:18:24 GMT+0100: SUCCESS: Updated od_02 via Direct
+18:18:24 GMT+0100: Updating Text: Product_02 / EAN-number_02 -> 284381
+18:18:24 GMT+0100: SUCCESS: Updated EAN-number_02 via Direct
+18:18:24 GMT+0100: Updating Text: Product_02 / EAN:_02 -> EAN:
+18:18:24 GMT+0100: SUCCESS: Updated EAN:_02 via Direct
+18:18:24 GMT+0100: SUCCESS: Updated dostupnost_02 via Direct
+18:18:26 GMT+0100: Data Keys for Product_05: nazev_05A, nazev_05B, cena_05A, cena_05B, od_05, EAN-number_05, EAN:_05, dostupnost_05, image_05
+18:18:26 GMT+0100: Updating Text: Product_05 / nazev_05A -> DH Foods
+18:18:26 GMT+0100: SUCCESS: Updated nazev_05A via Direct
+18:18:27 GMT+0100: SUCCESS: Updated nazev_05B via Direct
+18:18:27 GMT+0100: Updating Text: Product_05 / cena_05A -> 44
+18:18:27 GMT+0100: SUCCESS: Updated cena_05A via Direct
+18:18:27 GMT+0100: Updating Text: Product_05 / cena_05B -> 90
+18:18:27 GMT+0100: SUCCESS: Updated cena_05B via Direct
+18:18:27 GMT+0100: Updating Text: Product_05 / od_05 -> od
+18:18:27 GMT+0100: SUCCESS: Updated od_05 via Direct
+18:18:27 GMT+0100: Updating Text: Product_05 / EAN-number_05 -> 287009
+18:18:27 GMT+0100: SUCCESS: Updated EAN-number_05 via Direct
+18:18:27 GMT+0100: Updating Text: Product_05 / EAN:_05 -> EAN:
+18:18:27 GMT+0100: SUCCESS: Updated EAN:_05 via Direct
+18:18:28 GMT+0100: SUCCESS: Updated dostupnost_05 via Direct
+18:18:29 GMT+0100: Data Keys for Product_06: nazev_06A, nazev_06B, cena_06A, cena_06B, od_06, EAN-number_06, EAN:_06, dostupnost_06, image_06
+18:18:29 GMT+0100: Updating Text: Product_06 / nazev_06A -> Bich Chi
+18:18:30 GMT+0100: SUCCESS: Updated nazev_06A via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / nazev_06B -> Rýžové krekry 101g
+18:18:30 GMT+0100: SUCCESS: Updated nazev_06B via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / cena_06A -> 37
+18:18:30 GMT+0100: SUCCESS: Updated cena_06A via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / cena_06B -> 90
+18:18:30 GMT+0100: SUCCESS: Updated cena_06B via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / od_06 -> od
+18:18:30 GMT+0100: SUCCESS: Updated od_06 via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / EAN-number_06 -> 555112
+18:18:30 GMT+0100: SUCCESS: Updated EAN-number_06 via Direct
+18:18:30 GMT+0100: Updating Text: Product_06 / EAN:_06 -> EAN:
+18:18:31 GMT+0100: SUCCESS: Updated EAN:_06 via Direct
+18:18:31 GMT+0100: SUCCESS: Updated dostupnost_06 via Direct
+18:18:31 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:18:31 GMT+0100: Updating Text: Product_09 / nazev_09A -> Salafruit
+18:18:31 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:18:31 GMT+0100: Updating Text: Product_09 / nazev_09B -> Sušené ovoce 100g
+18:18:31 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:18:31 GMT+0100: Updating Text: Product_09 / cena_09A -> 34
+18:18:32 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:18:32 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:18:32 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:18:32 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:18:32 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:18:32 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 650248
+18:18:32 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:18:32 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:18:32 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:18:35 GMT+0100: Data Keys for Product_10: nazev_10A, nazev_10B, cena_10A, cena_10B, od_10, EAN-number_10, EAN:_10, dostupnost_10, image_10
+18:18:35 GMT+0100: Updating Text: Product_10 / nazev_10A -> Taiky Food
+18:18:35 GMT+0100: SUCCESS: Updated nazev_10A via Direct
+18:18:36 GMT+0100: SUCCESS: Updated nazev_10B via Direct
+18:18:36 GMT+0100: Updating Text: Product_10 / cena_10A -> 19
+18:18:36 GMT+0100: SUCCESS: Updated cena_10A via Direct
+18:18:36 GMT+0100: Updating Text: Product_10 / cena_10B -> 90
+18:18:36 GMT+0100: SUCCESS: Updated cena_10B via Direct
+18:18:36 GMT+0100: Updating Text: Product_10 / od_10 -> od
+18:18:36 GMT+0100: SUCCESS: Updated od_10 via Direct
+18:18:36 GMT+0100: Updating Text: Product_10 / EAN-number_10 -> 201204
+18:18:37 GMT+0100: SUCCESS: Updated EAN-number_10 via Direct
+18:18:37 GMT+0100: Updating Text: Product_10 / EAN:_10 -> EAN:
+18:18:37 GMT+0100: SUCCESS: Updated EAN:_10 via Direct
+18:18:37 GMT+0100: SUCCESS: Updated dostupnost_10 via Direct
+18:18:40 GMT+0100: Data Keys for Product_12: nazev_12A, nazev_12B, cena_12A, cena_12B, od_12, EAN-number_12, EAN:_12, dostupnost_12, image_12
+18:18:40 GMT+0100: Updating Text: Product_12 / nazev_12A -> Sauce Grandmaster
+18:18:40 GMT+0100: SUCCESS: Updated nazev_12A via Direct
+18:18:40 GMT+0100: SUCCESS: Updated nazev_12B via Direct
+18:18:40 GMT+0100: Updating Text: Product_12 / cena_12A -> 24
+18:18:41 GMT+0100: SUCCESS: Updated cena_12A via Direct
+18:18:41 GMT+0100: Updating Text: Product_12 / cena_12B -> 90
+18:18:41 GMT+0100: SUCCESS: Updated cena_12B via Direct
+18:18:41 GMT+0100: Updating Text: Product_12 / od_12 -> od
+18:18:42 GMT+0100: SUCCESS: Updated od_12 via Direct
+18:18:42 GMT+0100: Updating Text: Product_12 / EAN-number_12 -> 117549
+18:18:42 GMT+0100: SUCCESS: Updated EAN-number_12 via Direct
+18:18:42 GMT+0100: Updating Text: Product_12 / EAN:_12 -> EAN:
+18:18:42 GMT+0100: SUCCESS: Updated EAN:_12 via Direct
+18:18:42 GMT+0100: SUCCESS: Updated dostupnost_12 via Direct
+18:18:45 GMT+0100: Data Keys for Product_13: nazev_13A, nazev_13B, cena_13A, cena_13B, od_13, EAN-number_13, EAN:_13, dostupnost_13, image_13
+18:18:45 GMT+0100: Updating Text: Product_13 / nazev_13A -> Chin-Su Sójová
+18:18:46 GMT+0100: SUCCESS: Updated nazev_13A via Direct
+18:18:46 GMT+0100: SUCCESS: Updated nazev_13B via Direct
+18:18:46 GMT+0100: Updating Text: Product_13 / cena_13A -> 37
+18:18:46 GMT+0100: SUCCESS: Updated cena_13A via Direct
+18:18:46 GMT+0100: Updating Text: Product_13 / cena_13B -> 90
+18:18:47 GMT+0100: SUCCESS: Updated cena_13B via Direct
+18:18:47 GMT+0100: Updating Text: Product_13 / od_13 -> od
+18:18:47 GMT+0100: SUCCESS: Updated od_13 via Direct
+18:18:47 GMT+0100: Updating Text: Product_13 / EAN-number_13 -> 366537
+18:18:47 GMT+0100: SUCCESS: Updated EAN-number_13 via Direct
+18:18:47 GMT+0100: Updating Text: Product_13 / EAN:_13 -> EAN:
+18:18:47 GMT+0100: SUCCESS: Updated EAN:_13 via Direct
+18:18:47 GMT+0100: SUCCESS: Updated dostupnost_13 via Direct
+18:18:51 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:18:51 GMT+0100: Updating Text: Product_11 / nazev_11A -> YeonHo Happy
+18:18:51 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:18:51 GMT+0100: Updating Text: Product_11 / nazev_11B -> Nápoj 350ml
+18:18:51 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:18:51 GMT+0100: Updating Text: Product_11 / cena_11A -> 9
+18:18:52 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:18:52 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:18:52 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:18:52 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:18:52 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:18:52 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 280019
+18:18:52 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:18:52 GMT+0100: Updating Text: Product_11 / EAN:_11 -> 2 druhy
+18:18:52 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:18:53 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:18:56 GMT+0100: Data Keys for Product_14: nazev_14A, nazev_14B, cena_14A, cena_14B, od_14, EAN-number_14, EAN:_14, dostupnost_14, image_14
+18:18:56 GMT+0100: Updating Text: Product_14 / nazev_14A -> Chin-Su
+18:18:56 GMT+0100: SUCCESS: Updated nazev_14A via Direct
+18:18:56 GMT+0100: Updating Text: Product_14 / nazev_14B -> Rýžové nudle 500g
+18:18:56 GMT+0100: SUCCESS: Updated nazev_14B via Direct
+18:18:56 GMT+0100: Updating Text: Product_14 / cena_14A -> 39
+18:18:56 GMT+0100: SUCCESS: Updated cena_14A via Direct
+18:18:56 GMT+0100: Updating Text: Product_14 / cena_14B -> 90
+18:18:57 GMT+0100: SUCCESS: Updated cena_14B via Direct
+18:18:57 GMT+0100: Updating Text: Product_14 / od_14 -> od
+18:18:57 GMT+0100: SUCCESS: Updated od_14 via Direct
+18:18:57 GMT+0100: Updating Text: Product_14 / EAN-number_14 -> 049103
+18:18:57 GMT+0100: SUCCESS: Updated EAN-number_14 via Direct
+18:18:57 GMT+0100: Updating Text: Product_14 / EAN:_14 -> EAN:
+18:18:57 GMT+0100: SUCCESS: Updated EAN:_14 via Direct
+18:18:58 GMT+0100: SUCCESS: Updated dostupnost_14 via Direct
+18:19:01 GMT+0100: Data Keys for Product_16: nazev_16A, nazev_16B, cena_16A, cena_16B, od_16, EAN-number_16, EAN:_16, dostupnost_16, image_16
+18:19:01 GMT+0100: Updating Text: Product_16 / nazev_16A -> The Muger
+18:19:02 GMT+0100: SUCCESS: Updated nazev_16A via Direct
+18:19:02 GMT+0100: Updating Text: Product_16 / nazev_16B -> Ramen nudle 180g
+18:19:02 GMT+0100: SUCCESS: Updated nazev_16B via Direct
+18:19:02 GMT+0100: Updating Text: Product_16 / cena_16A -> 16
+18:19:02 GMT+0100: SUCCESS: Updated cena_16A via Direct
+18:19:02 GMT+0100: Updating Text: Product_16 / cena_16B -> 90
+18:19:03 GMT+0100: SUCCESS: Updated cena_16B via Direct
+18:19:03 GMT+0100: Updating Text: Product_16 / od_16 -> od
+18:19:03 GMT+0100: SUCCESS: Updated od_16 via Direct
+18:19:03 GMT+0100: Updating Text: Product_16 / EAN-number_16 -> 631416
+18:19:03 GMT+0100: SUCCESS: Updated EAN-number_16 via Direct
+18:19:03 GMT+0100: Updating Text: Product_16 / EAN:_16 -> EAN:
+18:19:03 GMT+0100: SUCCESS: Updated EAN:_16 via Direct
+18:19:03 GMT+0100: SUCCESS: Updated dostupnost_16 via Direct
+18:19:08 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:19:08 GMT+0100: Updating Text: Product_03 / nazev_03A -> Kimchoo
+18:19:09 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / nazev_03B -> Instantní nudle 80g
+18:19:09 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / cena_03A -> 12
+18:19:09 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:19:09 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:19:09 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 942004
+18:19:09 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:19:09 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 4 druhy
+18:19:09 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:19:10 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:19:15 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_47.json
+18:19:15 GMT+0100: JSON Parsed. Actions: 8
+18:19:15 GMT+0100: runBuild Started for Page 47
+18:19:15 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:19:15 GMT+0100: Updating Text: Product_01 / nazev_01A -> FineDog Family
+18:19:15 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / nazev_01B -> konzerva pro psy 1240g
+18:19:15 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / cena_01A -> 28
+18:19:15 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:19:15 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:19:15 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 305537
+18:19:15 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:19:15 GMT+0100: Updating Text: Product_01 / EAN:_01 -> 3 druhy
+18:19:16 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:19:16 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:19:17 GMT+0100: Data Keys for Product_02: nazev_02A, nazev_02B, cena_02A, cena_02B, od_02, EAN-number_02, EAN:_02, dostupnost_02, image_02
+18:19:17 GMT+0100: Updating Text: Product_02 / nazev_02A -> FineDog Family
+18:19:17 GMT+0100: SUCCESS: Updated nazev_02A via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / nazev_02B -> konzerva pro psy 415g
+18:19:17 GMT+0100: SUCCESS: Updated nazev_02B via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / cena_02A -> 12
+18:19:17 GMT+0100: SUCCESS: Updated cena_02A via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / cena_02B -> 90
+18:19:17 GMT+0100: SUCCESS: Updated cena_02B via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / od_02 -> od
+18:19:17 GMT+0100: SUCCESS: Updated od_02 via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / EAN-number_02 -> 305568
+18:19:17 GMT+0100: SUCCESS: Updated EAN-number_02 via Direct
+18:19:17 GMT+0100: Updating Text: Product_02 / EAN:_02 -> 2 druhy
+18:19:18 GMT+0100: SUCCESS: Updated EAN:_02 via Direct
+18:19:18 GMT+0100: SUCCESS: Updated dostupnost_02 via Direct
+18:19:19 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:19:19 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:19:19 GMT+0100: Updating Text: Product_03 / nazev_03B -> pro psy 20g
+18:19:19 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:19:19 GMT+0100: Updating Text: Product_03 / cena_03A -> 12
+18:19:19 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:19:19 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:19:19 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:19:19 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:19:20 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:19:20 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 981400
+18:19:20 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:19:20 GMT+0100: Updating Text: Product_03 / EAN:_03 -> EAN:
+18:19:20 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:19:20 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:19:21 GMT+0100: Data Keys for Product_04: nazev_04A, nazev_04B, cena_04A, cena_04B, od_04, EAN-number_04, EAN:_04, dostupnost_04, image_04
+18:19:21 GMT+0100: SUCCESS: Updated nazev_04A via Direct
+18:19:21 GMT+0100: Updating Text: Product_04 / nazev_04B -> pro psy 50g
+18:19:22 GMT+0100: SUCCESS: Updated nazev_04B via Direct
+18:19:22 GMT+0100: Updating Text: Product_04 / cena_04A -> 32
+18:19:22 GMT+0100: SUCCESS: Updated cena_04A via Direct
+18:19:22 GMT+0100: Updating Text: Product_04 / cena_04B -> 90
+18:19:22 GMT+0100: SUCCESS: Updated cena_04B via Direct
+18:19:22 GMT+0100: Updating Text: Product_04 / od_04 -> od
+18:19:22 GMT+0100: SUCCESS: Updated od_04 via Direct
+18:19:22 GMT+0100: Updating Text: Product_04 / EAN-number_04 -> 987433
+18:19:22 GMT+0100: SUCCESS: Updated EAN-number_04 via Direct
+18:19:22 GMT+0100: Updating Text: Product_04 / EAN:_04 -> EAN:
+18:19:22 GMT+0100: SUCCESS: Updated EAN:_04 via Direct
+18:19:22 GMT+0100: SUCCESS: Updated dostupnost_04 via Direct
+18:19:26 GMT+0100: Data Keys for Product_06: nazev_06A, nazev_06B, cena_06A, cena_06B, od_06, EAN-number_06, EAN:_06, dostupnost_06, image_06
+18:19:26 GMT+0100: Updating Text: Product_06 / nazev_06A -> FineDog Mini Exclusive
+18:19:26 GMT+0100: SUCCESS: Updated nazev_06A via Direct
+18:19:26 GMT+0100: Updating Text: Product_06 / nazev_06B -> konzerva pro psy 200g
+18:19:26 GMT+0100: SUCCESS: Updated nazev_06B via Direct
+18:19:26 GMT+0100: Updating Text: Product_06 / cena_06A -> 23
+18:19:26 GMT+0100: SUCCESS: Updated cena_06A via Direct
+18:19:26 GMT+0100: Updating Text: Product_06 / cena_06B -> 90
+18:19:27 GMT+0100: SUCCESS: Updated cena_06B via Direct
+18:19:27 GMT+0100: Updating Text: Product_06 / od_06 -> od
+18:19:27 GMT+0100: SUCCESS: Updated od_06 via Direct
+18:19:27 GMT+0100: Updating Text: Product_06 / EAN-number_06 -> 305377
+18:19:27 GMT+0100: SUCCESS: Updated EAN-number_06 via Direct
+18:19:27 GMT+0100: Updating Text: Product_06 / EAN:_06 -> 3 druhy
+18:19:27 GMT+0100: SUCCESS: Updated EAN:_06 via Direct
+18:19:27 GMT+0100: SUCCESS: Updated dostupnost_06 via Direct
+18:19:30 GMT+0100: Data Keys for Product_08: nazev_08A, nazev_08B, cena_08A, cena_08B, od_08, EAN-number_08, EAN:_08, dostupnost_08, image_08
+18:19:30 GMT+0100: Updating Text: Product_08 / nazev_08A -> FineDog Mini
+18:19:30 GMT+0100: SUCCESS: Updated nazev_08A via Direct
+18:19:30 GMT+0100: Updating Text: Product_08 / nazev_08B -> granule pro psy 400g
+18:19:30 GMT+0100: SUCCESS: Updated nazev_08B via Direct
+18:19:30 GMT+0100: Updating Text: Product_08 / cena_08A -> 31
+18:19:30 GMT+0100: SUCCESS: Updated cena_08A via Direct
+18:19:30 GMT+0100: Updating Text: Product_08 / cena_08B -> 90
+18:19:31 GMT+0100: SUCCESS: Updated cena_08B via Direct
+18:19:31 GMT+0100: Updating Text: Product_08 / od_08 -> od
+18:19:31 GMT+0100: SUCCESS: Updated od_08 via Direct
+18:19:31 GMT+0100: Updating Text: Product_08 / EAN-number_08 -> 987051
+18:19:31 GMT+0100: SUCCESS: Updated EAN-number_08 via Direct
+18:19:31 GMT+0100: Updating Text: Product_08 / EAN:_08 -> EAN:
+18:19:31 GMT+0100: SUCCESS: Updated EAN:_08 via Direct
+18:19:31 GMT+0100: SUCCESS: Updated dostupnost_08 via Direct
+18:19:34 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:19:34 GMT+0100: Updating Text: Product_09 / nazev_09A -> Friskies
+18:19:34 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:19:34 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:19:34 GMT+0100: Updating Text: Product_09 / cena_09A -> 10
+18:19:35 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:19:35 GMT+0100: Updating Text: Product_09 / cena_09B -> 50
+18:19:35 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:19:35 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:19:35 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:19:35 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 751157
+18:19:35 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:19:35 GMT+0100: Updating Text: Product_09 / EAN:_09 -> Všechny druhy
+18:19:35 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:19:36 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:19:39 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:19:39 GMT+0100: Updating Text: Product_11 / nazev_11A -> PreVital
+18:19:39 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:19:39 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:19:39 GMT+0100: Updating Text: Product_11 / cena_11A -> 21
+18:19:39 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:19:39 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:19:40 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:19:40 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:19:40 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:19:40 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 111235
+18:19:40 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:19:40 GMT+0100: Updating Text: Product_11 / EAN:_11 -> Všechny druhy
+18:19:40 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:19:40 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:19:49 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_48.json
+18:19:49 GMT+0100: JSON Parsed. Actions: 5
+18:19:49 GMT+0100: runBuild Started for Page 48
+18:19:49 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:19:49 GMT+0100: Updating Text: Product_01 / nazev_01A -> Magnum Chicken
+18:19:49 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:19:49 GMT+0100: Updating Text: Product_01 / nazev_01B -> pamlsky pro psy 250g
+18:19:49 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:19:49 GMT+0100: Updating Text: Product_01 / cena_01A -> 70
+18:19:49 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:19:49 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:19:49 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:19:49 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:19:49 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:19:49 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 534613
+18:19:50 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:19:50 GMT+0100: Updating Text: Product_01 / EAN:_01 -> 4 druhy
+18:19:50 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:19:50 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:19:51 GMT+0100: Data Keys for Product_02: nazev_02A, nazev_02B, cena_02A, cena_02B, od_02, EAN-number_02, EAN:_02, dostupnost_02, image_02
+18:19:51 GMT+0100: Updating Text: Product_02 / nazev_02A -> Magnum Duck
+18:19:51 GMT+0100: SUCCESS: Updated nazev_02A via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / nazev_02B -> pamlsky pro psy 250g
+18:19:51 GMT+0100: SUCCESS: Updated nazev_02B via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / cena_02A -> 70
+18:19:51 GMT+0100: SUCCESS: Updated cena_02A via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / cena_02B -> 90
+18:19:51 GMT+0100: SUCCESS: Updated cena_02B via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / od_02 -> od
+18:19:51 GMT+0100: SUCCESS: Updated od_02 via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / EAN-number_02 -> 536860
+18:19:51 GMT+0100: SUCCESS: Updated EAN-number_02 via Direct
+18:19:51 GMT+0100: Updating Text: Product_02 / EAN:_02 -> 4 druhy
+18:19:52 GMT+0100: SUCCESS: Updated EAN:_02 via Direct
+18:19:52 GMT+0100: SUCCESS: Updated dostupnost_02 via Direct
+18:19:53 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:19:53 GMT+0100: Updating Text: Product_03 / nazev_03A -> Magnum Silikagel 10L
+18:19:53 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:19:53 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:19:53 GMT+0100: Updating Text: Product_03 / cena_03A -> 225
+18:19:54 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:19:54 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:19:54 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:19:54 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 203785
+18:19:54 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:19:54 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 2 druhy
+18:19:54 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:19:54 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:19:56 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:19:56 GMT+0100: Updating Text: Product_09 / nazev_09A -> First Class
+18:19:56 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:19:56 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:19:56 GMT+0100: Updating Text: Product_09 / cena_09A -> 12
+18:19:57 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:19:57 GMT+0100: Updating Text: Product_09 / cena_09B -> 50
+18:19:57 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:19:57 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:19:57 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:19:57 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 011321
+18:19:57 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:19:57 GMT+0100: Updating Text: Product_09 / EAN:_09 -> Všechny druhy
+18:19:57 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:19:58 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:20:02 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:20:02 GMT+0100: Updating Text: Product_11 / nazev_11A -> Akinu
+18:20:02 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:20:02 GMT+0100: Updating Text: Product_11 / nazev_11B -> seno pro hlodavce  400g
+18:20:02 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:20:02 GMT+0100: Updating Text: Product_11 / cena_11A -> 17
+18:20:03 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:20:03 GMT+0100: Updating Text: Product_11 / cena_11B -> 50
+18:20:03 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:20:03 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:20:04 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:20:04 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 939076
+18:20:04 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:20:04 GMT+0100: Updating Text: Product_11 / EAN:_11 -> EAN:
+18:20:04 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:20:04 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:20:10 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_49.json
+18:20:10 GMT+0100: JSON Parsed. Actions: 0
+18:20:10 GMT+0100: runBuild Started for Page 49
+18:20:14 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_50.json
+18:20:14 GMT+0100: JSON Parsed. Actions: 4
+18:20:14 GMT+0100: runBuild Started for Page 50
+18:20:14 GMT+0100: Data Keys for Product_01: nazev_01A, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:20:14 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:20:14 GMT+0100: Updating Text: Product_01 / cena_01A -> 25
+18:20:14 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:20:14 GMT+0100: Updating Text: Product_01 / cena_01B -> 90
+18:20:14 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:20:14 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:20:15 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:20:15 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 623697
+18:20:15 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:20:15 GMT+0100: Updating Text: Product_01 / EAN:_01 -> EAN:
+18:20:15 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:20:15 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:20:16 GMT+0100: Data Keys for Product_03: nazev_03A, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:20:16 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:20:16 GMT+0100: Updating Text: Product_03 / cena_03A -> 30
+18:20:16 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:20:16 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:20:16 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:20:16 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:20:16 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:20:16 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 642933
+18:20:16 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:20:16 GMT+0100: Updating Text: Product_03 / EAN:_03 -> EAN:
+18:20:16 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:20:17 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:20:19 GMT+0100: Data Keys for Product_09: nazev_09A, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:20:19 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:20:19 GMT+0100: Updating Text: Product_09 / cena_09A -> 8
+18:20:19 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:20:19 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:20:19 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:20:19 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:20:19 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:20:20 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 470379
+18:20:20 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:20:20 GMT+0100: Updating Text: Product_09 / EAN:_09 -> EAN:
+18:20:20 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:20:20 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:20:23 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:20:23 GMT+0100: Updating Text: Product_11 / nazev_11A -> Tesori d'Oriente 
+18:20:23 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:20:23 GMT+0100: Updating Text: Product_11 / nazev_11B -> difuzér 200ml
+18:20:23 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:20:23 GMT+0100: Updating Text: Product_11 / cena_11A -> 136
+18:20:23 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:20:23 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:20:24 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:20:24 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:20:24 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:20:24 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 050454
+18:20:24 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:20:24 GMT+0100: Updating Text: Product_11 / EAN:_11 -> 3 druhy
+18:20:24 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:20:24 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct
+18:20:36 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster_v1.02\workspaces\build_plans\Workspace_State_2.xlsx_2026-01-24_18-14-28\build_page_51.json
+18:20:36 GMT+0100: JSON Parsed. Actions: 9
+18:20:37 GMT+0100: runBuild Started for Page 51
+18:20:37 GMT+0100: Data Keys for Product_01: nazev_01A, nazev_01B, cena_01A, cena_01B, od_01, EAN-number_01, EAN:_01, dostupnost_01, image_01
+18:20:37 GMT+0100: Updating Text: Product_01 / nazev_01A -> Brait Magic
+18:20:37 GMT+0100: SUCCESS: Updated nazev_01A via Direct
+18:20:37 GMT+0100: Updating Text: Product_01 / nazev_01B -> dekorativní difuzér  75ml
+18:20:37 GMT+0100: SUCCESS: Updated nazev_01B via Direct
+18:20:37 GMT+0100: Updating Text: Product_01 / cena_01A -> 53
+18:20:37 GMT+0100: SUCCESS: Updated cena_01A via Direct
+18:20:37 GMT+0100: Updating Text: Product_01 / cena_01B -> 50
+18:20:37 GMT+0100: SUCCESS: Updated cena_01B via Direct
+18:20:37 GMT+0100: Updating Text: Product_01 / od_01 -> od
+18:20:37 GMT+0100: SUCCESS: Updated od_01 via Direct
+18:20:37 GMT+0100: Updating Text: Product_01 / EAN-number_01 -> 712544
+18:20:37 GMT+0100: SUCCESS: Updated EAN-number_01 via Direct
+18:20:37 GMT+0100: SUCCESS: Updated EAN:_01 via Direct
+18:20:37 GMT+0100: SUCCESS: Updated dostupnost_01 via Direct
+18:20:38 GMT+0100: Data Keys for Product_02: nazev_02A, nazev_02B, cena_02A, cena_02B, od_02, EAN-number_02, EAN:_02, dostupnost_02, image_02
+18:20:38 GMT+0100: Updating Text: Product_02 / nazev_02A -> Cillit Bang Power Cleaner
+18:20:38 GMT+0100: SUCCESS: Updated nazev_02A via Direct
+18:20:39 GMT+0100: SUCCESS: Updated nazev_02B via Direct
+18:20:39 GMT+0100: Updating Text: Product_02 / cena_02A -> 56
+18:20:39 GMT+0100: SUCCESS: Updated cena_02A via Direct
+18:20:39 GMT+0100: Updating Text: Product_02 / cena_02B -> 90
+18:20:39 GMT+0100: SUCCESS: Updated cena_02B via Direct
+18:20:39 GMT+0100: Updating Text: Product_02 / od_02 -> od
+18:20:39 GMT+0100: SUCCESS: Updated od_02 via Direct
+18:20:39 GMT+0100: Updating Text: Product_02 / EAN-number_02 -> 510921
+18:20:39 GMT+0100: SUCCESS: Updated EAN-number_02 via Direct
+18:20:39 GMT+0100: Updating Text: Product_02 / EAN:_02 -> EAN:
+18:20:39 GMT+0100: SUCCESS: Updated EAN:_02 via Direct
+18:20:39 GMT+0100: SUCCESS: Updated dostupnost_02 via Direct
+18:20:42 GMT+0100: Data Keys for Product_03: nazev_03A, nazev_03B, cena_03A, cena_03B, od_03, EAN-number_03, EAN:_03, dostupnost_03, image_03
+18:20:42 GMT+0100: Updating Text: Product_03 / nazev_03A -> Savo 
+18:20:42 GMT+0100: SUCCESS: Updated nazev_03A via Direct
+18:20:42 GMT+0100: SUCCESS: Updated nazev_03B via Direct
+18:20:42 GMT+0100: Updating Text: Product_03 / cena_03A -> 44
+18:20:42 GMT+0100: SUCCESS: Updated cena_03A via Direct
+18:20:42 GMT+0100: Updating Text: Product_03 / cena_03B -> 90
+18:20:42 GMT+0100: SUCCESS: Updated cena_03B via Direct
+18:20:42 GMT+0100: Updating Text: Product_03 / od_03 -> od
+18:20:42 GMT+0100: SUCCESS: Updated od_03 via Direct
+18:20:42 GMT+0100: Updating Text: Product_03 / EAN-number_03 -> 870100
+18:20:42 GMT+0100: SUCCESS: Updated EAN-number_03 via Direct
+18:20:42 GMT+0100: Updating Text: Product_03 / EAN:_03 -> 3 druhy
+18:20:42 GMT+0100: SUCCESS: Updated EAN:_03 via Direct
+18:20:43 GMT+0100: SUCCESS: Updated dostupnost_03 via Direct
+18:20:44 GMT+0100: Data Keys for Product_04: nazev_04A, nazev_04B, cena_04A, cena_04B, od_04, EAN-number_04, EAN:_04, dostupnost_04, image_04
+18:20:44 GMT+0100: Updating Text: Product_04 / nazev_04A -> Ava
+18:20:44 GMT+0100: SUCCESS: Updated nazev_04A via Direct
+18:20:44 GMT+0100: SUCCESS: Updated nazev_04B via Direct
+18:20:44 GMT+0100: Updating Text: Product_04 / cena_04A -> 68
+18:20:44 GMT+0100: SUCCESS: Updated cena_04A via Direct
+18:20:44 GMT+0100: Updating Text: Product_04 / cena_04B -> 90
+18:20:44 GMT+0100: SUCCESS: Updated cena_04B via Direct
+18:20:44 GMT+0100: Updating Text: Product_04 / od_04 -> od
+18:20:45 GMT+0100: SUCCESS: Updated od_04 via Direct
+18:20:45 GMT+0100: Updating Text: Product_04 / EAN-number_04 -> 011498
+18:20:45 GMT+0100: SUCCESS: Updated EAN-number_04 via Direct
+18:20:45 GMT+0100: Updating Text: Product_04 / EAN:_04 -> EAN:
+18:20:45 GMT+0100: SUCCESS: Updated EAN:_04 via Direct
+18:20:45 GMT+0100: SUCCESS: Updated dostupnost_04 via Direct
+18:20:49 GMT+0100: Data Keys for Product_05: nazev_05A, nazev_05B, cena_05A, cena_05B, od_05, EAN-number_05, EAN:_05, dostupnost_05, image_05
+18:20:49 GMT+0100: Updating Text: Product_05 / nazev_05A -> Cit
+18:20:49 GMT+0100: SUCCESS: Updated nazev_05A via Direct
+18:20:49 GMT+0100: SUCCESS: Updated nazev_05B via Direct
+18:20:49 GMT+0100: Updating Text: Product_05 / cena_05A -> 24
+18:20:49 GMT+0100: SUCCESS: Updated cena_05A via Direct
+18:20:49 GMT+0100: Updating Text: Product_05 / cena_05B -> 90
+18:20:49 GMT+0100: SUCCESS: Updated cena_05B via Direct
+18:20:49 GMT+0100: Updating Text: Product_05 / od_05 -> od
+18:20:50 GMT+0100: SUCCESS: Updated od_05 via Direct
+18:20:50 GMT+0100: Updating Text: Product_05 / EAN-number_05 -> 069568
+18:20:50 GMT+0100: SUCCESS: Updated EAN-number_05 via Direct
+18:20:50 GMT+0100: SUCCESS: Updated EAN:_05 via Direct
+18:20:50 GMT+0100: SUCCESS: Updated dostupnost_05 via Direct
+18:20:52 GMT+0100: Data Keys for Product_06: nazev_06A, nazev_06B, cena_06A, cena_06B, od_06, EAN-number_06, EAN:_06, dostupnost_06, image_06
+18:20:52 GMT+0100: Updating Text: Product_06 / nazev_06A -> Fredy
+18:20:52 GMT+0100: SUCCESS: Updated nazev_06A via Direct
+18:20:52 GMT+0100: SUCCESS: Updated nazev_06B via Direct
+18:20:52 GMT+0100: Updating Text: Product_06 / cena_06A -> 31
+18:20:52 GMT+0100: SUCCESS: Updated cena_06A via Direct
+18:20:52 GMT+0100: Updating Text: Product_06 / cena_06B -> 50
+18:20:53 GMT+0100: SUCCESS: Updated cena_06B via Direct
+18:20:53 GMT+0100: Updating Text: Product_06 / od_06 -> od
+18:20:53 GMT+0100: SUCCESS: Updated od_06 via Direct
+18:20:53 GMT+0100: Updating Text: Product_06 / EAN-number_06 -> 350360
+18:20:53 GMT+0100: SUCCESS: Updated EAN-number_06 via Direct
+18:20:53 GMT+0100: Updating Text: Product_06 / EAN:_06 -> EAN:
+18:20:53 GMT+0100: SUCCESS: Updated EAN:_06 via Direct
+18:20:53 GMT+0100: SUCCESS: Updated dostupnost_06 via Direct
+18:20:55 GMT+0100: Data Keys for Product_08: nazev_08A, nazev_08B, cena_08A, cena_08B, od_08, EAN-number_08, EAN:_08, dostupnost_08, image_08
+18:20:56 GMT+0100: Updating Text: Product_08 / nazev_08A -> Cif
+18:20:56 GMT+0100: SUCCESS: Updated nazev_08A via Direct
+18:20:56 GMT+0100: Updating Text: Product_08 / nazev_08B -> tekutý písek  250ml
+18:20:56 GMT+0100: SUCCESS: Updated nazev_08B via Direct
+18:20:56 GMT+0100: Updating Text: Product_08 / cena_08A -> 29
+18:20:56 GMT+0100: SUCCESS: Updated cena_08A via Direct
+18:20:56 GMT+0100: Updating Text: Product_08 / cena_08B -> 90
+18:20:56 GMT+0100: SUCCESS: Updated cena_08B via Direct
+18:20:56 GMT+0100: Updating Text: Product_08 / od_08 -> od
+18:20:57 GMT+0100: SUCCESS: Updated od_08 via Direct
+18:20:57 GMT+0100: Updating Text: Product_08 / EAN-number_08 -> 469101
+18:20:57 GMT+0100: SUCCESS: Updated EAN-number_08 via Direct
+18:20:57 GMT+0100: Updating Text: Product_08 / EAN:_08 -> 2 druhy
+18:20:57 GMT+0100: SUCCESS: Updated EAN:_08 via Direct
+18:20:57 GMT+0100: SUCCESS: Updated dostupnost_08 via Direct
+18:21:03 GMT+0100: Data Keys for Product_09: nazev_09A, nazev_09B, cena_09A, cena_09B, od_09, EAN-number_09, EAN:_09, dostupnost_09, image_09
+18:21:03 GMT+0100: Updating Text: Product_09 / nazev_09A -> Sanytol Professional
+18:21:03 GMT+0100: SUCCESS: Updated nazev_09A via Direct
+18:21:03 GMT+0100: SUCCESS: Updated nazev_09B via Direct
+18:21:03 GMT+0100: Updating Text: Product_09 / cena_09A -> 279
+18:21:03 GMT+0100: SUCCESS: Updated cena_09A via Direct
+18:21:03 GMT+0100: Updating Text: Product_09 / cena_09B -> 90
+18:21:03 GMT+0100: SUCCESS: Updated cena_09B via Direct
+18:21:03 GMT+0100: Updating Text: Product_09 / od_09 -> od
+18:21:04 GMT+0100: SUCCESS: Updated od_09 via Direct
+18:21:04 GMT+0100: Updating Text: Product_09 / EAN-number_09 -> 615006
+18:21:04 GMT+0100: SUCCESS: Updated EAN-number_09 via Direct
+18:21:04 GMT+0100: Updating Text: Product_09 / EAN:_09 -> EAN:
+18:21:04 GMT+0100: SUCCESS: Updated EAN:_09 via Direct
+18:21:04 GMT+0100: SUCCESS: Updated dostupnost_09 via Direct
+18:21:07 GMT+0100: Data Keys for Product_11: nazev_11A, nazev_11B, cena_11A, cena_11B, od_11, EAN-number_11, EAN:_11, dostupnost_11, image_11
+18:21:07 GMT+0100: Updating Text: Product_11 / nazev_11A -> Dr. House
+18:21:07 GMT+0100: SUCCESS: Updated nazev_11A via Direct
+18:21:08 GMT+0100: Updating Text: Product_11 / nazev_11B -> prací prášek  1,5kg
+18:21:08 GMT+0100: SUCCESS: Updated nazev_11B via Direct
+18:21:08 GMT+0100: Updating Text: Product_11 / cena_11A -> 39
+18:21:08 GMT+0100: SUCCESS: Updated cena_11A via Direct
+18:21:08 GMT+0100: Updating Text: Product_11 / cena_11B -> 90
+18:21:08 GMT+0100: SUCCESS: Updated cena_11B via Direct
+18:21:08 GMT+0100: Updating Text: Product_11 / od_11 -> od
+18:21:09 GMT+0100: SUCCESS: Updated od_11 via Direct
+18:21:09 GMT+0100: Updating Text: Product_11 / EAN-number_11 -> 125233
+18:21:09 GMT+0100: SUCCESS: Updated EAN-number_11 via Direct
+18:21:09 GMT+0100: Updating Text: Product_11 / EAN:_11 -> 4 druhy
+18:21:09 GMT+0100: SUCCESS: Updated EAN:_11 via Direct
+18:21:09 GMT+0100: SUCCESS: Updated dostupnost_11 via Direct

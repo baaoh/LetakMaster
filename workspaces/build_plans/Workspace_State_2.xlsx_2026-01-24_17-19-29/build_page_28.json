@@ -1,0 +1,85 @@
+{
+  "page": 28,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Orion Delissa",
+        "nazev_01B": "oplatka 30g",
+        "cena_01A": "7",
+        "cena_01B": "50",
+        "od_01": "od",
+        "EAN-number_01": "034662",
+        "EAN:_01": "Všechny druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "2114183"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Merci Lovelies",
+        "nazev_03B": "čokoláda 185g",
+        "cena_03A": "88",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "933055",
+        "EAN:_03": "3 druhy",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "2112388"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": false,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Maitre Truffout",
+        "nazev_09B": "čokoláda 100g",
+        "cena_09A": "40",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "071461",
+        "EAN:_09": "3 druhy",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "2012935"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": false,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Kolonáda Lázeňské",
+        "nazev_11B": "oplatky od 175g - 200g",
+        "cena_11A": "72",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "140463",
+        "EAN:_11": "4 druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "2012846"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

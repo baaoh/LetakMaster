@@ -1,0 +1,184 @@
+{
+  "page": 25,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 2.0,
+      "data": {
+        "nazev_01A": "Balconi",
+        "nazev_01B": "dort 400g",
+        "cena_01A": "47",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "004164",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "4010344"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_02",
+      "hero": 1.0,
+      "data": {
+        "nazev_02A": "Keks",
+        "nazev_02B": "mini cake  180g",
+        "cena_02A": "27",
+        "cena_02B": "50",
+        "od_02": "od",
+        "EAN-number_02": "041775",
+        "EAN:_02": "EAN:",
+        "dostupnost_02": "•dostupné na všech pobočkách",
+        "image_02": "2112421"
+      },
+      "visibility": {
+        "od_02": false,
+        "EAN-number_02": true,
+        "dostupnost_02": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 1.0,
+      "data": {
+        "nazev_03A": "Klasa",
+        "nazev_03B": "linecké rohlíčky polomáčené 210g",
+        "cena_03A": "19",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "762187",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "4010657"
+      },
+      "visibility": {
+        "od_03": true,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_04",
+      "hero": 1.0,
+      "data": {
+        "nazev_04A": "Vincinni",
+        "nazev_04B": "Jumbo Roll  300g",
+        "cena_04A": "29",
+        "cena_04B": "90",
+        "od_04": "od",
+        "EAN-number_04": "002399",
+        "EAN:_04": "Více druhů",
+        "dostupnost_04": "•dostupné na všech pobočkách",
+        "image_04": "4011173"
+      },
+      "visibility": {
+        "od_04": false,
+        "EAN-number_04": false,
+        "dostupnost_04": false
+      }
+    },
+    {
+      "group": "Product_06",
+      "hero": 1.0,
+      "data": {
+        "nazev_06A": "Kuchen Meister",
+        "nazev_06B": "Vafle 250g",
+        "cena_06A": "35",
+        "cena_06B": "90",
+        "od_06": "od",
+        "EAN-number_06": "787102",
+        "EAN:_06": "EAN:",
+        "dostupnost_06": "•dostupné na všech pobočkách",
+        "image_06": "4010355"
+      },
+      "visibility": {
+        "od_06": false,
+        "EAN-number_06": true,
+        "dostupnost_06": false
+      }
+    },
+    {
+      "group": "Product_07",
+      "hero": 1.0,
+      "data": {
+        "nazev_07A": "St Michel",
+        "nazev_07B": "mini madlenky 175g",
+        "cena_07A": "39",
+        "cena_07B": "90",
+        "od_07": "od",
+        "EAN-number_07": "428667",
+        "EAN:_07": "EAN:",
+        "dostupnost_07": "•dostupné na všech pobočkách",
+        "image_07": "4011475"
+      },
+      "visibility": {
+        "od_07": false,
+        "EAN-number_07": true,
+        "dostupnost_07": false
+      }
+    },
+    {
+      "group": "Product_08",
+      "hero": 1.0,
+      "data": {
+        "nazev_08A": "Prima",
+        "nazev_08B": "Toustový chléb  500g",
+        "cena_08A": "20",
+        "cena_08B": "90",
+        "od_08": "od",
+        "EAN-number_08": "160100",
+        "EAN:_08": "EAN:",
+        "dostupnost_08": "•dostupné na všech pobočkách",
+        "image_08": "4011731"
+      },
+      "visibility": {
+        "od_08": false,
+        "EAN-number_08": true,
+        "dostupnost_08": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Balconi",
+        "nazev_09B": "roláda 250g",
+        "cena_09A": "23",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "002108",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "2010941"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Brick ",
+        "nazev_11B": "Trubičky 150g",
+        "cena_11A": "20",
+        "od_11": "od",
+        "EAN-number_11": "603057",
+        "EAN:_11": "Všechny druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "2015430"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

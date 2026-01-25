@@ -1,0 +1,12 @@
+COM Failed: Illegal argument - argument 1
+- Required value is missing (COM Error)
+Traceback (most recent call last):
+  File "C:\Users\Bao\Documents\LetakMaster_v1.02\app\main.py", line 208, in _run_ps
+    ps.DoJavaScriptFile(js_path, [], 1)
+    ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Bao\Documents\LetakMaster_v1.02\python_embed\Lib\site-packages\win32com\client\dynamic.py", line 620, in __getattr__
+    ret = self._oleobj_.Invoke(retEntry.dispid, 0, invoke_type, 1)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pywintypes.com_error: (-2147352567, 'Exception occurred.', (0, 'Adobe Photoshop', 'Illegal argument - argument 1\n- Required value is missing', None, 0, -2147220262), None)
+
+Attempting explicit executable fallback...

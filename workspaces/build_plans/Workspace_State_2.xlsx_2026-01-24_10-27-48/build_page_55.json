@@ -1,0 +1,85 @@
+{
+  "page": 55,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Tento",
+        "nazev_01B": "kosmetické ubrousky  mix",
+        "cena_01A": "19",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "084869",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "7127902"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Zewa Deluxe",
+        "nazev_03B": "toaletní papír  16ks",
+        "cena_03A": "119",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "201925",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "7023302"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Soft&Exclusive ZZ",
+        "nazev_09B": "skládané ručníky  150ks 2V bílé",
+        "cena_09A": "17",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "262007",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "7221808"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Linteo",
+        "nazev_11B": "odličovací tampony  40ks",
+        "cena_11A": "19",
+        "cena_11B": "50",
+        "od_11": "od",
+        "EAN-number_11": "373113",
+        "EAN:_11": "EAN:",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "7120313"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": true,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

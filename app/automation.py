@@ -40,7 +40,15 @@ class AutomationService:
         """
         report = {"status": "pending", "pages": [], "output_path": ""}
         try:
-            book = xw.books.active
+            try:
+                book = xw.books.active
+                # Verify connection by accessing a property
+                _ = book.fullname
+            except Exception as e:
+                # OLE error 0x800a01a8 or others indicating disconnection
+                print(f"Excel Connection Error: {e}")
+                raise RuntimeError("Excel Workspace appears to be closed or unresponsive. Please Open Workspace and try again.")
+
             print(f"Generating JSON from: {book.fullname}")
             
             output_dir = ""
@@ -200,6 +208,25 @@ class AutomationService:
         
         # Read source data (A to Y)
         data_range = sheet.range(f"A7:Y{last_row}").value
+        # Read colors for Column H (Price Source) to detect highlights
+        color_range = sheet.range(f"H7:H{last_row}")
+        
+        # Robust fetch: xlwings .color on large ranges can return a single value or 
+        # a truncated list if formatting is sparse. We fetch via API for consistency.
+        try:
+            # Interior.Color returns a BGR long. We convert to RGB tuple or keep as is.
+            # But simpler: just use xlwings cell-by-cell if needed, 
+            # or use the .value equivalent for colors if possible.
+            # Actually, the most reliable way to get a LIST is:
+            h_colors = []
+            raw_api_colors = color_range.api.Value # This won't work for colors.
+            
+            # Use a list comprehension over the range to get individual colors
+            # This is slightly slower but 100% reliable for aligned indices.
+            h_colors = [cell.color for cell in color_range]
+        except Exception as e:
+            print(f"Color Fetch Fallback active due to: {e}")
+            h_colors = [None] * len(data_range)
         
         # Prepare Output Buffer
         output_data = [[None] * len(HEADERS) for _ in range(len(data_range))]
@@ -287,9 +314,31 @@ class AutomationService:
                         output_data[idx][3] = "'" + ean_str
                     
                     # AQ: EAN Label
-                    lbl_in = str(src_row[COL_EANY_LBL]).lower().strip() if src_row[COL_EANY_LBL] else ""
-                    lbl_out = EAN_LABEL_MAP.get(lbl_in, "EAN:")
-                    if "více" in lbl_in: lbl_out = "Více druhů"
+                    raw_lbl = str(src_row[COL_EANY_LBL]).lower().strip() if src_row[COL_EANY_LBL] else ""
+                    
+                    # Robust Normalization
+                    lbl_out = "EAN:" # Default
+                    
+                    # 1. Check for Numbers
+                    try:
+                        val_num = int(float(raw_lbl))
+                        if val_num == 1:
+                            lbl_out = "EAN:"
+                        elif 1 < val_num <= 4:
+                            lbl_out = f"{val_num} druhy" if val_num < 5 else f"{val_num} druhů"
+                        else:
+                            # 5 and up
+                            lbl_out = "Více druhů"
+                    except:
+                        # 2. Check for Text Keywords
+                        if "vše" in raw_lbl or "vse" in raw_lbl:
+                            lbl_out = "Všechny druhy"
+                        elif "víc" in raw_lbl or "vic" in raw_lbl:
+                            lbl_out = "Více druhů"
+                        elif "druh" in raw_lbl:
+                            # Catch-all for "X druhu" if not caught above
+                            lbl_out = raw_lbl.capitalize()
+
                     output_data[idx][4] = lbl_out
                     
                     # AR: Dostupnost
@@ -334,8 +383,27 @@ class AutomationService:
                     
                     # Visibility
                     val_w = src_row[COL_PRICE]
+                    
+                    # Check for highlight in Column H (idx corresponds to row in data_range/h_colors)
+                    row_color = h_colors[idx] if idx < len(h_colors) else None
+                    is_highlighted = row_color is not None and row_color != (255, 255, 255) and row_color != 16777215
+                    
                     vis_od = "TRUE"
-                    if val_w is None or str(val_w).strip() == "": vis_od = "FALSE"
+                    
+                    # Logic: 
+                    # 1. Default: Visible if Column W (Price) has text.
+                    # 2. Override: Visible if Highlighted AND EANY is NOT 1 (i.e., label is not "EAN:")
+                    
+                    has_price_text = val_w is not None and str(val_w).strip() != ""
+                    is_plural = lbl_out != "EAN:"
+                    
+                    if is_highlighted and is_plural:
+                        vis_od = "TRUE"
+                    elif has_price_text:
+                        vis_od = "TRUE"
+                    else:
+                        vis_od = "FALSE"
+                    
                     output_data[idx][10] = vis_od
                     
                     vis_ean = "TRUE"

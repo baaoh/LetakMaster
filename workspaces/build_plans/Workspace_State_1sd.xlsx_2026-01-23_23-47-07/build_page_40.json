@@ -1,0 +1,85 @@
+{
+  "page": 40,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Maggi",
+        "nazev_01B": "RTH od 97g - 153g",
+        "cena_01A": "29",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "443304",
+        "EAN:_01": "Všechny druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "4053805"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Spak",
+        "nazev_03B": "omáčka 320ml",
+        "cena_03A": "47",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "419574",
+        "EAN:_03": "Více druhů",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "4053990"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": false,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Avokádo",
+        "nazev_09B": "jednodruhové koření",
+        "cena_09A": "4",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "020143",
+        "EAN:_09": "Více druhů",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "4050818"
+      },
+      "visibility": {
+        "od_09": true,
+        "EAN-number_09": false,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Vitana",
+        "nazev_11B": "Polévka Do hrnečku",
+        "cena_11A": "8",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "244041",
+        "EAN:_11": "Všechny druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "4050047"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

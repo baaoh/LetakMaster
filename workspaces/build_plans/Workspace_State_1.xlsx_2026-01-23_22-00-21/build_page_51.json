@@ -1,0 +1,185 @@
+{
+  "page": 51,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 1.0,
+      "data": {
+        "nazev_01A": "Brait Magic",
+        "nazev_01B": "dekorativní difuzér  75ml",
+        "cena_01A": "53",
+        "cena_01B": "50",
+        "od_01": "od",
+        "EAN-number_01": "712544",
+        "EAN:_01": "Více druhů",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "7020128"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_02",
+      "hero": 1.0,
+      "data": {
+        "nazev_02A": "Cillit Bang Power Cleaner",
+        "nazev_02B": "Spray pro kuchyň  750ml",
+        "cena_02A": "56",
+        "cena_02B": "90",
+        "od_02": "od",
+        "EAN-number_02": "510921",
+        "EAN:_02": "EAN:",
+        "dostupnost_02": "•dostupné na všech pobočkách",
+        "image_02": "7019508"
+      },
+      "visibility": {
+        "od_02": false,
+        "EAN-number_02": true,
+        "dostupnost_02": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 2.0,
+      "data": {
+        "nazev_03A": "Savo ",
+        "nazev_03B": "čistící sprej Koupelna 500ml",
+        "cena_03A": "44",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "870100",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "7018924"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_04",
+      "hero": 1.0,
+      "data": {
+        "nazev_04A": "Ava",
+        "nazev_04B": "čistič na nádobí  5L",
+        "cena_04A": "68",
+        "cena_04B": "90",
+        "od_04": "od",
+        "EAN-number_04": "011498",
+        "EAN:_04": "EAN:",
+        "dostupnost_04": "•dostupné na všech pobočkách",
+        "image_04": "7128534"
+      },
+      "visibility": {
+        "od_04": false,
+        "EAN-number_04": true,
+        "dostupnost_04": false
+      }
+    },
+    {
+      "group": "Product_05",
+      "hero": 1.0,
+      "data": {
+        "nazev_05A": "Cit",
+        "nazev_05B": "čistič na nádobí 1L",
+        "cena_05A": "24",
+        "cena_05B": "90",
+        "od_05": "od",
+        "EAN-number_05": "069568",
+        "EAN:_05": "EAN:",
+        "dostupnost_05": "•dostupné na všech pobočkách",
+        "image_05": "7125611"
+      },
+      "visibility": {
+        "od_05": false,
+        "EAN-number_05": true,
+        "dostupnost_05": false
+      }
+    },
+    {
+      "group": "Product_06",
+      "hero": 1.0,
+      "data": {
+        "nazev_06A": "Fredy",
+        "nazev_06B": "Čistič na sifony 500g",
+        "cena_06A": "31",
+        "cena_06B": "50",
+        "od_06": "od",
+        "EAN-number_06": "350360",
+        "EAN:_06": "EAN:",
+        "dostupnost_06": "•dostupné na všech pobočkách",
+        "image_06": "7017371"
+      },
+      "visibility": {
+        "od_06": false,
+        "EAN-number_06": true,
+        "dostupnost_06": false
+      }
+    },
+    {
+      "group": "Product_08",
+      "hero": 1.0,
+      "data": {
+        "nazev_08A": "Cif",
+        "nazev_08B": "tekutý písek  250ml",
+        "cena_08A": "29",
+        "cena_08B": "90",
+        "od_08": "od",
+        "EAN-number_08": "469101",
+        "EAN:_08": "EAN:",
+        "dostupnost_08": "•dostupné na všech pobočkách",
+        "image_08": "7011731"
+      },
+      "visibility": {
+        "od_08": false,
+        "EAN-number_08": true,
+        "dostupnost_08": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Sanytol Professional",
+        "nazev_09B": "čistič podlah a ploch 5L",
+        "cena_09A": "279",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "615006",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "7029982"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Dr. House",
+        "nazev_11B": "prací prášek  1,5kg",
+        "cena_11A": "39",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "125233",
+        "EAN:_11": "EAN:",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "7120135"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": true,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

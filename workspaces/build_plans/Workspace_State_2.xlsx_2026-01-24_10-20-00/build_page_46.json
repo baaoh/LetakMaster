@@ -1,0 +1,245 @@
+{
+  "page": 46,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 1.0,
+      "data": {
+        "nazev_01A": "DH Foods",
+        "nazev_01B": "Směs koření na hovězí polévku 24g",
+        "cena_01A": "24",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "284367",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "6016479"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_02",
+      "hero": 1.0,
+      "data": {
+        "nazev_02A": "DH Foods",
+        "nazev_02B": "Směs koření na kuřecí polévku 20g",
+        "cena_02A": "24",
+        "cena_02B": "90",
+        "od_02": "od",
+        "EAN-number_02": "284381",
+        "EAN:_02": "EAN:",
+        "dostupnost_02": "•dostupné na všech pobočkách",
+        "image_02": "6016480"
+      },
+      "visibility": {
+        "od_02": false,
+        "EAN-number_02": true,
+        "dostupnost_02": false
+      }
+    },
+    {
+      "group": "Product_05",
+      "hero": 1.0,
+      "data": {
+        "nazev_05A": "DH Foods",
+        "nazev_05B": "Kumquatová omáčka 200g",
+        "cena_05A": "44",
+        "cena_05B": "90",
+        "od_05": "od",
+        "EAN-number_05": "287009",
+        "EAN:_05": "EAN:",
+        "dostupnost_05": "•dostupné na všech pobočkách",
+        "image_05": "6017412"
+      },
+      "visibility": {
+        "od_05": false,
+        "EAN-number_05": true,
+        "dostupnost_05": false
+      }
+    },
+    {
+      "group": "Product_06",
+      "hero": 1.0,
+      "data": {
+        "nazev_06A": "Bich Chi",
+        "nazev_06B": "Rýžové krekry 101g",
+        "cena_06A": "37",
+        "cena_06B": "90",
+        "od_06": "od",
+        "EAN-number_06": "555112",
+        "EAN:_06": "EAN:",
+        "dostupnost_06": "•dostupné na všech pobočkách",
+        "image_06": "6017432"
+      },
+      "visibility": {
+        "od_06": false,
+        "EAN-number_06": true,
+        "dostupnost_06": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 1.0,
+      "data": {
+        "nazev_09A": "Salafruit",
+        "nazev_09B": "Sušené ovoce 100g",
+        "cena_09A": "34",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "650248",
+        "EAN:_09": "Více druhů",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "6016476"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": false,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_10",
+      "hero": 1.0,
+      "data": {
+        "nazev_10A": "Taiky Food",
+        "nazev_10B": "Směs na rýžové rolky 400g",
+        "cena_10A": "19",
+        "cena_10B": "90",
+        "od_10": "od",
+        "EAN-number_10": "201204",
+        "EAN:_10": "EAN:",
+        "dostupnost_10": "•dostupné na všech pobočkách",
+        "image_10": "6014464"
+      },
+      "visibility": {
+        "od_10": false,
+        "EAN-number_10": true,
+        "dostupnost_10": false
+      }
+    },
+    {
+      "group": "Product_12",
+      "hero": 1.0,
+      "data": {
+        "nazev_12A": "Sauce Grandmaster",
+        "nazev_12B": "Sladká sójová omáčka 150ml",
+        "cena_12A": "24",
+        "cena_12B": "90",
+        "od_12": "od",
+        "EAN-number_12": "117549",
+        "EAN:_12": "EAN:",
+        "dostupnost_12": "•dostupné na všech pobočkách",
+        "image_12": "6017115"
+      },
+      "visibility": {
+        "od_12": false,
+        "EAN-number_12": true,
+        "dostupnost_12": false
+      }
+    },
+    {
+      "group": "Product_13",
+      "hero": 1.0,
+      "data": {
+        "nazev_13A": "Chin-Su Sójová",
+        "nazev_13B": "Sójová omáčka chilli + česnek 500ml",
+        "cena_13A": "37",
+        "cena_13B": "90",
+        "od_13": "od",
+        "EAN-number_13": "366537",
+        "EAN:_13": "EAN:",
+        "dostupnost_13": "•dostupné na všech pobočkách",
+        "image_13": "6011570"
+      },
+      "visibility": {
+        "od_13": false,
+        "EAN-number_13": true,
+        "dostupnost_13": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 2.0,
+      "data": {
+        "nazev_11A": "YeonHo Happy",
+        "nazev_11B": "Nápoj 350ml",
+        "cena_11A": "9",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "280019",
+        "EAN:_11": "EAN:",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "1014644"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": true,
+        "dostupnost_11": false
+      }
+    },
+    {
+      "group": "Product_14",
+      "hero": 1.0,
+      "data": {
+        "nazev_14A": "Chin-Su",
+        "nazev_14B": "Rýžové nudle 500g",
+        "cena_14A": "39",
+        "cena_14B": "90",
+        "od_14": "od",
+        "EAN-number_14": "049103",
+        "EAN:_14": "EAN:",
+        "dostupnost_14": "•dostupné na všech pobočkách",
+        "image_14": "6017110"
+      },
+      "visibility": {
+        "od_14": false,
+        "EAN-number_14": true,
+        "dostupnost_14": false
+      }
+    },
+    {
+      "group": "Product_16",
+      "hero": 1.0,
+      "data": {
+        "nazev_16A": "The Muger",
+        "nazev_16B": "Ramen nudle 180g",
+        "cena_16A": "16",
+        "cena_16B": "90",
+        "od_16": "od",
+        "EAN-number_16": "631416",
+        "EAN:_16": "EAN:",
+        "dostupnost_16": "•dostupné na všech pobočkách",
+        "image_16": "6017220"
+      },
+      "visibility": {
+        "od_16": false,
+        "EAN-number_16": true,
+        "dostupnost_16": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Kimchoo",
+        "nazev_03B": "Instantní nudle 80g",
+        "cena_03A": "12",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "942004",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "6017149"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    }
+  ]
+}

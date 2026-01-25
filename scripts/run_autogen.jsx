@@ -1,17 +1,28 @@
-var g_injected_images_dir = "D:/TAMDA/LetakMaster/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/Workspace_State_16.xlsx_2026-01-24_00-51-58";
-var g_injected_automation = true;
 #target photoshop
+var g_injected_images_dir = "C:/Users/Bao/Documents/LetakMaster_v1.02/workspaces/images";
+var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster_v1.02/workspaces/build_plans/Workspace_State_2.xlsx_2026-01-24_18-14-28";
+var g_injected_automation = true;
+
+var LOG_FILE = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.txt");
+
+function logToManifest(msg) {
+    LOG_FILE.open('a'); // Append mode
+    LOG_FILE.writeln(new Date().toTimeString() + ": " + msg);
+    LOG_FILE.close();
+}
 
 // Utility: Read JSON
 function readJSON(filePath) {
+    logToManifest("Reading JSON: " + filePath);
     var file = new File(filePath);
     file.open('r');
     var content = file.read();
     file.close();
     // Adobe ExtendScript doesn't have native JSON.parse. 
     // Secure-ish eval for local trusted files.
-    return eval('(' + content + ')');
+    var obj = eval('(' + content + ')');
+    logToManifest("JSON Parsed. Actions: " + (obj.actions ? obj.actions.length : "0"));
+    return obj;
 }
 
 // Utility: Hide a Group
@@ -61,17 +72,94 @@ function setGroupSize(doc, groupName, hero) {
     }
 }
 
+var g_manifest = [];
+
 function updateTextLayer(group, layerName, text) {
+    logToManifest("Updating Text: " + group.name + " / " + layerName + " -> " + text);
+    var status = "Missing";
+    var method = "Direct";
+    
     try {
-        // Recurse finding layer? Or assume flat structure?
-        // Our schema verification showed layers are nested deep (Pricetag_XX/cena_XX...)
-        // We need a recursive finder.
         var layer = findLayerRecursive(group, layerName);
-        if (layer && layer.kind == LayerKind.TEXT) {
-            layer.textItem.contents = text;
+        
+        // Fallback strategies for EAN/Labels
+        if (!layer) {
+            // Strategy 1: Try prefix before underscore (e.g. "EAN:_01" -> "EAN:")
+            if (layerName.indexOf("_") > 0) {
+                var prefix = layerName.split("_")[0];
+                layer = findLayerRecursive(group, prefix);
+                if (layer) method = "Fallback_Prefix_" + prefix;
+            }
+        }
+        
+        if (!layer && layerName.indexOf("EAN") >= 0) {
+            // Strategy 2: Common EAN variations
+            var vars = ["EAN", "EAN:", "EAN_label"];
+            for (var i=0; i<vars.length; i++) {
+                if (!layer) {
+                    layer = findLayerRecursive(group, vars[i]);
+                    if (layer) method = "Fallback_Var_" + vars[i];
+                }
+            }
+        }
+
+        if (layer) {
+            if (layer.kind == LayerKind.TEXT) {
+                layer.textItem.contents = text;
+                status = "Updated";
+                logToManifest("SUCCESS: Updated " + layer.name + " via " + method);
+            } else {
+                status = "WrongType_" + layer.kind;
+                logToManifest("FAIL: Layer found but not TEXT. Type: " + layer.kind);
+            }
+        } else {
+            logToManifest("FAIL: Layer NOT FOUND: " + layerName);
         }
     } catch(e) {
-        // alert("Error updating " + layerName + ": " + e);
+        status = "Error_" + e.message;
+        logToManifest("ERROR in updateTextLayer: " + e);
+    }
+    
+    g_manifest.push({
+        "group": group.name,
+        "layer": layerName,
+        "action": "Text",
+        "value": text,
+        "status": status,
+        "method": method
+    });
+}
+
+// Simple JSON Serializer for ExtendScript
+function toJson(obj) {
+    var t = typeof (obj);
+    if (t != "object" || obj === null) {
+        // simple data type
+        if (t == "string") obj = '"' + obj.replace(/"/g, '\\"') + '"';
+        return String(obj);
+    } else {
+        // recurse array or object
+        var n, v, json = [], arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+            v = obj[n];
+            t = typeof (v);
+            if (t == "string") v = '"' + v.replace(/"/g, '\\"') + '"';
+            else if (t == "object" && v !== null) v = toJson(v);
+            json.push((arr ? "" : '"' + n + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    }
+}
+
+function saveManifest(docPath, pageNum) {
+    try {
+        var f = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.json");
+        f.open('w');
+        f.write(toJson(g_manifest));
+        f.close();
+        // alert("Manifest saved to root!");
+    } catch(e) {
+        alert("Manifest SAVE ERROR: " + e);
     }
 }
 
@@ -116,61 +204,90 @@ var g_imagesDir = null;
 var g_config = {};
 
 function main() {
-    // 1. Priority: Injected Paths (Dynamic Run)
-    if (g_injected_images_dir) {
-        var d = new Folder(g_injected_images_dir);
-        if (d.exists) {
-            g_imagesDir = d;
-        }
-    }
-
-    // 2. Fallback: Config File
-    var scriptPath = File($.fileName).parent.fsName;
-    var configFile = new File(scriptPath + "/config.json");
-    if (configFile.exists && !g_imagesDir) {
-        try {
-            g_config = readJSON(configFile.fsName);
-            if (g_config.images_dir) {
-                var d = new Folder(g_config.images_dir);
-                if (d.exists) g_imagesDir = d;
-            }
-        } catch(e) { }
-    }
-
-    var mode = "select"; // default
+    logToManifest("Script Started");
+    // Save User Preference
+    var originalDisplayDialogs = app.displayDialogs;
+    // Suppress all dialogs (including Missing Fonts)
+    app.displayDialogs = DialogModes.NO;
     
-    if (app.documents.length > 0) {
-        if (g_injected_automation) {
-            // In automation mode, we prioritize active document without asking
-            mode = "active";
-        } else {
-            var result = confirm("Process ACTIVE document '" + app.activeDocument.name + "'?\n\nClick YES to process Active Document.\nClick NO to Select Files from disk.");
-            if (result) {
+    try {
+        // 1. Priority: Injected Paths (Dynamic Run)
+        if (g_injected_images_dir) {
+            var d = new Folder(g_injected_images_dir);
+            if (d.exists) {
+                g_imagesDir = d;
+            }
+        }
+
+        // 2. Fallback: Config File
+        var scriptPath = File($.fileName).parent.fsName;
+        var configFile = new File(scriptPath + "/config.json");
+        if (configFile.exists && !g_imagesDir) {
+            try {
+                g_config = readJSON(configFile.fsName);
+                if (g_config.images_dir) {
+                    var d = new Folder(g_config.images_dir);
+                    if (d.exists) g_imagesDir = d;
+                }
+            } catch(e) { }
+        }
+
+        var mode = "select"; // default
+        
+        if (app.documents.length > 0) {
+            if (g_injected_automation) {
+                // In automation mode, we prioritize active document without asking
                 mode = "active";
+            } else {
+                // Temporarily re-enable dialogs just for this confirmation if needed, 
+                // but since this is interactive, we can assume NO dialogs is fine for the confirm too?
+                // No, confirm() works regardless of displayDialogs setting usually.
+                var result = confirm("Process ACTIVE document '" + app.activeDocument.name + "'?\n\nClick YES to process Active Document.\nClick NO to Select Files from disk.");
+                if (result) {
+                    mode = "active";
+                }
             }
         }
+        
+        logToManifest("Mode: " + mode);
+        if (mode == "active") {
+            processDocument(app.activeDocument);
+        } else {
+            // Select Files
+            var files = File.openDialog("Select PSD Files to Automate", "*.psd", true);
+            if (files && files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    var f = files[i];
+                    var doc = open(f);
+                    processDocument(doc);
+                    // Optional: Save and Close?
+                    // doc.save();
+                    // doc.close();
+                }
+            }
+        }
+    } finally {
+        // Restore User Preference
+        app.displayDialogs = originalDisplayDialogs;
     }
-    
-    if (mode == "active") {
-        processDocument(app.activeDocument);
-    } else {
-        // Select Files
-        var files = File.openDialog("Select PSD Files to Automate", "*.psd", true);
-        if (files && files.length > 0) {
-            for (var i = 0; i < files.length; i++) {
-                var f = files[i];
-                var doc = open(f);
-                processDocument(doc);
-                // Optional: Save and Close?
-                // doc.save();
-                // doc.close();
-            }
-        }
+}
+
+function updateAllTextLayers() {
+    try {
+        var idupdateAllTextLayers = stringIDToTypeID( "updateAllTextLayers" );
+        var desc = new ActionDescriptor();
+        executeAction( idupdateAllTextLayers, desc, DialogModes.NO );
+    } catch(e) {
+        // Ignore if fails (e.g. no text layers or command not available)
     }
 }
 
 function processDocument(doc) {
     app.activeDocument = doc; // Focus
+    
+    // Force text engine to initialize to prevent "Missing Font" or "Update" dialogs/errors
+    updateAllTextLayers();
+    
     var docName = doc.name;
     
     // 1. Auto-Detect Page Number
@@ -263,10 +380,15 @@ function processDocument(doc) {
     }
     
     // 3. Execute
+    g_manifest = []; // Reset for this doc
     doc.suspendHistory("Build Page " + pageNum, "runBuild(doc, plan)");
+    
+    // 4. Save Manifest
+    saveManifest(jsonFile.fsName, pageNum);
 }
 
 function runBuild(doc, plan) {
+    logToManifest("runBuild Started for Page " + plan.page);
     var total = plan.actions.length;
     
     // Create Progress Window
@@ -294,6 +416,11 @@ function runBuild(doc, plan) {
             // Handle Overlap Hiding
             setGroupSize(doc, groupName, action.hero);
             
+            // DEBUG: Log all data keys
+            var dataKeys = [];
+            for (var k in action.data) dataKeys.push(k);
+            logToManifest("Data Keys for " + groupName + ": " + dataKeys.join(", "));
+            
             // Update Text & Images
             for (var key in action.data) {
                 if (key.indexOf("image_") === 0) {
@@ -319,7 +446,7 @@ function runBuild(doc, plan) {
     }
     
     win.close();
-    alert("Page " + plan.page + " Built Successfully!");
+    // alert("Page " + plan.page + " Built Successfully!");
 }
 
 function toggleLayerVisibility(group, layerName, isVisible) {
@@ -352,9 +479,13 @@ function findImageFile(dir, basename) {
 }
 
 function replaceProductImage(group, imageName, imageDir) {
+    // DEBUG: Check what we are looking for
+    // alert("Looking for image: '" + imageName + "' in " + imageDir.fsName);
+
     // 1. Resolve File
     var file = findImageFile(imageDir, imageName);
     if (!file) {
+        // alert("Image NOT found: " + imageName);
         return;
     }
     

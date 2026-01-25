@@ -1,0 +1,85 @@
+{
+  "page": 13,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Koli",
+        "nazev_01B": "Sirup 0,7L",
+        "cena_01A": "34",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "848468",
+        "EAN:_01": "Všechny druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "1014021"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "Coca Cola",
+        "nazev_03B": "1L",
+        "cena_03A": "21",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "054227",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "8010002"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 4.0,
+      "data": {
+        "nazev_09A": "Monster",
+        "nazev_09B": "Energetický nápoj 0,5L",
+        "cena_09A": "22",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "943949",
+        "EAN:_09": "Všechny druhy",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "1014217"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": false,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Hell",
+        "nazev_11B": "Energetický nápoj 0,25L",
+        "cena_11A": "17",
+        "cena_11B": "90",
+        "od_11": "od",
+        "EAN-number_11": "034612",
+        "EAN:_11": "Všechny druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "1010715"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+{
+  "page": 54,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 4.0,
+      "data": {
+        "nazev_01A": "Linteo",
+        "nazev_01B": "kuchyňská utěrka mix",
+        "cena_01A": "14",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "877747",
+        "EAN:_01": "4 druhy",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "7015587"
+      },
+      "visibility": {
+        "od_01": true,
+        "EAN-number_01": false,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 4.0,
+      "data": {
+        "nazev_03A": "TDF Ultra Soft",
+        "nazev_03B": "dětské vlhčené ubrousky 64listů",
+        "cena_03A": "15",
+        "cena_03B": "50",
+        "od_03": "od",
+        "EAN-number_03": "815498",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "7127408"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 1.0,
+      "data": {
+        "nazev_09A": "Sanytol ",
+        "nazev_09B": "univerzální vlhčené ubrousky  36listů",
+        "cena_09A": "59",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "312257",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "7022445"
+      },
+      "visibility": {
+        "od_09": false,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_12",
+      "hero": 1.0,
+      "data": {
+        "nazev_12A": "Miléne",
+        "nazev_12B": "antibakteriální vlhčené ubrousky  15listů",
+        "cena_12A": "8",
+        "cena_12B": "90",
+        "od_12": "od",
+        "EAN-number_12": "814453",
+        "EAN:_12": "EAN:",
+        "dostupnost_12": "•dostupné na všech pobočkách",
+        "image_12": "7028634"
+      },
+      "visibility": {
+        "od_12": false,
+        "EAN-number_12": true,
+        "dostupnost_12": false
+      }
+    },
+    {
+      "group": "Product_13",
+      "hero": 1.0,
+      "data": {
+        "nazev_13A": "TDF Deluxe",
+        "nazev_13B": "vlhčený toaletní papír 60listů",
+        "cena_13A": "22",
+        "cena_13B": "50",
+        "od_13": "od",
+        "EAN-number_13": "815412",
+        "EAN:_13": "EAN:",
+        "dostupnost_13": "•dostupné na všech pobočkách",
+        "image_13": "7126235"
+      },
+      "visibility": {
+        "od_13": false,
+        "EAN-number_13": true,
+        "dostupnost_13": false
+      }
+    },
+    {
+      "group": "Product_16",
+      "hero": 1.0,
+      "data": {
+        "nazev_16A": "Pampers ",
+        "nazev_16B": "Vlhčené ubrousky 52listů",
+        "cena_16A": "36",
+        "cena_16B": "90",
+        "od_16": "od",
+        "EAN-number_16": "041360",
+        "EAN:_16": "2 druhy",
+        "dostupnost_16": "•dostupné na všech pobočkách",
+        "image_16": "7120152"
+      },
+      "visibility": {
+        "od_16": true,
+        "EAN-number_16": false,
+        "dostupnost_16": false
+      }
+    },
+    {
+      "group": "Product_10",
+      "hero": 4.0,
+      "data": {
+        "nazev_10A": "Harmony",
+        "nazev_10B": "kosmetické ubrousky   150ks",
+        "cena_10A": "21",
+        "cena_10B": "90",
+        "od_10": "od",
+        "EAN-number_10": "873208",
+        "EAN:_10": "3 druhy",
+        "dostupnost_10": "•dostupné na všech pobočkách",
+        "image_10": "7221586"
+      },
+      "visibility": {
+        "od_10": false,
+        "EAN-number_10": false,
+        "dostupnost_10": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "page": 22,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 1.0,
+      "data": {
+        "nazev_01A": "Velta Tea",
+        "nazev_01B": "kvetoucí čaj 12g",
+        "cena_01A": "49",
+        "cena_01B": "90",
+        "od_01": "od",
+        "EAN-number_01": "785022",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "1051395"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_02",
+      "hero": 2.0,
+      "data": {
+        "nazev_02A": "Teekanne",
+        "nazev_02B": "World of Fruits 35-45g",
+        "cena_02A": "29",
+        "cena_02B": "90",
+        "od_02": "od",
+        "EAN-number_02": "000913",
+        "EAN:_02": "Více druhů",
+        "dostupnost_02": "•dostupné na všech pobočkách",
+        "image_02": "8010122"
+      },
+      "visibility": {
+        "od_02": false,
+        "EAN-number_02": false,
+        "dostupnost_02": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 1.0,
+      "data": {
+        "nazev_03A": "Lipton",
+        "nazev_03B": "black pyramid 34g",
+        "cena_03A": "33",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "110911",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "1051928"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_04",
+      "hero": 1.0,
+      "data": {
+        "nazev_04A": "Leros",
+        "nazev_04B": "Immunit Shot  150ml",
+        "cena_04A": "30",
+        "cena_04B": "90",
+        "od_04": "od",
+        "EAN-number_04": "550397",
+        "EAN:_04": "EAN:",
+        "dostupnost_04": "•dostupné na všech pobočkách",
+        "image_04": "1051989"
+      },
+      "visibility": {
+        "od_04": false,
+        "EAN-number_04": true,
+        "dostupnost_04": false
+      }
+    },
+    {
+      "group": "Product_05",
+      "hero": 1.0,
+      "data": {
+        "nazev_05A": "Frapé",
+        "nazev_05B": "instantní čaj  350g",
+        "cena_05A": "34",
+        "cena_05B": "90",
+        "od_05": "od",
+        "EAN-number_05": "000060",
+        "EAN:_05": "EAN:",
+        "dostupnost_05": "•dostupné na všech pobočkách",
+        "image_05": "1051028"
+      },
+      "visibility": {
+        "od_05": false,
+        "EAN-number_05": true,
+        "dostupnost_05": false
+      }
+    },
+    {
+      "group": "Product_07",
+      "hero": 1.0,
+      "data": {
+        "nazev_07A": "Belin",
+        "nazev_07B": "bylinkový čaj  30g",
+        "cena_07A": "17",
+        "cena_07B": "90",
+        "od_07": "od",
+        "EAN-number_07": "003878",
+        "EAN:_07": "EAN:",
+        "dostupnost_07": "•dostupné na všech pobočkách",
+        "image_07": "1051085"
+      },
+      "visibility": {
+        "od_07": true,
+        "EAN-number_07": true,
+        "dostupnost_07": false
+      }
+    },
+    {
+      "group": "Product_08",
+      "hero": 1.0,
+      "data": {
+        "nazev_08A": "Bardollini",
+        "nazev_08B": "Cappuccino 1kg",
+        "cena_08A": "82",
+        "cena_08B": "90",
+        "od_08": "od",
+        "EAN-number_08": "218704",
+        "EAN:_08": "EAN:",
+        "dostupnost_08": "•dostupné na všech pobočkách",
+        "image_08": "1051739"
+      },
+      "visibility": {
+        "od_08": false,
+        "EAN-number_08": true,
+        "dostupnost_08": false
+      }
+    },
+    {
+      "group": "Product_09",
+      "hero": 1.0,
+      "data": {
+        "nazev_09A": "Brazilka",
+        "nazev_09B": "instantní káva 100g",
+        "cena_09A": "49",
+        "cena_09B": "90",
+        "od_09": "od",
+        "EAN-number_09": "590358",
+        "EAN:_09": "EAN:",
+        "dostupnost_09": "•dostupné na všech pobočkách",
+        "image_09": "1050662"
+      },
+      "visibility": {
+        "od_09": true,
+        "EAN-number_09": true,
+        "dostupnost_09": false
+      }
+    },
+    {
+      "group": "Product_10",
+      "hero": 1.0,
+      "data": {
+        "nazev_10A": "Bercoff ",
+        "nazev_10B": "káva 400g",
+        "cena_10A": "132",
+        "od_10": "od",
+        "EAN-number_10": "014156",
+        "EAN:_10": "EAN:",
+        "dostupnost_10": "•dostupné na všech pobočkách",
+        "image_10": "1051818"
+      },
+      "visibility": {
+        "od_10": false,
+        "EAN-number_10": true,
+        "dostupnost_10": false
+      }
+    },
+    {
+      "group": "Product_13",
+      "hero": 1.0,
+      "data": {
+        "nazev_13A": "Minges",
+        "nazev_13B": "zrnková káva 1kg",
+        "cena_13A": "279",
+        "od_13": "od",
+        "EAN-number_13": "180011",
+        "EAN:_13": "EAN:",
+        "dostupnost_13": "•dostupné na všech pobočkách",
+        "image_13": "1051054"
+      },
+      "visibility": {
+        "od_13": false,
+        "EAN-number_13": true,
+        "dostupnost_13": false
+      }
+    },
+    {
+      "group": "Product_14",
+      "hero": 1.0,
+      "data": {
+        "nazev_14A": "MoccaFix",
+        "nazev_14B": "mletá káva 500g",
+        "cena_14A": "125",
+        "od_14": "od",
+        "EAN-number_14": "000646",
+        "EAN:_14": "EAN:",
+        "dostupnost_14": "•dostupné na všech pobočkách",
+        "image_14": "1052073"
+      },
+      "visibility": {
+        "od_14": false,
+        "EAN-number_14": true,
+        "dostupnost_14": false
+      }
+    },
+    {
+      "group": "Product_11",
+      "hero": 4.0,
+      "data": {
+        "nazev_11A": "Mokate",
+        "nazev_11B": "Cappuccino 40g",
+        "cena_11A": "9",
+        "cena_11B": "50",
+        "od_11": "od",
+        "EAN-number_11": "085497",
+        "EAN:_11": "Všechny druhy",
+        "dostupnost_11": "•dostupné na všech pobočkách",
+        "image_11": "1052001"
+      },
+      "visibility": {
+        "od_11": false,
+        "EAN-number_11": false,
+        "dostupnost_11": false
+      }
+    }
+  ]
+}

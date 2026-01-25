@@ -1,0 +1,142 @@
+{
+  "page": 1,
+  "actions": [
+    {
+      "group": "Product_01",
+      "hero": 1.0,
+      "data": {
+        "nazev_01A": "Alvorada",
+        "nazev_01B": "zrnková káva 1kg",
+        "cena_01A": "275",
+        "od_01": "od",
+        "EAN-number_01": "105101",
+        "EAN:_01": "EAN:",
+        "dostupnost_01": "•dostupné na všech pobočkách",
+        "image_01": "1051049"
+      },
+      "visibility": {
+        "od_01": false,
+        "EAN-number_01": true,
+        "dostupnost_01": false
+      }
+    },
+    {
+      "group": "Product_02",
+      "hero": 1.0,
+      "data": {
+        "nazev_02A": "Davidoff",
+        "nazev_02B": "instantí káva 90g, 100g",
+        "cena_02A": "125",
+        "od_02": "od",
+        "EAN-number_02": "060977",
+        "EAN:_02": "4 druhy",
+        "dostupnost_02": "•dostupné na všech pobočkách",
+        "image_02": "1040048"
+      },
+      "visibility": {
+        "od_02": false,
+        "EAN-number_02": false,
+        "dostupnost_02": false
+      }
+    },
+    {
+      "group": "Product_03",
+      "hero": 2.0,
+      "data": {
+        "nazev_03A": "Lindt Lindor",
+        "nazev_03B": "srdce tin 50g",
+        "cena_03A": "48",
+        "cena_03B": "90",
+        "od_03": "od",
+        "EAN-number_03": "700532",
+        "EAN:_03": "EAN:",
+        "dostupnost_03": "•dostupné na všech pobočkách",
+        "image_03": "2017390"
+      },
+      "visibility": {
+        "od_03": false,
+        "EAN-number_03": true,
+        "dostupnost_03": false
+      }
+    },
+    {
+      "group": "Product_04",
+      "hero": 1.0,
+      "data": {
+        "nazev_04A": "Lindt Pralines Hochfein",
+        "nazev_04B": "bonboniéra 120g",
+        "cena_04A": "145",
+        "od_04": "od",
+        "EAN-number_04": "398469",
+        "EAN:_04": "EAN:",
+        "dostupnost_04": "•není dostupné v Brně",
+        "image_04": "2015994"
+      },
+      "visibility": {
+        "od_04": false,
+        "EAN-number_04": true,
+        "dostupnost_04": true
+      }
+    },
+    {
+      "group": "Product_06",
+      "hero": 1.0,
+      "data": {
+        "nazev_06A": "Lexus srdce",
+        "nazev_06B": "bonboniéra 110g",
+        "cena_06A": "28",
+        "cena_06B": "90",
+        "od_06": "od",
+        "EAN-number_06": "609924",
+        "EAN:_06": "2 druhy",
+        "dostupnost_06": "•dostupné na všech pobočkách",
+        "image_06": "2115158"
+      },
+      "visibility": {
+        "od_06": false,
+        "EAN-number_06": false,
+        "dostupnost_06": false
+      }
+    },
+    {
+      "group": "Product_07",
+      "hero": 1.0,
+      "data": {
+        "nazev_07A": "Lexus",
+        "nazev_07B": "bonboniéra 150g",
+        "cena_07A": "52",
+        "cena_07B": "90",
+        "od_07": "od",
+        "EAN-number_07": "608392",
+        "EAN:_07": "3 druhy",
+        "dostupnost_07": "•dostupné na všech pobočkách",
+        "image_07": "2016775"
+      },
+      "visibility": {
+        "od_07": false,
+        "EAN-number_07": false,
+        "dostupnost_07": false
+      }
+    },
+    {
+      "group": "Product_08",
+      "hero": 1.0,
+      "data": {
+        "nazev_08A": "Vobro Love and Cherry",
+        "nazev_08B": "bonboniéra 300g",
+        "cena_08A": "122",
+        "cena_08B": "90",
+        "od_08": "od",
+        "EAN-number_08": "153689",
+        "EAN:_08": "EAN:",
+        "dostupnost_08": "•dostupné na všech pobočkách",
+        "image_08": "2013590"
+      },
+      "visibility": {
+        "od_08": false,
+        "EAN-number_08": true,
+        "dostupnost_08": false
+      }
+    }
+  ]
+}
