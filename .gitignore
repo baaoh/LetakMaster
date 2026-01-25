@@ -1,0 +1,65 @@
+# User Data and Workspaces
+workspaces/
+archive_files/
+uploads/
+*.xls
+*.xlsx
+
+# Allow test data
+!tests/*.xls
+!tests/*.xlsx
+!tests/*.psd
+
+# Photoshop Files and Assets
+*.psd
+PSD files/
+LetakMaster_Alpha_v1/
+LetakMaster_Alpha_v1.01/
+
+# Databases
+*.db
+*.db-shm
+*.db-wal
+
+# Logs and Debugging
+*.log
+debug_manifest.*
+logs.txt
+
+# Python Artifacts
+__pycache__/
+*/__pycache__/
+.coverage
+.pytest_cache/
+venv/
+.ipynb_checkpoints/
+python_embed/
+
+# Node/Frontend Artifacts
+node_modules/
+frontend/node_modules/
+frontend/dist/
+.eslintcache
+
+# Static Frontend (Built assets)
+# If you want to keep the built version in the repo for "Zero Install", comment the next line.
+# However, usually it's best to ignore it if the source is in 'frontend/'
+frontend_static/
+
+# Binaries and Client Apps
+ImageCopier/
+*.exe
+
+# Project Specific
+OLD/
+Releases/
+
+# OS/IDE Specific
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# AI Context
+.gemini/
+.gemini-clipboard/

@@ -1,6 +1,8 @@
 #target photoshop
 
-var LOG_FILE = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.txt");
+var scriptFolder = new File($.fileName).parent;
+var projectRoot = scriptFolder.parent;
+var LOG_FILE = new File(projectRoot.fsName + "/debug_manifest.txt");
 
 function logToManifest(msg) {
     LOG_FILE.open('a'); // Append mode
@@ -150,7 +152,9 @@ function toJson(obj) {
 
 function saveManifest(docPath, pageNum) {
     try {
-        var f = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.json");
+        var scriptFolder = new File($.fileName).parent;
+        var projectRoot = scriptFolder.parent;
+        var f = new File(projectRoot.fsName + "/debug_manifest.json");
         f.open('w');
         f.write(toJson(g_manifest));
         f.close();
