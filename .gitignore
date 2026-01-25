@@ -123,7 +123,6 @@ Releases/
 uploads/
 workspaces/
 archive_files/
-python_embed/
 logs.txt
 *.log
 *.psd

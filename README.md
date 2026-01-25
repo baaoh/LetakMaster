@@ -1,32 +1,20 @@
 # LetakMaster
 
-LetakMaster is a comprehensive automation suite designed to streamline the production of retail catalog pages (Letak) by integrating Excel product data with Adobe Photoshop layouts. It serves as a bridge between data managers and graphic designers, ensuring data integrity, automating tedious layout tasks, and providing a history of changes.
+LetakMaster is a comprehensive automation suite designed to streamline the production of retail catalog pages (Letak) by integrating Excel product data with Adobe Photoshop layouts.
 
-## 🚀 Features
+## 🚀 Key Features
 
-*   **Excel Ingestion & Sync:** Automatically reads and parses master Excel files (including password-protected ones). Tracks changes over time and maintains a history of "states".
-*   **Smart Slot Allocation:** Uses a "Tetris-like" algorithm (`SlotAllocator`) to map products to grid slots on a page, handling variable item sizes (1x1, 1x2, 2x2 "Hero" items).
-*   **Photoshop Automation:** Generates JSON build plans that drive Adobe Photoshop scripts (`.jsx`) to automatically populate text layers, prices, and product images, handling complex visibility logic for overlapping groups.
-*   **Traceability:** Verifies the final visual output (PSD) against the original source data to ensure accuracy.
-*   **Dashboard UI:** A modern React-based frontend to manage workspaces, view product data, and trigger automation tasks.
-*   **Background Processing:** Handles resource-intensive tasks asynchronously.
-
-## 🛠️ Tech Stack
-
-*   **Backend:** Python 3.x, FastAPI, SQLAlchemy (SQLite), Pandas
-*   **Frontend:** React, TypeScript, Vite, Tailwind CSS
-*   **Automation:** Adobe Photoshop ExtendScript (`.jsx`), `psd-tools`
+*   **Excel Ingestion & Sync:** Tracks changes in master Excel files and maintains state history.
+*   **Smart Slot Allocation:** Maps products to a 4x4 grid, handling variable item sizes (1x1, 1x2, 2x2).
+*   **Photoshop Automation:** Generates JSON build plans to automatically populate PSD templates.
+*   **Zero Install:** Comes with a portable environment; just clone and run.
 
 ## 📋 Prerequisites
 
-*   **OS:** Windows 10/11 (Required for Photoshop COM automation)
+*   **OS:** Windows 10/11
 *   **Adobe Photoshop:** CC 2024 or newer
-*   *(Optional - For Developers only)* **Node.js:** Version 18+ (if you want to modify the frontend code)
 
-## 📦 Installation
-
-### Option A: From Source (Git Clone)
-Use this if you want the latest code.
+## 📦 Getting Started (Zero Install)
 
 1.  **Clone the Repository**
     ```bash
@@ -34,72 +22,33 @@ Use this if you want the latest code.
     cd LetakMaster
     ```
 
-2.  **Run Installer**
-    Double-click `install.bat`.
-    *   This will check for Python, create a virtual environment, and install all dependencies.
-    *   *Note: You do NOT need to install Node.js.*
-
-3.  **Start Application**
-    Double-click `start_app.bat` (created by the installer).
-
-### Option B: Portable Release (If available)
-If you downloaded a Release `.zip` that includes the `python_embed` folder:
-1.  Extract the zip.
-2.  Double-click `start_app_portable.bat`.
-3.  No installation required.
-
-## ▶️ Usage
-
-### Dashboard
-Once the application starts, it will open your browser to `http://localhost:8000`.
-Use the **Data Input** tab to upload your master Excel file and begin.
-
-### Manual Workflow
-If you need to run specific scripts manually (e.g., for debugging):
-
-*   **Git Users:** Activate venv first: `venv\Scripts\activate` then run `python scripts/script_name.py`.
-*   **Portable Users:** Use `python_embed\python.exe scripts/script_name.py`.
-
-#### 1. Data Ingestion
-1.  Open the web dashboard (`http://localhost:8000`).
-2.  Go to the **Data Input** tab.
-3.  Select your master Excel file (e.g., `Copy of letak prodejna 2026 NEW FINAL.xls`).
-4.  The system will ingest the data and create a new "State".
-
-#### 2. Allocation & Build Plan
-1.  The system calculates the layout for every page using the **Enrichment** process. This writes a `PSD_Allocation` value (e.g., `P25_01A`) to the Excel data.
-2.  Generate a **Build Plan** for a specific page (e.g., Page 25). This creates a JSON file containing all the text and logic needed for Photoshop.
+2.  **Run the Application**
+    Double-click the launcher script:
     ```bash
-    # Example manual command using embedded python
-    python_embed\python.exe scripts/generate_build_json.py 25
+    ./start_app_portable.bat
     ```
+    *   This launches the backend and the user interface.
+    *   Your browser will automatically open to `http://localhost:8000`.
 
-#### 3. Photoshop Automation
-1.  Open your target PSD template in Adobe Photoshop (e.g., `Letak W Page 10...`).
-2.  In Photoshop, go to `File > Scripts > Browse...`.
-3.  Select `scripts/builder.jsx`.
-4.  The script will read the generated JSON and populate the active document, updating names, prices, and handling layout visibility.
+## ▶️ Usage Workflow
 
-## 🧩 Architecture Logic
+### 1. Data Ingestion
+*   Open the dashboard (`http://localhost:8000`).
+*   In the **Data Input** tab, select your master Excel file.
+*   The system will process the data and create a new project state.
 
-### Slot Allocation
-The core logic resides in `app/allocation_logic.py`. It maps a flat list of products to a 4x4 grid (or similar) on a catalog page.
-*   **Standard Items:** 1 slot.
-*   **Hero Items:** Can take 2 horizontal slots, 2 vertical slots, or a 2x2 box.
-*   **Logic:** The allocator respects the sort order from Excel but will "flow" items around Hero products to minimize gaps.
+### 2. Photoshop Automation
+*   Open your target PSD template in Adobe Photoshop.
+*   In Photoshop, go to `File > Scripts > Browse...`.
+*   Select `scripts/builder.jsx`.
+*   The script will populate the PSD with the latest data from the system.
 
-### Photoshop Layers
-The Photoshop templates must follow a specific naming convention for the automation to work:
-*   Groups named `Product_01`, `Product_02`, etc.
-*   Text layers inside named `nazev_XX` (Name), `cena_XX` (Price), etc.
-*   The `builder.jsx` script controls the visibility of these groups based on the `PSD_Allocation` data.
+## 🛠️ Developer Mode
+If you want to modify the React frontend:
+1.  Navigate to `/frontend`.
+2.  Install Node.js 18+.
+3.  Run `npm install` and `npm run dev`.
+4.  Use `start_servers.bat` to run the backend in reload mode.
 
-## 🤝 Contributing
-1.  Fork the repository.
-2.  Create a feature branch (`git checkout -b feature/AmazingFeature`).
-3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4.  Push to the branch (`git push origin feature/AmazingFeature`).
-5.  Open a Pull Request.
-
-## 📄 License
+---
 [Proprietary/Internal Use]
