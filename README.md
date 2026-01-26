@@ -32,21 +32,6 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
     cd LetakMaster
     ```
 
-2.  **Backend Setup**
-    Create a virtual environment and install dependencies:
-    ```bash
-    python -m venv venv
-    venv\Scripts\activate
-    pip install -r requirements.txt
-    ```
-
-3.  **Frontend Setup**
-    Navigate to the frontend directory and install dependencies:
-    ```bash
-    cd frontend
-    npm install
-    ```
-
 ## ▶️ Usage
 
 ### Quick Start
