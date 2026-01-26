@@ -8,4 +8,4 @@
 - [x] Task: Verify the unit test produces `Product_XX_K` and `Product_XX_EX` strings.
 - [x] Task: Update `builder.jsx` to strictly hide standard `Product_XX` group when `Product_XX_K/EX` is active.
 - [x] Task: Fix builder.jsx visibility logic to handle layer suffixes (_K/_EX) for EAN and Availability layers.
-- [ ] Task: (Manual) User to verify `builder.jsx` picks up the new group names in Photoshop.
+- [x] Task: (Manual) User to verify `builder.jsx` picks up the new group names in Photoshop. (Verified: Works, with AM optimization)
