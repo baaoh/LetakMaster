@@ -56,6 +56,13 @@ class AutomationService:
             timestamp = datetime.datetime.now().strftime("%y%m%d_%H%M")
             safe_name = re.sub(r'[^\w\-_\. ]', '_', book.name)
             
+            # Infer state_id from filename if missing
+            if not state_id:
+                # Matches "Workspace_State_1.xlsx" or similar patterns
+                match = re.search(r"_State_(\d+)", book.name, re.IGNORECASE)
+                if match:
+                    state_id = int(match.group(1))
+            
             # New Naming: YYMMDD_HHmm_ExcelName_State_{id}
             state_str = f"_State_{state_id}" if state_id else "_State_X"
             folder_name = f"{timestamp}_{safe_name}{state_str}"
@@ -315,9 +322,13 @@ class AutomationService:
                     output_data[idx][1] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
                     
                     # AO: Nazev B
-                    desc = str(src_row[COL_DESC]) if src_row[COL_DESC] else ""
-                    gram = str(src_row[COL_GRAMAZ]) if src_row[COL_GRAMAZ] else ""
-                    output_data[idx][2] = f"{desc} {gram}".strip()
+                    desc = str(src_row[COL_DESC]).strip() if src_row[COL_DESC] else ""
+                    gram = str(src_row[COL_GRAMAZ]).strip() if src_row[COL_GRAMAZ] else ""
+                    
+                    if desc and gram:
+                        output_data[idx][2] = f"{desc}\n{gram}"
+                    else:
+                        output_data[idx][2] = f"{desc}{gram}"
                     
                     # AP: EAN Number
                     ean_raw = src_row[COL_EAN]

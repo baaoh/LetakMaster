@@ -12,6 +12,6 @@
 - [x] Task: Enhance layer finder to look for `image`, `obraz`, `photo` *containing* the suffix or just generic names.
 
 ## Phase 3: Verification
-- [ ] Task: Verify with "Raster" placeholder.
-- [ ] Task: Verify with "Smart Object" placeholder.
-- [ ] Task: Verify with different aspect ratio images.
+- [x] Task: Verify with "Raster" placeholder.
+- [x] Task: Verify with "Smart Object" placeholder.
+- [x] Task: Verify with different aspect ratio images.
