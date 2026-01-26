@@ -159,6 +159,21 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
         if state and state.last_build_plans_path:
             json_dir = state.last_build_plans_path
             
+    # Auto-Discovery Logic: If json_dir is still empty/invalid, find the latest generated plan
+    if not json_dir or not os.path.exists(json_dir):
+        # Check workspaces/build_plans for the newest folder
+        plans_root = os.path.join(os.getcwd(), "workspaces", "build_plans")
+        if os.path.exists(plans_root):
+            subdirs = [os.path.join(plans_root, d) for d in os.listdir(plans_root) if os.path.isdir(os.path.join(plans_root, d))]
+            if subdirs:
+                # Sort by name descending (Date YYMMDD is first)
+                subdirs.sort(key=lambda x: os.path.basename(x), reverse=True)
+                json_dir = subdirs[0]
+                print(f"Auto-Discovered Latest Build Plans: {json_dir}")
+
+    if not json_dir or not os.path.exists(json_dir):
+        raise HTTPException(status_code=400, detail="No Build Plans found. Please run 'Export Build Plans' first.")
+
     # Ensure absolute paths for Photoshop
     if images_dir and not os.path.isabs(images_dir):
         images_dir = os.path.abspath(images_dir)

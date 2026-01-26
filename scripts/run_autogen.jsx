@@ -1,9 +1,11 @@
 #target photoshop
-var g_injected_images_dir = "C:/Users/Bao/Documents/LetakMaster_v1.02/workspaces/images";
-var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster_v1.02/workspaces/build_plans/Workspace_State_2.xlsx_2026-01-24_18-14-28";
+var g_injected_images_dir = "D:/TAMDA/LetakMaster/workspaces/images";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/Workspace_State_1.xlsx_2026-01-26_01-48-38";
 var g_injected_automation = true;
 
-var LOG_FILE = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.txt");
+var scriptFolder = new File($.fileName).parent;
+var projectRoot = scriptFolder.parent;
+var LOG_FILE = new File(projectRoot.fsName + "/debug_manifest.txt");
 
 function logToManifest(msg) {
     LOG_FILE.open('a'); // Append mode
@@ -18,41 +20,41 @@ function readJSON(filePath) {
     file.open('r');
     var content = file.read();
     file.close();
-    // Adobe ExtendScript doesn't have native JSON.parse. 
-    // Secure-ish eval for local trusted files.
     var obj = eval('(' + content + ')');
     logToManifest("JSON Parsed. Actions: " + (obj.actions ? obj.actions.length : "0"));
     return obj;
 }
 
-// Utility: Hide a Group
-function hideGroup(doc, groupName) {
-    try {
-        var grp = doc.layerSets.getByName(groupName);
+// Utility: Hide a Group (Optimized using cache)
+function hideGroupOptimized(doc, groupName, groupIndex) {
+    var grp = groupIndex[groupName];
+    if (grp) {
         grp.visible = false;
-    } catch(e) {
-        // Ignore if already gone
     }
 }
 
-// Utility: Resize/Mask Group (Simplified placeholder logic)
-// In reality, this would modify the Vector Mask or specific "box" layer
-function setGroupSize(doc, groupName, hero) {
-    // This is complex in pure DOM. 
-    // Usually involves selecting the "box" layer and transforming it.
-    // For now, we assume the user has "Templates" or we simply don't resize 
-    // but just allow the content to flow.
-    // BUT, we MUST hide the overlapped groups.
-    
-    // Grid Logic (1-16)
-    // 1  2  3  4
-    // 5  6  7  8
-    // 9  10 11 12
-    // 13 14 15 16
-    
+// Utility: Resize/Mask Group (Optimized)
+function setGroupSizeOptimized(doc, groupName, hero, groupIndex) {
     var id = parseInt(groupName.replace("Product_", ""), 10);
-    var toHide = [];
+    var suffixId = (id < 10) ? "0" + id : "" + id;
+
+    // Enforce Exclusive Visibility: Hide all other variants of this slot
+    // We check the Index first to avoid slow DOM calls for non-existent groups
+    var variants = [
+        "Product_" + suffixId, 
+        "Product_" + suffixId + "_K", 
+        "Product_" + suffixId + "_EX"
+    ];
     
+    for (var v = 0; v < variants.length; v++) {
+        var vName = variants[v];
+        if (vName != groupName) {
+            hideGroupOptimized(doc, vName, groupIndex);
+        }
+    }
+    
+    // Hide overlapped slots based on Hero size
+    var toHide = [];
     if (hero == 2) {
         // Vertical: Hide ID + 4
         toHide.push(id + 4);
@@ -67,37 +69,84 @@ function setGroupSize(doc, groupName, hero) {
         var hideId = toHide[i];
         if (hideId <= 16) {
             var suffix = (hideId < 10) ? "0" + hideId : "" + hideId;
-            hideGroup(doc, "Product_" + suffix);
+            var base = "Product_" + suffix;
+            // Also hide variants of the overlapped slot!
+            hideGroupOptimized(doc, base, groupIndex);
+            hideGroupOptimized(doc, base + "_K", groupIndex);
+            hideGroupOptimized(doc, base + "_EX", groupIndex);
         }
     }
 }
 
 var g_manifest = [];
 
-function updateTextLayer(group, layerName, text) {
-    logToManifest("Updating Text: " + group.name + " / " + layerName + " -> " + text);
+// Recursive Map Builder: Returns { "lowercase_name": LayerObject }
+function mapLayers(parent, map) {
+    if (!map) map = {};
+    
+    for (var i = 0; i < parent.layers.length; i++) {
+        var layer = parent.layers[i];
+        var nameKey = layer.name.toLowerCase();
+        
+        // Store first match only (standard behavior)
+        if (!map[nameKey]) {
+            map[nameKey] = layer;
+        }
+        
+        // Recurse if group
+        if (layer.typename == "LayerSet") {
+            mapLayers(layer, map);
+        }
+    }
+    return map;
+}
+
+function updateTextLayerCached(group, layerName, text, layerMap) {
     var status = "Missing";
     var method = "Direct";
+    var layer = null;
     
     try {
-        var layer = findLayerRecursive(group, layerName);
+        // 1. Direct Lookup
+        layer = layerMap[layerName.toLowerCase()];
         
-        // Fallback strategies for EAN/Labels
+        // 2. Fallback: Suffix "K" / "EX" (Underscore)
         if (!layer) {
-            // Strategy 1: Try prefix before underscore (e.g. "EAN:_01" -> "EAN:")
-            if (layerName.indexOf("_") > 0) {
-                var prefix = layerName.split("_")[0];
-                layer = findLayerRecursive(group, prefix);
-                if (layer) method = "Fallback_Prefix_" + prefix;
+            var groupParts = group.name.split("_");
+            if (groupParts.length > 2) {
+                var ext = groupParts[groupParts.length - 1]; // "K" or "EX"
+                var altName = layerName + "_" + ext;
+                layer = layerMap[altName.toLowerCase()];
+                if (layer) method = "Fallback_Suffix_" + ext;
             }
         }
         
+        // 3. Fallback: Suffix "K" / "EX" (No Underscore)
+        if (!layer) {
+            var groupParts = group.name.split("_");
+            if (groupParts.length > 2) {
+                var ext = groupParts[groupParts.length - 1];
+                var altName = layerName + ext;
+                layer = layerMap[altName.toLowerCase()];
+                if (layer) method = "Fallback_Suffix_NoUnderscore_" + ext;
+            }
+        }
+
+        // 4. Fallback: EAN Variations
+        if (!layer) {
+             // Prefix (EAN:_01 -> EAN:)
+             if (layerName.indexOf("_") > 0) {
+                var prefix = layerName.split("_")[0];
+                layer = layerMap[prefix.toLowerCase()];
+                if (layer) method = "Fallback_Prefix_" + prefix;
+             }
+        }
+        
         if (!layer && layerName.indexOf("EAN") >= 0) {
-            // Strategy 2: Common EAN variations
             var vars = ["EAN", "EAN:", "EAN_label"];
             for (var i=0; i<vars.length; i++) {
                 if (!layer) {
-                    layer = findLayerRecursive(group, vars[i]);
+                    layer = layerMap[vars[i].toLowerCase()];
                     if (layer) method = "Fallback_Var_" + vars[i];
                 }
             }
@@ -107,17 +156,12 @@ function updateTextLayer(group, layerName, text) {
             if (layer.kind == LayerKind.TEXT) {
                 layer.textItem.contents = text;
                 status = "Updated";
-                logToManifest("SUCCESS: Updated " + layer.name + " via " + method);
             } else {
                 status = "WrongType_" + layer.kind;
-                logToManifest("FAIL: Layer found but not TEXT. Type: " + layer.kind);
             }
-        } else {
-            logToManifest("FAIL: Layer NOT FOUND: " + layerName);
         }
     } catch(e) {
         status = "Error_" + e.message;
-        logToManifest("ERROR in updateTextLayer: " + e);
     }
     
     g_manifest.push({
@@ -134,11 +178,9 @@ function updateTextLayer(group, layerName, text) {
 function toJson(obj) {
     var t = typeof (obj);
     if (t != "object" || obj === null) {
-        // simple data type
         if (t == "string") obj = '"' + obj.replace(/"/g, '\\"') + '"';
         return String(obj);
     } else {
-        // recurse array or object
         var n, v, json = [], arr = (obj && obj.constructor == Array);
         for (n in obj) {
             v = obj[n];
@@ -153,49 +195,16 @@ function toJson(obj) {
 
 function saveManifest(docPath, pageNum) {
     try {
-        var f = new File("C:/Users/Bao/Documents/LetakMaster_v1.02/debug_manifest.json");
+        var scriptFolder = new File($.fileName).parent;
+        var projectRoot = scriptFolder.parent;
+        var f = new File(projectRoot.fsName + "/debug_manifest.json");
         f.open('w');
         f.write(toJson(g_manifest));
         f.close();
-        // alert("Manifest saved to root!");
-    } catch(e) {
-        alert("Manifest SAVE ERROR: " + e);
-    }
-}
-
-function findLayerRecursive(parent, name) {
-    try {
-        // Direct match first (fast)
-        try {
-            var layer = parent.layers.getByName(name);
-            return layer;
-        } catch(e) {
-            // Proceed to loop
-        }
-        
-        // Iterate for case-insensitive or recursive search
-        for (var i = 0; i < parent.layers.length; i++) {
-            var cur = parent.layers[i];
-            
-            // Check name case-insensitive
-            if (cur.name.toLowerCase() === name.toLowerCase()) {
-                return cur;
-            }
-            
-            // Recurse if group
-            if (cur.typename == "LayerSet") {
-                var found = findLayerRecursive(cur, name);
-                if (found) return found;
-            }
-        }
-    } catch(e) {
-        // General error
-    }
-    return null;
+    } catch(e) { }
 }
 
 // --- Globals & Config ---
-// These specific variables can be injected by the backend prepending to this script
 var g_injected_json_dir = typeof g_injected_json_dir !== 'undefined' ? g_injected_json_dir : null;
 var g_injected_images_dir = typeof g_injected_images_dir !== 'undefined' ? g_injected_images_dir : null;
 var g_injected_automation = typeof g_injected_automation !== 'undefined' ? g_injected_automation : false;
@@ -205,47 +214,36 @@ var g_config = {};
 
 function main() {
     logToManifest("Script Started");
-    // Save User Preference
     var originalDisplayDialogs = app.displayDialogs;
-    // Suppress all dialogs (including Missing Fonts)
     app.displayDialogs = DialogModes.NO;
     
     try {
-        // 1. Priority: Injected Paths (Dynamic Run)
         if (g_injected_images_dir) {
             var d = new Folder(g_injected_images_dir);
-            if (d.exists) {
-                g_imagesDir = d;
+            if (d.exists) g_imagesDir = d;
+        }
+
+        if (!g_imagesDir) {
+            var scriptPath = File($.fileName).parent.fsName;
+            var configFile = new File(scriptPath + "/config.json");
+            if (configFile.exists) {
+                try {
+                    g_config = readJSON(configFile.fsName);
+                    if (g_config.images_dir) {
+                        var d = new Folder(g_config.images_dir);
+                        if (d.exists) g_imagesDir = d;
+                    }
+                } catch(e) { }
             }
         }
 
-        // 2. Fallback: Config File
-        var scriptPath = File($.fileName).parent.fsName;
-        var configFile = new File(scriptPath + "/config.json");
-        if (configFile.exists && !g_imagesDir) {
-            try {
-                g_config = readJSON(configFile.fsName);
-                if (g_config.images_dir) {
-                    var d = new Folder(g_config.images_dir);
-                    if (d.exists) g_imagesDir = d;
-                }
-            } catch(e) { }
-        }
-
-        var mode = "select"; // default
-        
+        var mode = "select";
         if (app.documents.length > 0) {
             if (g_injected_automation) {
-                // In automation mode, we prioritize active document without asking
                 mode = "active";
             } else {
-                // Temporarily re-enable dialogs just for this confirmation if needed, 
-                // but since this is interactive, we can assume NO dialogs is fine for the confirm too?
-                // No, confirm() works regardless of displayDialogs setting usually.
                 var result = confirm("Process ACTIVE document '" + app.activeDocument.name + "'?\n\nClick YES to process Active Document.\nClick NO to Select Files from disk.");
-                if (result) {
-                    mode = "active";
-                }
+                if (result) mode = "active";
             }
         }
         
@@ -253,21 +251,15 @@ function main() {
         if (mode == "active") {
             processDocument(app.activeDocument);
         } else {
-            // Select Files
             var files = File.openDialog("Select PSD Files to Automate", "*.psd", true);
             if (files && files.length > 0) {
                 for (var i = 0; i < files.length; i++) {
-                    var f = files[i];
-                    var doc = open(f);
+                    var doc = open(files[i]);
                     processDocument(doc);
-                    // Optional: Save and Close?
-                    // doc.save();
-                    // doc.close();
                 }
             }
         }
     } finally {
-        // Restore User Preference
         app.displayDialogs = originalDisplayDialogs;
     }
 }
@@ -277,20 +269,14 @@ function updateAllTextLayers() {
         var idupdateAllTextLayers = stringIDToTypeID( "updateAllTextLayers" );
         var desc = new ActionDescriptor();
         executeAction( idupdateAllTextLayers, desc, DialogModes.NO );
-    } catch(e) {
-        // Ignore if fails (e.g. no text layers or command not available)
-    }
+    } catch(e) { }
 }
 
 function processDocument(doc) {
-    app.activeDocument = doc; // Focus
-    
-    // Force text engine to initialize to prevent "Missing Font" or "Update" dialogs/errors
+    app.activeDocument = doc;
     updateAllTextLayers();
     
     var docName = doc.name;
-    
-    // 1. Auto-Detect Page Number
     var pageNum = null;
     var match = docName.match(/Page\s*(\d+)/i);
     
@@ -303,15 +289,11 @@ function processDocument(doc) {
         return;
     }
     
-    // 2. Locate JSON Plan
-    var docPath = doc.path;
     var jsonName = "build_page_" + pageNum + ".json";
     var scriptPath = File($.fileName).parent.fsName;
-    var projectRoot = new Folder(scriptPath + "/.."); // Assuming scripts/ is in root
-    
+    var projectRoot = new Folder(scriptPath + "/.."); 
     var jsonFile = null;
     
-    // Strategy Priority 0: Injected Dynamic Path
     if (g_injected_json_dir) {
         var d = new Folder(g_injected_json_dir);
         if (d.exists) {
@@ -320,7 +302,6 @@ function processDocument(doc) {
         }
     }
     
-    // Strategy Priority 1: Configured JSON Directory (Fallback)
     if (!jsonFile && g_config.json_dir) {
         var d = new Folder(g_config.json_dir);
         if (d.exists) {
@@ -329,61 +310,48 @@ function processDocument(doc) {
         }
     }
     
-    // Strategy Priority 2: Structured Workspace Plans (Latest)
     if (!jsonFile) {
         var plansRoot = new Folder(projectRoot.fsName + "/workspaces/build_plans");
         if (plansRoot.exists) {
             var stateFolders = plansRoot.getFiles("state_*");
             if (stateFolders.length > 0) {
                 stateFolders.sort();
-                var selectedFolder = stateFolders[stateFolders.length - 1]; // Latest
+                var selectedFolder = stateFolders[stateFolders.length - 1]; 
                 if (selectedFolder) {
                     var potentialFile = new File(selectedFolder.fsName + "/" + jsonName);
-                    if (potentialFile.exists) {
-                        jsonFile = potentialFile;
-                    }
+                    if (potentialFile.exists) jsonFile = potentialFile;
                 }
             }
         }
     }
     
-    // Strategy Priority 3: Direct Adjacency (Legacy)
     if (!jsonFile) {
         var directPaths = [
-            docPath + "/" + jsonName,
+            doc.path + "/" + jsonName,
             scriptPath + "/" + jsonName,
             projectRoot.fsName + "/" + jsonName
         ];
-        
         for (var i = 0; i < directPaths.length; i++) {
             var f = new File(directPaths[i]);
             if (f.exists) { jsonFile = f; break; }
         }
     }
     
-    // Strategy Priority 4: Manual Selection
     if (!jsonFile) {
         alert("Could not auto-locate " + jsonName + ".\nPlease select the Build Plan JSON file manually.");
         jsonFile = File.openDialog("Select " + jsonName, "*.json");
     }
     
-    if (!jsonFile) {
-        alert("Aborted: No Build Plan selected.");
-        return;
-    }
+    if (!jsonFile) return;
 
     var plan = readJSON(jsonFile.fsName);
 
-    // Ask for Image Directory if not yet set
     if (!g_imagesDir) {
         g_imagesDir = Folder.selectDialog("Select the directory containing Product Images");
     }
     
-    // 3. Execute
-    g_manifest = []; // Reset for this doc
+    g_manifest = [];
     doc.suspendHistory("Build Page " + pageNum, "runBuild(doc, plan)");
-    
-    // 4. Save Manifest
     saveManifest(jsonFile.fsName, pageNum);
 }
 
@@ -391,7 +359,6 @@ function runBuild(doc, plan) {
     logToManifest("runBuild Started for Page " + plan.page);
     var total = plan.actions.length;
     
-    // Create Progress Window
     var win = new Window("palette", "LetakMaster Builder");
     win.pnl = win.add("panel", [10, 10, 440, 100], "Building Page " + plan.page);
     win.pnl.progBar = win.pnl.add("progressbar", [20, 35, 410, 60], 0, total);
@@ -399,124 +366,122 @@ function runBuild(doc, plan) {
     
     win.show();
     
-    // Process Actions
+    // --- OPTIMIZATION: Index all Groups once ---
+    logToManifest("Indexing Groups...");
+    var groupIndex = {};
+    for (var i = 0; i < doc.layerSets.length; i++) {
+        groupIndex[doc.layerSets[i].name] = doc.layerSets[i];
+    }
+    
     for (var i = 0; i < total; i++) {
         var action = plan.actions[i];
         var groupName = action.group;
         
-        // Update Progress
-        win.pnl.progBar.value = i + 1;
-        win.pnl.lblStatus.text = "Processing " + groupName + " (" + (i + 1) + "/" + total + ")...";
-        win.update(); // Force redraw
+        // Throttled UI Update (Every 3 items)
+        if (i % 3 === 0 || i === total - 1) {
+            win.pnl.progBar.value = i + 1;
+            win.pnl.lblStatus.text = "Processing " + groupName + " (" + (i + 1) + "/" + total + ")...";
+            win.update(); 
+        }
+        
+        // Fast Lookup
+        var group = groupIndex[groupName];
+        if (!group) continue;
         
         try {
-            var group = doc.layerSets.getByName(groupName);
-            group.visible = true; // Ensure active group is visible
+            group.visible = true; 
             
-            // Handle Overlap Hiding
-            setGroupSize(doc, groupName, action.hero);
+            // Optimized Visibility Handling
+            setGroupSizeOptimized(doc, groupName, action.hero, groupIndex);
             
-            // DEBUG: Log all data keys
-            var dataKeys = [];
-            for (var k in action.data) dataKeys.push(k);
-            logToManifest("Data Keys for " + groupName + ": " + dataKeys.join(", "));
+            // --- OPTIMIZATION: Map Group Layers once ---
+            var layerMap = mapLayers(group);
             
-            // Update Text & Images
+            // Update Text
             for (var key in action.data) {
                 if (key.indexOf("image_") === 0) {
-                    // Handle Image Replacement
                     if (g_imagesDir) {
-                        replaceProductImage(group, action.data[key], g_imagesDir);
+                        replaceProductImageCached(group, action.data[key], g_imagesDir, layerMap);
                     }
                 } else {
-                    updateTextLayer(group, key, action.data[key]);
+                    updateTextLayerCached(group, key, action.data[key], layerMap);
                 }
             }
             
-            // Handle Visibility (Explicit Toggles)
+            // Update Visibility
             if (action.visibility) {
                 for (var key in action.visibility) {
-                    toggleLayerVisibility(group, key, action.visibility[key]);
+                    var layer = layerMap[key.toLowerCase()];
+                    if (layer) layer.visible = action.visibility[key];
                 }
             }
             
         } catch(e) {
-            // Group might not exist
+            logToManifest("Error processing group " + groupName + ": " + e);
         }
     }
     
     win.close();
-    // alert("Page " + plan.page + " Built Successfully!");
-}
-
-function toggleLayerVisibility(group, layerName, isVisible) {
-    try {
-        var layer = findLayerRecursive(group, layerName);
-        if (layer) {
-            layer.visible = isVisible;
-        }
-    } catch(e) {
-        // Ignore if layer not found
-    }
 }
 
 function findImageFile(dir, basename) {
     var extensions = [".jpg", ".jpeg", ".png", ".tif", ".tiff", ".psd", ".webp"];
-    
-    // Check exact match first
     var f = new File(dir.fsName + "/" + basename);
     if (f.exists) return f;
     
-    // Check extensions
     for (var i = 0; i < extensions.length; i++) {
         f = new File(dir.fsName + "/" + basename + extensions[i]);
         if (f.exists) return f;
-        // Also check uppercase ext
         f = new File(dir.fsName + "/" + basename + extensions[i].toUpperCase());
         if (f.exists) return f;
     }
     return null;
 }
 
-function replaceProductImage(group, imageName, imageDir) {
-    // DEBUG: Check what we are looking for
-    // alert("Looking for image: '" + imageName + "' in " + imageDir.fsName);
-
-    // 1. Resolve File
+function replaceProductImageCached(group, imageName, imageDir, layerMap) {
     var file = findImageFile(imageDir, imageName);
-    if (!file) {
-        // alert("Image NOT found: " + imageName);
-        return;
+    if (!file) return;
+    
+    var baseNames = ["image", "obraz", "photo", "packshot"];
+    var targetLayer = null;
+    
+    var groupParts = group.name.split("_");
+    var ext = (groupParts.length > 2) ? groupParts[groupParts.length - 1] : null;
+
+    for (var i = 0; i < baseNames.length; i++) {
+        var bName = baseNames[i];
+        
+        // 1. Direct
+        targetLayer = layerMap[bName.toLowerCase()];
+        if (targetLayer) break;
+        
+        // 2. Suffix
+        if (ext) {
+            targetLayer = layerMap[(bName + "_" + ext).toLowerCase()];
+            if (targetLayer) break;
+            targetLayer = layerMap[(bName + ext).toLowerCase()];
+            if (targetLayer) break;
+        }
     }
     
-    // 2. Find Placeholder (Try common names: "image", "obraz", "photo", "packshot")
-    // We also support suffix matching if the JSON key implies it, but here we just look for standard placeholders.
-    var targetLayer = findLayerRecursive(group, "image");
-    if (!targetLayer) targetLayer = findLayerRecursive(group, "obraz");
-    if (!targetLayer) targetLayer = findLayerRecursive(group, "photo");
-    if (!targetLayer) targetLayer = findLayerRecursive(group, "packshot");
-    
-    // Fallback: Try finding layer containing "obraz" or "image" loosely
     if (!targetLayer) {
-        for (var i=0; i<group.layers.length; i++) {
-             var nm = group.layers[i].name.toLowerCase();
-             if (nm.indexOf("obraz") >= 0 || nm.indexOf("image") >= 0) {
-                 targetLayer = group.layers[i];
+        // Fallback: Scan map keys for "obraz"/"image"
+        for (var key in layerMap) {
+             if (key.indexOf("obraz") >= 0 || key.indexOf("image") >= 0) {
+                 targetLayer = layerMap[key];
                  break;
              }
         }
     }
     
     if (targetLayer) {
-        // Use Place & Hide Strategy
         placeAndAlign(app.activeDocument, group, targetLayer, file);
     }
 }
 
 function placeAndAlign(doc, group, placeholder, file) {
     try {
-        // 1. Get Bounds of Placeholder
-        var bounds = placeholder.bounds; // [left, top, right, bottom]
+        var bounds = placeholder.bounds; 
         var pLeft = bounds[0].value;
         var pTop = bounds[1].value;
         var pRight = bounds[2].value;
@@ -527,10 +492,8 @@ function placeAndAlign(doc, group, placeholder, file) {
         var pCenterX = pLeft + (pWidth / 2);
         var pCenterY = pTop + (pHeight / 2);
 
-        // 2. Select the Placeholder so Place puts it above
         doc.activeLayer = placeholder;
         
-        // 3. Place Image
         var idPlc = charIDToTypeID("Plc ");
         var desc = new ActionDescriptor();
         var idnull = charIDToTypeID("null");
@@ -538,12 +501,14 @@ function placeAndAlign(doc, group, placeholder, file) {
         var idFTcs = charIDToTypeID("FTcs");
         var idQCSt = charIDToTypeID("QCSt");
         var idQcsa = charIDToTypeID("Qcsa");
-        desc.putEnumerated(idFTcs, idQCSt, idQcsa); // Place as Smart Object if possible
+        desc.putEnumerated(idFTcs, idQCSt, idQcsa); 
         executeAction(idPlc, desc, DialogModes.NO);
         
         var newLayer = doc.activeLayer;
         
         // 4. Resize to Fit (Contain)
+        // "Cant be larger than template image in any dimension" -> standard Fit/Contain.
+        
         var nBounds = newLayer.bounds;
         var nWidth = nBounds[2].value - nBounds[0].value;
         var nHeight = nBounds[3].value - nBounds[1].value;
@@ -553,8 +518,13 @@ function placeAndAlign(doc, group, placeholder, file) {
             var wRatio = pWidth / nWidth;
             var hRatio = pHeight / nHeight;
             
-            // Contain strategy: use smaller ratio
+            // "Contain" strategy: use the smaller ratio to ensure BOTH dimensions fit within the box.
+            // This ensures the image is never larger than the placeholder in any dimension.
+            // Example: Image 1000x1000, Box 500x200. wRatio=0.5, hRatio=0.2. Scale=20%. Result 200x200. Fits in 500x200.
             var scale = Math.min(wRatio, hRatio) * 100;
+            
+            // Optional: If you NEVER want to scale UP small images (only shrink large ones), uncomment this:
+            // if (scale > 100) scale = 100; 
             
             newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
         }
@@ -574,12 +544,9 @@ function placeAndAlign(doc, group, placeholder, file) {
         
         newLayer.translate(dx, dy);
         
-        // 6. Hide Placeholder
         placeholder.visible = false;
         
-    } catch(e) {
-        // alert("Place & Align failed: " + e);
-    }
+    } catch(e) { }
 }
 
 main();

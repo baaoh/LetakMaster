@@ -227,7 +227,12 @@ export function DataInputTab() {
 
   const handleRunBuilder = async () => {
       try {
-          await axios.post(`${API_BASE}/system/run-builder-script`)
+          // Pass the selected state ID so the backend can prioritize its paths
+          const url = selectedStateId 
+            ? `${API_BASE}/system/run-builder-script?state_id=${selectedStateId}`
+            : `${API_BASE}/system/run-builder-script`
+            
+          await axios.post(url)
       } catch (e: any) {
           alert("Failed to run script: " + (e.response?.data?.detail || e.message))
       }

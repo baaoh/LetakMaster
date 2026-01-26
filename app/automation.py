@@ -52,17 +52,30 @@ class AutomationService:
             print(f"Generating JSON from: {book.fullname}")
             
             output_dir = ""
-            if state_id:
-                # Internalized Path Strategy
-                root = os.getcwd()
-                output_dir = os.path.join(root, "workspaces", f"state_{state_id}", "build_plans")
-            else:
-                # Fallback Timestamp Strategy
-                import datetime
-                timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-                safe_name = re.sub(r'[^\w\-_\. ]', '_', book.name)
-                folder_name = f"{safe_name}_{timestamp}"
-                output_dir = os.path.join(os.getcwd(), "workspaces", "build_plans", folder_name)
+            import datetime
+            timestamp = datetime.datetime.now().strftime("%y%m%d_%H%M")
+            safe_name = re.sub(r'[^\w\-_\. ]', '_', book.name)
+            
+            # New Naming: YYMMDD_HHmm_ExcelName_State_{id}
+            state_str = f"_State_{state_id}" if state_id else "_State_X"
+            folder_name = f"{timestamp}_{safe_name}{state_str}"
+            
+            # Root for build plans
+            root_plans_dir = os.path.join(os.getcwd(), "workspaces", "build_plans")
+            
+            # If state_id provided, we usually want it linked to the state.
+            # But the user asked for a specific naming convention "folders... should be named..."
+            # Let's put everything in workspaces/build_plans/YYMMDD... to be safe and consistent, 
+            # OR put it inside the state folder with that name?
+            # User said: "the folders where build plans are stored, should be named..."
+            # This implies a global storage or a standardized format. 
+            # To keep it clean and sortable by date as requested, a shared directory is better.
+            
+            output_dir = os.path.join(root_plans_dir, folder_name)
+            
+            # However, if we want to keep "State Isolation", we might put it in workspaces/state_X/build_plans/YYMMDD...
+            # But the request "Run Builder Script should always take the newest Build Plans" implies a linear history is easier to track.
+            # Let's use the shared `workspaces/build_plans` with the precise naming.
             
             if not os.path.exists(output_dir):
                 os.makedirs(output_dir)
@@ -289,7 +302,13 @@ class AutomationService:
                     
                     # --- Mapping Logic (Identical to original script) ---
                     # AM: Group
-                    psd_group = f"Product_{res['start_slot']:02d}"
+                    suffix = ""
+                    if res['hero'] == 2:
+                        suffix = "_K"
+                    elif res['hero'] == 4:
+                        suffix = "_EX"
+                    
+                    psd_group = f"Product_{res['start_slot']:02d}{suffix}"
                     output_data[idx][0] = psd_group
                     
                     # AN: Nazev A
