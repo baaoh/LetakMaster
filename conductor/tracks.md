@@ -15,10 +15,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Stability & UX Overhaul**
   *Link: [./tracks/stability_ux_20260123/](./tracks/stability_ux_20260123/)*
 
-- [ ] **Track: Feature: Pre-sized Template Groups**
+- [x] **Track: Feature: Pre-sized Template Groups**
   *Link: [./tracks/feature_presized_template_groups_20260126/](./tracks/feature_presized_template_groups_20260126/)*
 
-- [ ] **Track: Image Replacement Improvements**
+- [x] **Track: Image Replacement Improvements**
   *Link: [./tracks/image_replacement_20260123/](./tracks/image_replacement_20260123/)*
+
+- [~] **Track: A4 Unstructured Page Support**
+  *Status: Backend Complete, Builder Script Buggy. See [DEV_NEXT_STEPS.md](../../DEV_NEXT_STEPS.md)*
 
 
