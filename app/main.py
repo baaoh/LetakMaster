@@ -658,16 +658,17 @@ async def health_check():
 # --- Static Serving ---
 static_dir = os.path.join(os.getcwd(), "frontend_static")
 if os.path.exists(static_dir):
-    assets_dir = os.path.join(static_dir, "assets")
-    if os.path.exists(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
-    
-    @app.get("/")
-    async def serve_index():
-        return FileResponse(os.path.join(static_dir, "index.html"))
+    # Mount everything at root. Since this is the LAST mount added,
+    # it serves as a fallback for everything not caught by API routes.
+    # html=True ensures index.html is served for the root path.
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
 
+    # Optional: If you want true SPA behavior (routing handled by frontend),
+    # you can still keep the exception handler for 404s to return index.html
     @app.exception_handler(404)
     async def spa_fallback(request, exc):
         if request.method == "GET" and not request.url.path.startswith("/api"):
             return FileResponse(os.path.join(static_dir, "index.html"))
-        return await http_exception_handler(request, exc)
+        # For API 404s, we still want the standard JSON response
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})

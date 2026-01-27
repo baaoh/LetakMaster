@@ -59,10 +59,16 @@ echo.
 echo === Killing old processes first... ===
 call :KILL_SERVERS_SILENT
 
+:: Detect Python
+set "PYTHON_EXE=python"
+if exist ".\python_embed\python.exe" (
+    set "PYTHON_EXE=.\python_embed\python.exe"
+)
+
 echo.
 echo Starting Backend (Uvicorn)...
 :: /c ensures window closes when process ends
-start "LetakMaster Backend" cmd /c ".\python_embed\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port %BACKEND_PORT% --reload"
+start "LetakMaster Backend" cmd /c ""%PYTHON_EXE%" -m uvicorn app.main:app --host 0.0.0.0 --port %BACKEND_PORT% --reload"
 
 echo Starting Frontend (Vite)...
 cd frontend
