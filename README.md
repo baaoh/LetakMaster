@@ -32,6 +32,13 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
     cd LetakMaster
     ```
 
+2.  **Install Dependencies**
+    Double-click `install.bat` or run it from the terminal:
+    ```cmd
+    install.bat
+    ```
+    This will install required Python packages and Node.js modules for the frontend.
+
 ## ▶️ Usage
 
 ### Quick Start
