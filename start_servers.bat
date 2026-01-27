@@ -62,19 +62,23 @@ call :KILL_SERVERS_SILENT
 :: Detect Python
 set "PYTHON_EXE=python"
 if exist ".\python_embed\python.exe" (
+    echo [INFO] Using Bundled Python: .\python_embed\python.exe
     set "PYTHON_EXE=.\python_embed\python.exe"
+) else (
+    echo [INFO] Using System Python (Dev Mode)
 )
 
 echo.
 echo Starting Backend (Uvicorn)...
-:: /c ensures window closes when process ends
-start "LetakMaster Backend" cmd /c ""%PYTHON_EXE%" -m uvicorn app.main:app --host 0.0.0.0 --port %BACKEND_PORT% --reload"
+:: /k keeps the window open if it crashes immediately, useful for debugging.
+:: We use start "" to ensure title is set correctly.
+start "LetakMaster Backend" cmd /k ""%PYTHON_EXE%" -m uvicorn app.main:app --host 0.0.0.0 --port %BACKEND_PORT% --reload"
 
 echo Starting Frontend (Vite)...
 cd frontend
-:: /c ensures window closes when process ends
-:: Try starting dev server. If fails, launch Portable Mode (Backend serves static files)
-start "LetakMaster Frontend" cmd /c "npm run dev || (echo 'NPM not found. Launching Portable UI (Backend)...' && start http://localhost:%BACKEND_PORT% && pause)"
+:: /k keeps the window open so we can see errors.
+:: If npm fails, we print a message and pause.
+start "LetakMaster Frontend" cmd /k "npm run dev || (echo. && echo [ERROR] Frontend failed to start. && echo If you do not have Node.js installed, this is expected. && echo You can use the Portable UI at http://localhost:%BACKEND_PORT% && pause)"
 cd ..
 
 echo.
