@@ -44,7 +44,7 @@ frontend/dist/
 # Static Frontend (Built assets)
 # If you want to keep the built version in the repo for "Zero Install", comment the next line.
 # However, usually it's best to ignore it if the source is in 'frontend/'
-frontend_static/
+# frontend_static/
 
 # Binaries and Client Apps
 ImageCopier/

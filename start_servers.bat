@@ -67,8 +67,8 @@ start "LetakMaster Backend" cmd /c ".\python_embed\python.exe -m uvicorn app.mai
 echo Starting Frontend (Vite)...
 cd frontend
 :: /c ensures window closes when process ends
-:: Try starting dev server, but don't fail if npm missing
-start "LetakMaster Frontend" cmd /c "npm run dev || echo 'NPM not found. Serving via Backend port 8000.' && pause"
+:: Try starting dev server. If fails, launch Portable Mode (Backend serves static files)
+start "LetakMaster Frontend" cmd /c "npm run dev || (echo 'NPM not found. Launching Portable UI (Backend)...' && start http://localhost:%BACKEND_PORT% && pause)"
 cd ..
 
 echo.
