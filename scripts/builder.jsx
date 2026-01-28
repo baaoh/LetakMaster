@@ -203,6 +203,12 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         if (layerId) method = "Suffix_EX_NoUnderscore";
     }
     
+    // NEW: Try "_A" suffix (Common in A4 templates)
+    if (!layerId) {
+        layerId = layerIdMap[layerName.toLowerCase() + "_a"];
+        if (layerId) method = "Suffix_A";
+    }
+    
     if (!layerId && layerName.indexOf("EAN") >= 0) {
         var vars = ["ean", "ean:", "ean_label"];
         for (var i=0; i<vars.length; i++) {
