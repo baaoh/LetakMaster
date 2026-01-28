@@ -190,7 +190,8 @@ class ProductClusterer:
         
         if not unique: return ""
         
-        return ", ".join(unique[:3]) + (", ..." if len(unique) > 3 else "")
+        # Concatenate ALL variants without truncation as per user request
+        return ", ".join(unique)
 
     def group_items(self, items):
         """

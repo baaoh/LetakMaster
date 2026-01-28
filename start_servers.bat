@@ -71,14 +71,26 @@ if exist ".\python_embed\python.exe" (
     set "PYTHON_EXE=.\python_embed\python.exe"
 )
 
-echo Starting Backend (Minimized)...
-:: We use start /min with python.exe (not w) to ensure we can capture stdout to logs.txt
-start /min "LetakMaster Backend" cmd /c ""%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% > logs.txt 2>&1"
+echo Starting Backend (Hidden)...
+:: Create a temp runner for backend
+(
+    echo @echo off
+    echo "%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% --reload ^> logs.txt 2^>^&1
+) > run_backend.bat
 
-echo Starting Frontend (Minimized)...
-cd frontend
-start /min "LetakMaster Frontend" cmd /c "npm run dev > ..\frontend_logs.txt 2>&1"
-cd ..
+:: Launch it silently
+wscript scripts\launch_silent.vbs run_backend.bat
+
+echo Starting Frontend (Hidden)...
+:: Create a temp runner for frontend
+(
+    echo @echo off
+    echo cd frontend
+    echo npm run dev ^> ..\frontend_logs.txt 2^>^&1
+) > run_frontend.bat
+
+:: Launch it silently
+wscript scripts\launch_silent.vbs run_frontend.bat
 
 echo.
 echo Waiting for servers to initialize...

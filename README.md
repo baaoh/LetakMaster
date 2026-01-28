@@ -43,32 +43,51 @@ LetakMaster is a comprehensive automation suite designed to streamline the produ
 
 ### Quick Start
 The easiest way to start the application is using the provided batch script:
-```bash
-./start_servers.bat
+```cmd
+start_servers.bat
 ```
-This will launch both the Python backend API and the React frontend.
+*   **Option [1] (Recommended):** Launches both servers in the background (hidden). No extra terminal windows will pop up. The browser will open automatically.
+*   **Auto-Reload:** The backend runs with `--reload` enabled, meaning any code changes to the Python logic will apply immediately without restarting the script.
 
 ### Manual Workflow
 
 #### 1. Data Ingestion
-1.  Open the web dashboard (usually `http://localhost:5173`).
+1.  Open the web dashboard (usually `http://localhost:8000` or `http://localhost:5173`).
 2.  Go to the **Data Input** tab.
-3.  Select your master Excel file (e.g., `Copy of letak prodejna 2026 NEW FINAL.xls`).
+3.  Select your master Excel file.
 4.  The system will ingest the data and create a new "State".
 
 #### 2. Allocation & Build Plan
-1.  The system calculates the layout for every page using the **Enrichment** process. This writes a `PSD_Allocation` value (e.g., `P25_01A`) to the Excel data.
-2.  Generate a **Build Plan** for a specific page (e.g., Page 25). This creates a JSON file containing all the text and logic needed for Photoshop.
-    ```bash
-    # Example manual command
-    python scripts/generate_build_json.py 25
-    ```
+1.  The system calculates the layout for every page using the **Enrichment** process. This writes PSD group keys (e.g., `Product_01`) to column **AM** (`PSD_Group`) in Excel.
+2.  Generate a **Build Plan** for a specific page. This creates a JSON file in the `workspaces/build_plans` folder.
 
 #### 3. Photoshop Automation
-1.  Open your target PSD template in Adobe Photoshop (e.g., `Letak W Page 10...`).
-2.  In Photoshop, go to `File > Scripts > Browse...`.
-3.  Select `scripts/builder.jsx`.
-4.  The script will read the generated JSON and populate the active document, updating names, prices, and handling layout visibility.
+1.  Open your target PSD template in Adobe Photoshop.
+2.  Run `scripts/run_autogen.jsx` or use the standard `File > Scripts > Browse...` to select `scripts/builder.jsx`.
+3.  The script will read the JSON and automatically populate the document.
+
+## 🌟 Advanced Features
+
+### Manual Grouping Override (A4 Pages)
+For A4/Unstructured pages, the system uses a clustering algorithm to group products automatically. You can override this directly in Excel:
+1.  **Locate Column AM (`PSD_Group`):** Find the rows you want to group together.
+2.  **Enter a Manual Key:** Type a custom key like `G1`, `G2`, or `GroupA` for all items in that group.
+    *   *Constraint:* The key must contain at least one letter (e.g., `G1` is manual, `01` might be overwritten).
+3.  **Run Enrichment:** Re-run the "Enrich Excel" process.
+4.  **Result:** The script will respect your manual keys, aggregate the data for those rows into a single `A4_Grp_G1`, and skip automatic clustering for those specific items.
+
+### Grouping Persistence (Column AL)
+*   **PSD_Status (Column AL):** When a manual group is detected or created, the script writes `MANUAL` to this column.
+*   **Locking:** If column AL contains `MANUAL`, the script will **strictly preserve** the grouping ID in column AM during future runs, preventing it from being overwritten by auto-clustering or getting "messed up". You can manually type `MANUAL` here to lock any group.
+
+### Builder Script Enhancements
+*   **Smart Renaming:** After generating a group in Photoshop, the script renames the layer group (e.g., `A4_Grp_G1`) to the actual product title (e.g., `Jimmyfox Candy`), making the Layers panel much more readable.
+*   **Color Highlighting:** Each price tag group and its associated product images are assigned a unique color label (cycling Red, Orange, Yellow...) to visually link them together.
+*   **Dynamic Stacking:** Groups are stacked vertically based strictly on their order in the JSON build plan.
+
+### Data Handling
+*   **Full Subtitles:** The system concatenates **all** variant names (e.g., flavors) into the subtitle field (`PSD_Nazev_B`), instead of truncating them with "...".
+*   **Data Preservation:** The enrichment process reads existing data before writing, ensuring that skipped rows (e.g., missing page numbers) do not lose their `MANUAL` status or other data.
 
 ## 🧩 Architecture Logic
 

@@ -133,6 +133,26 @@ class AutomationService:
             
         return report
 
+    def clean_int_code(self, val):
+        if not val:
+            return ""
+        s_val = str(val)
+        # Handle multiline
+        parts = s_val.split('\n')
+        cleaned_parts = []
+        for p in parts:
+            p = p.strip()
+            if not p: continue
+            try:
+                f = float(p)
+                if f.is_integer():
+                    cleaned_parts.append(str(int(f)))
+                else:
+                    cleaned_parts.append(p)
+            except ValueError:
+                cleaned_parts.append(p)
+        return "\n".join(cleaned_parts)
+
     def _enrich_logic(self, book, sheet_name):
         COL_EAN = 1      # B
         COL_PRODUCT = 3  # D: Název zboží
@@ -147,8 +167,14 @@ class AutomationService:
         COL_PAGE = 21    # V: page
         COL_PRICE = 22   # W: cena od
         COL_TDE = 24     # Y: TDE Availability
+        
+        # Read AL (37) and AM (38)
+        COL_STATUS = 37
+        COL_EXISTING_GROUP = 38 
 
+        # Shifted Headers starting at AL
         HEADERS = [
+            "PSD_Status", # AL
             "PSD_Group", "PSD_Nazev_A", "PSD_Nazev_B", "PSD_EAN_Number", 
             "PSD_EAN_Label", "PSD_Dostupnost", "PSD_Od", "PSD_Cena_A", 
             "PSD_Cena_B", "PSD_Obraz", "PSD_Vis_Od", "PSD_Vis_EAN_Num", 
@@ -171,7 +197,8 @@ class AutomationService:
 
         print(f"Enriching rows 7 to {last_row}...")
         
-        data_range = sheet.range(f"A7:Y{last_row}").value
+        # Expand read range to include AM (38)
+        data_range = sheet.range(f"A7:AM{last_row}").value
         color_range = sheet.range(f"H7:H{last_row}")
         
         try:
@@ -192,6 +219,15 @@ class AutomationService:
             page = row[COL_PAGE]
             product = row[COL_PRODUCT]
             
+            # Read existing group and status
+            existing_group = ""
+            status_marker = ""
+            
+            if len(row) > COL_EXISTING_GROUP:
+                existing_group = str(row[COL_EXISTING_GROUP]).strip() if row[COL_EXISTING_GROUP] else ""
+            if len(row) > COL_STATUS:
+                status_marker = str(row[COL_STATUS]).strip() if row[COL_STATUS] else ""
+
             p_val = None
             if page is not None:
                 try: p_val = int(float(page))
@@ -228,7 +264,9 @@ class AutomationService:
                     'product': product,
                     'name': str(product) if product else "",
                     'price': price_val,
-                    'weight_text': str(raw_weight) if raw_weight else ""
+                    'weight_text': str(raw_weight) if raw_weight else "",
+                    'existing_group': existing_group,
+                    'status_marker': status_marker
                 })
 
         allocator = SlotAllocator()
@@ -266,21 +304,24 @@ class AutomationService:
                         elif res['hero'] == 4: suffix = "_EX"
                         
                         psd_group = f"Product_{res['start_slot']:02d}{suffix}"
-                        output_data[idx][0] = psd_group
                         
-                        output_data[idx][1] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
+                        # Index 0 is now Status
+                        output_data[idx][0] = None # Auto
+                        output_data[idx][1] = psd_group
+                        
+                        output_data[idx][2] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
                         
                         desc = str(src_row[COL_DESC]).strip() if src_row[COL_DESC] else ""
                         gram = str(src_row[COL_GRAMAZ]).strip() if src_row[COL_GRAMAZ] else ""
-                        if desc and gram: output_data[idx][2] = f"{desc}\n{gram}"
-                        else: output_data[idx][2] = f"{desc}{gram}"
+                        if desc and gram: output_data[idx][3] = f"{desc}\n{gram}"
+                        else: output_data[idx][3] = f"{desc}{gram}"
                         
                         ean_raw = src_row[COL_EAN]
                         ean_str = ""
                         if ean_raw is not None:
                             if isinstance(ean_raw, float): ean_str = str(int(ean_raw))
                             else: ean_str = str(ean_raw)
-                        output_data[idx][3] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
+                        output_data[idx][4] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
                         
                         raw_lbl = str(src_row[COL_EANY_LBL]).lower().strip() if src_row[COL_EANY_LBL] else ""
                         lbl_out = "EAN:"
@@ -293,7 +334,7 @@ class AutomationService:
                             if "vše" in raw_lbl or "vse" in raw_lbl: lbl_out = "Všechny druhy"
                             elif "víc" in raw_lbl or "vic" in raw_lbl: lbl_out = "Více druhů"
                             elif "druh" in raw_lbl: lbl_out = raw_lbl.capitalize()
-                        output_data[idx][4] = lbl_out
+                        output_data[idx][5] = lbl_out
                         
                         val_p = src_row[COL_BRNO]
                         val_q = src_row[COL_USTI]
@@ -308,8 +349,8 @@ class AutomationService:
                         elif p0: msg = "•není dostupné v Brně"
                         elif q0: msg = "•není dostupné v Ústí"
                         elif y0: msg = "•není dostupné na TDE"
-                        output_data[idx][5] = msg
-                        output_data[idx][6] = "od"
+                        output_data[idx][6] = msg
+                        output_data[idx][7] = "od"
                         
                         price_raw = src_row[COL_ACS]
                         p_int = ""; p_dec = ""
@@ -320,10 +361,11 @@ class AutomationService:
                                 dec_val = int(round((f - int(f)) * 100))
                                 p_dec = f"{dec_val:02d}"
                             except: p_int = str(price_raw)
-                        output_data[idx][7] = p_int
-                        output_data[idx][8] = p_dec
+                        output_data[idx][8] = p_int
+                        output_data[idx][9] = p_dec
                         
-                        output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
+                        # Use new cleaner method
+                        output_data[idx][10] = self.clean_int_code(src_row[COL_INT_KOD])
                         
                         val_w = src_row[COL_PRICE]
                         row_color = h_colors[idx] if idx < len(h_colors) else None
@@ -332,15 +374,15 @@ class AutomationService:
                         has_price_text = val_w is not None and str(val_w).strip() != ""
                         is_plural = lbl_out != "EAN:"
                         vis_od = "TRUE" if (is_highlighted and is_plural) or has_price_text else "FALSE"
-                        output_data[idx][10] = vis_od
+                        output_data[idx][11] = vis_od
                         
                         vis_ean = "TRUE"
                         if lbl_out != "EAN:": vis_ean = "FALSE"
-                        output_data[idx][11] = vis_ean
+                        output_data[idx][12] = vis_ean
                         
                         vis_dost = "TRUE"
                         if msg == "•dostupné na všech pobočkách": vis_dost = "FALSE"
-                        output_data[idx][12] = vis_dost
+                        output_data[idx][13] = vis_dost
                             
                 except Exception as e:
                     print(f"Page {page_num} Allocation Error: {e}")
@@ -349,14 +391,78 @@ class AutomationService:
                 # --- A4 / UNSTRUCTURED LOGIC (Fallback) ---
                 print(f"Page {page_num}: Total Hero {total_hero} != {expected_hero}. Running Clustering Logic...")
                 
-                # Filter out items with empty names to avoid creating groups for empty rows
-                valid_a4_products = [p for p in products if p['name'] and p['name'].strip()]
+                manual_items = []
+                auto_items = []
                 
-                groups = clusterer.group_items(valid_a4_products)
-                print(f"  -> Created {len(groups)} groups for Page {page_num}.")
+                manual_pattern = re.compile(r"^(?:A4_Grp_)?([A-Za-z]+[\w\-]*)$", re.IGNORECASE)
+
+                for p in products:
+                    if not p['name'] or not p['name'].strip(): continue
+                    
+                    ex_grp = p['existing_group']
+                    status = p['status_marker']
+                    
+                    is_manual = False
+                    key = ""
+                    
+                    # 1. Check Explicit Manual Status
+                    if status and status.upper() == "MANUAL":
+                        is_manual = True
+                        # Use existing group as key (strip prefix if present)
+                        if ex_grp:
+                            key = ex_grp.replace("A4_Grp_", "").replace("Product_", "")
+                        else:
+                            # Fallback if MANUAL but no key? 
+                            # Maybe "Man_Idx"? Better to treat as auto if no key.
+                            is_manual = False 
+                    
+                    # 2. Check Regex Pattern (if not already valid manual)
+                    if not is_manual and ex_grp:
+                        core_key = ex_grp.replace("A4_Grp_", "").replace("Product_", "")
+                        if re.search(r'[A-Za-z]', core_key):
+                            is_manual = True
+                            key = core_key
+                    
+                    if is_manual and key:
+                        p['manual_key'] = key
+                        manual_items.append(p)
+                    else:
+                        auto_items.append(p)
+
+                # Group Manual Items
+                manual_groups = {}
+                for m in manual_items:
+                    k = m['manual_key']
+                    if k not in manual_groups: manual_groups[k] = []
+                    manual_groups[k].append(m)
                 
-                for grp_idx, grp in enumerate(groups, 1):
-                    group_id_str = f"A4_Grp_{grp_idx:02d}"
+                # Group Auto Items (Clustering)
+                auto_groups = clusterer.group_items(auto_items)
+                
+                print(f"  -> Manual Groups: {len(manual_groups)}, Auto Groups: {len(auto_groups)}")
+                
+                final_groups = []
+                
+                # Add Manual Groups
+                for key, grp in manual_groups.items():
+                    final_groups.append({
+                        "id": f"A4_Grp_{key}", 
+                        "items": grp,
+                        "is_manual": True
+                    })
+                    
+                # Add Auto Groups
+                for i, grp in enumerate(auto_groups, 1):
+                    final_groups.append({
+                        "id": f"A4_Grp_{i:02d}", 
+                        "items": grp,
+                        "is_manual": False
+                    })
+                
+                for group_obj in final_groups:
+                    group_id_str = group_obj["id"]
+                    grp = group_obj["items"]
+                    is_manual_grp = group_obj["is_manual"]
                     leader_item = grp[0]
                     
                     # 1. Calculate Aggregates
@@ -366,15 +472,11 @@ class AutomationService:
                     
                     # --- SMART TITLE SPLITTER ---
                     if len(nazev_a) > 20:
-                        # Find last space within first 21 chars to avoid breaking words
                         split_idx = nazev_a[:21].rfind(' ')
                         if split_idx == -1: split_idx = 20
-                        
                         part_a = nazev_a[:split_idx].strip()
                         part_b = nazev_a[split_idx:].strip()
-                        
                         nazev_a = part_a
-                        # Prepend overflow to variants if they exist
                         nazev_b = f"{part_b}, {nazev_b}" if nazev_b else part_b
                     
                     prices = [x['price'] for x in grp if x['price'] > 0]
@@ -384,24 +486,19 @@ class AutomationService:
                     count = len(grp)
                     label = "EAN:" if count == 1 else (f"{count} druhy" if count <= 4 else "více druhů")
                     
-                    # Format Min Price
                     p_int = ""; p_dec = ""
                     if min_price > 0:
                         try:
-                            # Robustly handle price formatting
                             price_float = float(min_price)
                             p_int = str(int(price_float))
                             dec_val = int(round((price_float - int(price_float)) * 100))
                             p_dec = f"{dec_val:02d}"
-                        except Exception as e: 
-                            print(f"Price Formatting Error for {group_id_str}: {e}")
-                            p_int = str(min_price) # Fallback
+                        except: p_int = str(min_price)
                     
-                    # Aggregate Images
                     img_codes = []
                     for x in grp:
                         rx = data_range[x['offset']]
-                        code = str(rx[COL_INT_KOD]) if rx[COL_INT_KOD] else ""
+                        code = self.clean_int_code(rx[COL_INT_KOD])
                         if code: img_codes.append(code)
                     combined_img = "\n".join(img_codes)
 
@@ -409,36 +506,29 @@ class AutomationService:
                         idx = item['offset']
                         src_row = data_range[idx]
                         
-                        # Only assign Group ID (and aggregated data) to the leader
-                        # Non-leaders get NO Group ID, so they are ignored by JSON generation.
                         if item == leader_item:
-                            output_data[idx][0] = group_id_str
+                            output_data[idx][0] = "MANUAL" if is_manual_grp else None
+                            output_data[idx][1] = group_id_str
                             
-                            output_data[idx][1] = nazev_a
-                            output_data[idx][2] = nazev_b
-                            output_data[idx][4] = label
+                            output_data[idx][2] = nazev_a
+                            output_data[idx][3] = nazev_b
+                            output_data[idx][5] = label
+                            output_data[idx][8] = p_int
+                            output_data[idx][9] = p_dec
                             
-                            # Use Calculated Min Price
-                            output_data[idx][7] = p_int
-                            output_data[idx][8] = p_dec
-                            
-                            # Force "od" (From) if multiple prices or multiple items
                             vis_od = "TRUE" if (has_multiple_prices or count > 1) else "FALSE"
-                            output_data[idx][10] = vis_od
-                            output_data[idx][6] = "od"
+                            output_data[idx][11] = vis_od
+                            output_data[idx][7] = "od"
                             
-                            # EAN Number / Label
                             ean_raw = src_row[COL_EAN]
                             ean_str = ""
                             if ean_raw is not None:
                                 if isinstance(ean_raw, float): ean_str = str(int(ean_raw))
                                 else: ean_str = str(ean_raw)
-                            output_data[idx][3] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
+                            output_data[idx][4] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
                             
-                            # Image Code (Aggregated)
-                            output_data[idx][9] = combined_img
+                            output_data[idx][10] = combined_img
                             
-                            # Availability Logic
                             val_p = src_row[COL_BRNO]; val_q = src_row[COL_USTI]; val_y = src_row[COL_TDE]
                             def is_zero(v):
                                 try: return float(v) == 0
@@ -450,30 +540,41 @@ class AutomationService:
                             elif p0: msg = "•není dostupné v Brně"
                             elif q0: msg = "•není dostupné v Ústí"
                             elif y0: msg = "•není dostupné na TDE"
-                            output_data[idx][5] = msg
+                            output_data[idx][6] = msg
                             
-                            # Visibilities
                             vis_ean = "TRUE"
                             if label != "EAN:": vis_ean = "FALSE"
-                            output_data[idx][11] = vis_ean
+                            output_data[idx][12] = vis_ean
                             
                             vis_dost = "FALSE" if msg == "•dostupné na všech pobočkách" else "TRUE"
-                            output_data[idx][12] = vis_dost
+                            output_data[idx][13] = vis_dost
                             
                         else:
-                            # Non-Leader: Leave Group ID empty to skip generation
-                            output_data[idx][0] = None 
+                            # Slave Item
+                            # 1. Write Group ID & Status to persist grouping
+                            output_data[idx][0] = "MANUAL" if is_manual_grp else None
+                            output_data[idx][1] = group_id_str 
                             
-                            # We can still fill Name/Desc for Excel reference, 
-                            # but they won't go to the builder.
-                            output_data[idx][1] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
-                            output_data[idx][2] = str(src_row[COL_DESC]) if src_row[COL_DESC] else ""
+                            # 2. Write Raw Data for reference (Name/Desc/Image)
+                            output_data[idx][2] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
+                            output_data[idx][3] = str(src_row[COL_DESC]) if src_row[COL_DESC] else ""
+                            output_data[idx][10] = self.clean_int_code(src_row[COL_INT_KOD])
                             
-                            # Copy EAN/Image for reference
-                            output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
+                            # 3. Explicitly Clear Aggregated/Calculated Columns
+                            # This ensures _write_page_json skips this row (checked via COL_VIS_DOST)
+                            output_data[idx][4] = None # EAN Num
+                            output_data[idx][5] = None # EAN Label
+                            output_data[idx][6] = None # Dostupnost Msg
+                            output_data[idx][7] = None # Od
+                            output_data[idx][8] = None # Price A
+                            output_data[idx][9] = None # Price B
+                            # Col 10 is Image (kept raw)
+                            output_data[idx][11] = None # Vis Od
+                            output_data[idx][12] = None # Vis EAN
+                            output_data[idx][13] = None # Vis Dost (CRITICAL FLAG)
 
-        sheet.range("AM6").value = HEADERS
-        sheet.range("AM7").value = output_data
+        sheet.range("AL6").value = HEADERS
+        sheet.range("AL7").value = output_data
 
     def _generate_json_logic(self, book, sheet_name, output_dir_override=None):
         generated_pages = []
@@ -540,6 +641,11 @@ class AutomationService:
             psd_group = row[COL_ALLOC]
             if not psd_group: continue # Skip if no allocation group is defined
             
+            # Filter out "Slave" rows in A4 groups
+            # We identify them because we explicitly cleared their VIS_DOST column
+            if psd_group.startswith("A4_Grp_") and row[COL_VIS_DOST] is None:
+                continue
+            
             hero = row[COL_HERO]
             
             action = {
@@ -553,12 +659,10 @@ class AutomationService:
                 # Extract suffix for JSON keys
                 if psd_group.startswith("A4_Grp_"):
                     # A4_Grp_02 -> suffix "02"
+                    # A4_Grp_G1 -> suffix "G1"
                     suffix = psd_group.split('_')[2]
                 elif psd_group.startswith("Product_"):
                     # Product_01 -> "01"
-                    # Product_01_K -> "01" (We append K/EX via suffix logic in builder? No, keys usually include it?)
-                    # Wait, standard logic: keys are nazev_01A. The suffix var here is just the number.
-                    # Let's check how suffix is used below.
                     suffix = psd_group.split('_')[1]
                 else:
                     suffix = psd_group.split('_')[1]
