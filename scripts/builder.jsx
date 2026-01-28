@@ -549,12 +549,19 @@ function runBuild(doc, plan) {
         logToManifest("A4 Mode Active: Hiding Standard Product Groups...");
         for (var i=1; i<=16; i++) {
             var suffix = (i < 10) ? "0" + i : "" + i;
-            // Only hide the main parent group. If variants are nested, this hides them too.
-            // If they are siblings, they might remain visible, but usually they are nested or strictly managed.
-            // User requested to preserve inner visibility state.
-            var baseName = "Product_" + suffix;
-            if (docMap[baseName]) {
-                setVisibleAM(docMap[baseName]["_self"], false);
+            
+            // Explicitly hide regular, K, and EX groups
+            var variants = [
+                "Product_" + suffix,
+                "Product_" + suffix + "_K",
+                "Product_" + suffix + "_EX"
+            ];
+            
+            for (var v=0; v<variants.length; v++) {
+                var gName = variants[v];
+                if (docMap[gName]) {
+                    setVisibleAM(docMap[gName]["_self"], false);
+                }
             }
         }
     }
