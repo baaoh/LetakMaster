@@ -72,7 +72,7 @@ echo.
 echo Starting Backend (Uvicorn)...
 :: /k keeps the window open if it crashes immediately, useful for debugging.
 :: We use start "" to ensure title is set correctly.
-start "LetakMaster Backend" cmd /k ""%PYTHON_EXE%" -m uvicorn app.main:app --host 0.0.0.0 --port %BACKEND_PORT% --reload"
+start "LetakMaster Backend" cmd /k ""%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% --reload"
 
 echo Starting Frontend (Vite)...
 cd frontend

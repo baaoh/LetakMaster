@@ -7,3 +7,4 @@ Pillow
 taskiq
 taskiq-fastapi
 openpyxl
+msoffcrypto-tool
