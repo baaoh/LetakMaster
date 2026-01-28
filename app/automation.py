@@ -537,10 +537,20 @@ class AutomationService:
             }
             
             try:
-                # Extract suffix from group name (e.g., 'K' or 'EX')
-                suffix = psd_group.split('_')[1]
+                # Extract suffix for JSON keys
+                if psd_group.startswith("A4_Grp_"):
+                    # A4_Grp_02 -> suffix "02"
+                    suffix = psd_group.split('_')[2]
+                elif psd_group.startswith("Product_"):
+                    # Product_01 -> "01"
+                    # Product_01_K -> "01" (We append K/EX via suffix logic in builder? No, keys usually include it?)
+                    # Wait, standard logic: keys are nazev_01A. The suffix var here is just the number.
+                    # Let's check how suffix is used below.
+                    suffix = psd_group.split('_')[1]
+                else:
+                    suffix = psd_group.split('_')[1]
             except IndexError:
-                suffix = "00" # Default suffix if not found
+                suffix = "00" 
             
             def safe_str(val):
                 """Safely convert value to string, handling None and floats."""
