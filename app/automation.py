@@ -212,6 +212,7 @@ class AutomationService:
                 
                 # Extract Price and Weight for Clustering
                 raw_price = row[COL_PRICE]
+                if not raw_price: raw_price = row[COL_ACS] # Fallback to ACS
                 raw_weight = row[COL_GRAMAZ]
                 
                 price_val = 0.0
@@ -374,11 +375,23 @@ class AutomationService:
                     p_int = ""; p_dec = ""
                     if min_price > 0:
                         try:
-                            p_int = str(int(min_price))
-                            dec_val = int(round((min_price - int(min_price)) * 100))
+                            # Robustly handle price formatting
+                            price_float = float(min_price)
+                            p_int = str(int(price_float))
+                            dec_val = int(round((price_float - int(price_float)) * 100))
                             p_dec = f"{dec_val:02d}"
-                        except: pass
+                        except Exception as e: 
+                            print(f"Price Formatting Error for {group_id_str}: {e}")
+                            p_int = str(min_price) # Fallback
                     
+                    # Aggregate Images
+                    img_codes = []
+                    for x in grp:
+                        rx = data_range[x['offset']]
+                        code = str(rx[COL_INT_KOD]) if rx[COL_INT_KOD] else ""
+                        if code: img_codes.append(code)
+                    combined_img = "\n".join(img_codes)
+
                     for item in grp:
                         idx = item['offset']
                         src_row = data_range[idx]
@@ -397,8 +410,6 @@ class AutomationService:
                             output_data[idx][8] = p_dec
                             
                             # Force "od" (From) if multiple prices or multiple items
-                            # User requirement: "if multiple prices occur, enable OD"
-                            # Also often used if multiple variants exist regardless of price equality
                             vis_od = "TRUE" if (has_multiple_prices or count > 1) else "FALSE"
                             output_data[idx][10] = vis_od
                             output_data[idx][6] = "od"
@@ -411,8 +422,8 @@ class AutomationService:
                                 else: ean_str = str(ean_raw)
                             output_data[idx][3] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
                             
-                            # Image Code
-                            output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
+                            # Image Code (Aggregated)
+                            output_data[idx][9] = combined_img
                             
                             # Availability Logic
                             val_p = src_row[COL_BRNO]; val_q = src_row[COL_USTI]; val_y = src_row[COL_TDE]

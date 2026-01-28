@@ -4,13 +4,17 @@ from collections import Counter
 
 class ProductClusterer:
     def __init__(self):
-        # Common brands to strip for core comparison
-        self.brands = ["giana", "kaiser", "franz josef", "hame", "hamé", "nissin", "vitana", "maggi"]
+        # Common brands/words to treat as "transparent" or skip in core analysis
+        self.stop_words = {
+            "giana", "kaiser", "franz", "josef", "hame", "hamé", "nissin", 
+            "vitana", "maggi", "dr.oetker", "hellmann's", "hellmanns", 
+            "instant", "instantní", "sáčková", "polévka", "hotová", "hotova"
+        }
         
     def extract_weight_data(self, text):
         """Returns (value, unit) or (None, None)"""
         if not text: return (None, None)
-        # Match number + unit
+        # Match number + unit (e.g., 100g, 1.5l, 4x100g)
         match = re.search(r'(\d+(?:[.,]\d+)?)\s*(g|ml|kg|l|ks)\b', text, re.IGNORECASE)
         if match:
             val_str = match.group(1).replace(',', '.')
@@ -27,190 +31,234 @@ class ProductClusterer:
             return val * 1000
         return val
 
-    def check_value_similarity(self, val1, val2, threshold_ratio=2.0):
+    def check_value_similarity(self, val1, val2, threshold_ratio=1.6):
         """
         Returns True if values are within the threshold ratio.
-        e.g. threshold 2.0 allows 100g vs 200g.
         """
-        if val1 == 0 or val2 == 0: return True # Missing data -> Ignore check (Permissive)
+        if val1 == 0 or val2 == 0: return True # Missing data -> Permissive
         
         ratio = val1 / val2 if val2 != 0 else 0
-        if ratio < 1.0: ratio = 1.0 / ratio # Ensure ratio >= 1
+        if ratio < 1.0: ratio = 1.0 / ratio
         
         return ratio <= threshold_ratio
 
-    def extract_weight(self, text):
-        # Legacy helper for name cleaning
-        if not text: return None
-        match = re.search(r'(\d+(?:[.,]\d+)?\s*(?:g|ml|kg|l|ks))', text, re.IGNORECASE)
-        if match:
-            return match.group(1).lower().replace(' ', '')
-        return None
-
     def clean_name(self, text):
-        if not text:
-            return ""
+        """Normalizes text for comparison (lowercase, remove weights/specials)"""
+        if not text: return ""
         cleaned = text.lower()
         
-        # Remove weight
-        weight = self.extract_weight(text)
-        if weight:
-            cleaned = cleaned.replace(weight, "")
-            cleaned = re.sub(r'/\d+(?:g|ml|kg|l)', '', cleaned) # Handle slash combos
+        # Remove common weight patterns to focus on product name
+        cleaned = re.sub(r'\d+(?:[.,]\d+)?\s*(?:g|ml|kg|l|ks)\b', '', cleaned)
+        cleaned = re.sub(r'\d+x\d+', '', cleaned) # 4x100 etc
         
         # Remove special chars
         cleaned = re.sub(r'[^\w\s]', ' ', cleaned)
         return " ".join(cleaned.split())
 
-    def get_core_phrase(self, text):
-        cleaned = text.lower()
-        for b in self.brands:
-            cleaned = cleaned.replace(b, "")
-        
+    def get_tokens(self, text):
+        """Returns set of significant words"""
+        cleaned = self.clean_name(text)
         tokens = cleaned.split()
-        if len(tokens) >= 2:
-            return " ".join(tokens[:2])
-        return " ".join(tokens)
+        return [t for t in tokens if t not in self.stop_words and len(t) > 1]
 
-    def calculate_similarity(self, name1, name2):
-        c1 = self.clean_name(name1)
-        c2 = self.clean_name(name2)
+    def calculate_similarity_score(self, item1, item2):
+        """
+        Complex scoring logic to mimic "AI" reasoning using heuristics.
+        Returns score 0.0 to 1.0
+        """
+        name1 = item1['name']
+        name2 = item2['name']
         
-        core1 = self.get_core_phrase(name1)
-        core2 = self.get_core_phrase(name2)
+        # 1. Head Noun Check (Crucial for "Shampoo" vs "Conditioner")
+        tokens1 = self.get_tokens(name1)
+        tokens2 = self.get_tokens(name2)
         
-        if core1 and core2 and core1 == core2:
-            return 0.95 
+        if not tokens1 or not tokens2:
+            # Fallback to string distance if tokens missing
+            return difflib.SequenceMatcher(None, name1.lower(), name2.lower()).ratio()
+
+        head1 = tokens1[0]
+        head2 = tokens2[0]
+        
+        # If the very first significant word is different, penalty.
+        # e.g. "Savo" vs "Jar" -> Different.
+        head_match = (head1 == head2)
+        
+        # 2. Token Overlap (Jaccard) - Good for variants "Chicken Soup" vs "Beef Soup"
+        set1 = set(tokens1)
+        set2 = set(tokens2)
+        intersection = len(set1.intersection(set2))
+        union = len(set1.union(set2))
+        jaccard = intersection / union if union > 0 else 0
+        
+        # 3. Sequence Match (for word order)
+        seq_ratio = difflib.SequenceMatcher(None, " ".join(tokens1), " ".join(tokens2)).ratio()
+        
+        # Weighted Score
+        score = 0.0
+        
+        if head_match:
+            score += 0.4  # Base score for same "Type"
+            score += (jaccard * 0.4) # Add overlap
+            score += (seq_ratio * 0.2) # Add order
+        else:
+            # If heads differ, they must be VERY similar otherwise (e.g. synonyms?)
+            # Usually we just penalize heavily.
+            score += (jaccard * 0.5) 
+            score += (seq_ratio * 0.2)
             
-        seq = difflib.SequenceMatcher(None, c1, c2)
-        return seq.ratio()
+        return score
 
     def generate_smart_title(self, names):
+        """
+        Extracts the common prefix/tokens that represent the Group Name.
+        """
         if not names: return ""
-        all_tokens = [n.split() for n in names]
-        total_items = len(names)
-        token_counts = Counter()
+        if len(names) == 1: return names[0]
         
-        for tokens in all_tokens:
-            seen_in_title = set()
-            for t in tokens:
-                clean_t = t.lower().strip(".,()")
-                if clean_t not in seen_in_title:
-                    token_counts[clean_t] += 1
-                    seen_in_title.add(clean_t)
+        # Tokenize all names
+        token_lists = [self.clean_name(n).split() for n in names]
         
-        threshold = total_items * 0.75
-        common_words = {word for word, count in token_counts.items() if count >= threshold}
+        # Find Longest Common Subsequence of tokens from the start
+        if not token_lists: return ""
         
-        ref_tokens = names[0].split()
-        result_tokens = []
+        common = []
+        ref = token_lists[0]
         
-        for t in ref_tokens:
-            clean_t = t.lower().strip(".,()")
-            if clean_t in common_words:
-                result_tokens.append(t)
-                
-        return " ".join(result_tokens)
+        for i, token in enumerate(ref):
+            is_in_all = True
+            for other_list in token_lists[1:]:
+                # Check if token exists in other list
+                if token not in other_list:
+                    is_in_all = False
+                    break
+            if is_in_all:
+                common.append(token)
+            else:
+                # Heuristic: If we have enough common words, maybe stop?
+                # For now, let's keep collecting common words even if skipped
+                pass
+        
+        # Fallback: Just use SequenceMatcher on the raw strings to find the common block
+        matcher = difflib.SequenceMatcher(None, names[0], names[1])
+        match = matcher.find_longest_match(0, len(names[0]), 0, len(names[1]))
+        if match.size > 3:
+            candidate = names[0][match.a : match.a + match.size].strip()
+            candidate = candidate.strip(" -,.")
+            return candidate.title()
+            
+        if common:
+            return " ".join(common).title()
+            
+        return names[0]
 
-    def generate_variants(self, items, nazev_a):
+    def generate_variants(self, items, group_title):
+        """
+        Extracts the 'variable' part of the names as the subtext.
+        """
         variants = []
-        common_tokens = set(nazev_a.lower().split())
+        title_lower = group_title.lower()
         
         for item in items:
-            full_tokens = item['name'].split()
-            diff = []
-            for t in full_tokens:
-                clean_t = t.lower().strip(".,()")
-                if clean_t not in common_tokens:
-                    if clean_t not in self.brands:
-                        diff.append(t)
+            name = item['name']
+            name_lower = name.lower()
             
-            variant_str = " ".join(diff).strip(" -.,")
-            if variant_str:
-                variants.append(variant_str)
-                
+            # Simple subtraction
+            # We remove the group title tokens from the name
+            title_tokens = title_lower.split()
+            name_tokens = name_lower.split()
+            
+            diff_tokens = [t for t in name_tokens if t not in title_tokens]
+            diff = " ".join(diff_tokens)
+            
+            # Cleanup
+            diff = re.sub(r'^\W+|\W+$', '', diff) # trim non-alphanumeric
+            
+            # Remove weights from variant text if they are redundant (optional)
+            
+            if diff:
+                variants.append(diff.title())
+            else:
+                # If exact match, look for weight difference
+                w_text = item.get('weight_text', '')
+                if w_text: variants.append(w_text)
+
+        # Unique & Limit
         unique = sorted(list(set(variants)))
+        # Filter out empty or pure punctuation
+        unique = [u for u in unique if re.search(r'[a-zA-Z0-9]', u)]
+        
+        if not unique: return ""
+        
         return ", ".join(unique[:3]) + (", ..." if len(unique) > 3 else "")
 
     def group_items(self, items):
         """
-        Main clustering function.
-        items: List of dicts {'id', 'name', 'price', 'weight_text'}
+        Greedy Clustering Strategy.
+        Sorts items, then for each ungrouped item (leader),
+        finds ALL other compatible items in the remaining list.
         """
-        groups = []
-        processed_ids = set()
+        if not items: return []
         
-        for i, item in enumerate(items):
-            if item['id'] in processed_ids:
+        # 1. SORTING
+        # Sort by Head Word -> Price -> Name
+        def sort_key(x):
+            name_clean = self.clean_name(x['name'])
+            tokens = name_clean.split()
+            head = tokens[0] if tokens else ""
+            return (head, x.get('price', 0), x['name'])
+            
+        sorted_items = sorted(items, key=sort_key)
+        
+        groups = []
+        processed_indices = set()
+        
+        for i in range(len(sorted_items)):
+            if i in processed_indices:
                 continue
                 
-            current_group = [item]
-            processed_ids.add(item['id'])
+            leader = sorted_items[i]
+            current_group = [leader]
+            processed_indices.add(i)
             
-            # Parse Item 1 Data
-            core1 = self.get_core_phrase(item['name']).split()[0] if self.get_core_phrase(item['name']) else ""
-            
-            # Try parsing weight from Column F first, then Name
-            w1, u1 = self.extract_weight_data(item.get('weight_text'))
-            if w1 is None: w1, u1 = self.extract_weight_data(item['name'])
-            norm_w1 = self.normalize_weight(w1, u1) if w1 else 0
-            
-            p1 = item.get('price', 0.0)
-            
-            for j, other in enumerate(items):
-                if other['id'] in processed_ids:
+            # Greedy Search: Scan all subsequent items
+            for j in range(i + 1, len(sorted_items)):
+                if j in processed_indices:
                     continue
+                    
+                candidate = sorted_items[j]
                 
-                # --- VALUE CHECKS (Strictness) ---
+                # --- MATCH LOGIC ---
+                is_match = False
                 
-                # 1. Price Check (Max 1.6x diff)
-                p2 = other.get('price', 0.0)
-                # If both prices exist, enforce strict check. If one is missing, allow (maybe data error).
+                # Price Check
+                p1 = leader.get('price', 0.0)
+                p2 = candidate.get('price', 0.0)
+                price_ok = True
                 if p1 > 0 and p2 > 0:
-                    if not self.check_value_similarity(p1, p2, threshold_ratio=1.6): 
-                        continue 
-                    
-                # 2. Weight Check (Max 1.6x diff)
-                w2, u2 = self.extract_weight_data(other.get('weight_text'))
-                if w2 is None: w2, u2 = self.extract_weight_data(other['name'])
-                norm_w2 = self.normalize_weight(w2, u2) if w2 else 0
+                    price_ok = self.check_value_similarity(p1, p2, threshold_ratio=1.6)
                 
-                if norm_w1 > 0 and norm_w2 > 0:
-                    # Require units to be compatible
-                    if (u1 == 'ks' and u2 != 'ks') or (u1 != 'ks' and u2 == 'ks'):
-                        continue
-                        
-                    if not self.check_value_similarity(norm_w1, norm_w2, threshold_ratio=1.6):
-                        continue
+                # Similarity Check
+                score = self.calculate_similarity_score(leader, candidate)
                 
-                # --- NAME CHECKS ---
-                
-                score = self.calculate_similarity(item['name'], other['name'])
-                core2 = self.get_core_phrase(other['name']).split()[0] if self.get_core_phrase(other['name']) else ""
-                
-                # Extract first word of cleaned name for Head Noun check
-                clean1 = self.clean_name(item['name'])
-                clean2 = self.clean_name(other['name'])
-                word1 = clean1.split()[0] if clean1 else ""
-                word2 = clean2.split()[0] if clean2 else ""
-                
-                match = False
-                
-                # Strict Rule: If first significant word differs (e.g. "Instantní" vs "Soba"), 
-                # require extremely high similarity (0.90) to group them.
-                if word1 != word2:
-                    if score > 0.90:
-                        match = True
+                # Decision Matrix
+                if price_ok:
+                    if score > 0.60: # Threshold for similar price
+                        is_match = True
                 else:
-                    # Standard Rules if first word matches
+                    # Price differs significantly -> Require very high similarity (Size variants)
                     if score > 0.85:
-                        match = True
-                    elif score > 0.55 and core1 == core2:
-                        match = True
-                    
-                if match:
-                    current_group.append(other)
-                    processed_ids.add(other['id'])
+                        is_match = True
+                        
+                        # Extra Safety: Check units match if extracting weights
+                        w1, u1 = self.extract_weight_data(leader.get('weight_text') or leader['name'])
+                        w2, u2 = self.extract_weight_data(candidate.get('weight_text') or candidate['name'])
+                        if w1 and w2 and u1 != u2:
+                            is_match = False # Different units (kg vs l) -> unlikely match
+                            
+                if is_match:
+                    current_group.append(candidate)
+                    processed_indices.add(j)
             
             groups.append(current_group)
             

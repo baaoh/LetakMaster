@@ -304,29 +304,77 @@ function placeAndAlign(doc, group, placeholder, file) {
     } catch(e) { }
 }
 
-function replaceProductImageAM(layerMap, imageName, imageDir) {
-    var file = findImageFile(imageDir, imageName);
-    if (!file) return;
+function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
+    if (!imageNamesStr) return;
     
+    // Split by newline to handle multiple images
+    var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
-    var targetId = null;
     
-    for (var key in layerMap) {
-        if (key == "_self") continue;
-        for (var b=0; b<baseNames.length; b++) {
-            if (key.indexOf(baseNames[b]) >= 0) {
-                targetId = layerMap[key];
-                break;
+    // Reverse loop to stack them in order (if placing below group)
+    // or just process normally. If multiple images and 1 placeholder, 
+    // only the first might work unless we duplicate placeholder?
+    // For A4 (no placeholder), we just stack them.
+    
+    for (var i = 0; i < imageNames.length; i++) {
+        var imageName = imageNames[i];
+        if (!imageName || imageName.length === 0) continue;
+        
+        var file = findImageFile(imageDir, imageName);
+        if (!file) {
+            logToManifest("Image not found: " + imageName);
+            continue;
+        }
+        
+        var targetId = null;
+        
+        // Try to find placeholder
+        for (var key in layerMap) {
+            if (key == "_self") continue;
+            for (var b=0; b<baseNames.length; b++) {
+                if (key.indexOf(baseNames[b]) >= 0) {
+                    targetId = layerMap[key];
+                    break;
+                }
+            }
+            if (targetId) break;
+        }
+        
+        if (targetId) {
+            // Placeholder found: Replace and Align (First image only?)
+            // If we have multiple images but 1 placeholder, usually we just place the first.
+            // Or we could duplicate the placeholder. For now, let's stick to 1-to-1 if placeholder exists.
+            if (i === 0) {
+                selectLayerAM(targetId);
+                var doc = app.activeDocument;
+                var placeholder = doc.activeLayer; 
+                placeAndAlign(doc, null, placeholder, file);
+            }
+        } else if (layerMap["_self"]) {
+            // No placeholder: Place BELOW the group (A4 Style)
+            try {
+                selectLayerAM(layerMap["_self"]);
+                var doc = app.activeDocument;
+                var group = doc.activeLayer;
+                
+                // Place puts it above/inside current selection
+                var idPlc = charIDToTypeID("Plc ");
+                var desc = new ActionDescriptor();
+                desc.putPath(charIDToTypeID("null"), file);
+                desc.putEnumerated(charIDToTypeID("FTcs"), charIDToTypeID("QCSt"), charIDToTypeID("Qcsa")); 
+                executeAction(idPlc, desc, DialogModes.NO);
+                
+                var newLayer = doc.activeLayer;
+                newLayer.name = imageName;
+                
+                // Move below group
+                newLayer.move(group, ElementPlacement.PLACEAFTER);
+                
+                logToManifest("Placed image " + imageName + " below group.");
+            } catch(e) {
+                logToManifest("Error placing image " + imageName + ": " + e);
             }
         }
-        if (targetId) break;
-    }
-    
-    if (targetId) {
-        selectLayerAM(targetId);
-        var doc = app.activeDocument;
-        var placeholder = doc.activeLayer; 
-        placeAndAlign(doc, null, placeholder, file);
     }
 }
 
