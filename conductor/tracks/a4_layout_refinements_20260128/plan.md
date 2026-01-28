@@ -20,4 +20,4 @@
 
 ## Phase 3: Verification
 - [x] Unit tests for title splitting and visibility logic in `tests/test_a4_refinements.py`.
-- [ ] Test on real A4 page in Photoshop.
+- [x] Test on real A4 page in Photoshop (Verified by User).

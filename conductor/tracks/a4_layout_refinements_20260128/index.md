@@ -1,6 +1,6 @@
 # A4 Layout Refinements & Smart Content
 
-**Status:** Completed (Pending PS Verification)  
+**Status:** Done  
 **Created:** 2026-01-28  
 **Owner:** User / Assistant
 

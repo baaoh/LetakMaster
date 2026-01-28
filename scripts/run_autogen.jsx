@@ -1,6 +1,6 @@
 #target photoshop
-var g_injected_images_dir = "D:/TAMDA/LetakMaster/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260127_0133_Workspace_State_1.xlsx_State_1";
+var g_injected_images_dir = "M:/@BaoVuong/2026_01_24-Letak/images";
+var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster/workspaces/build_plans/260128_1752_Workspace_State_2.xlsx_State_2";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -206,6 +206,16 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         if (layerId) method = "Suffix_EX_NoUnderscore";
     }
     
+    // NEW: Try "_A" or "_B" suffix (Common in A4 templates)
+    if (!layerId) {
+        layerId = layerIdMap[layerName.toLowerCase() + "_a"];
+        if (layerId) method = "Suffix_A";
+    }
+    if (!layerId) {
+        layerId = layerIdMap[layerName.toLowerCase() + "_b"];
+        if (layerId) method = "Suffix_B";
+    }
+    
     if (!layerId && layerName.indexOf("EAN") >= 0) {
         var vars = ["ean", "ean:", "ean_label"];
         for (var i=0; i<vars.length; i++) {
@@ -307,29 +317,97 @@ function placeAndAlign(doc, group, placeholder, file) {
     } catch(e) { }
 }
 
-function replaceProductImageAM(layerMap, imageName, imageDir) {
-    var file = findImageFile(imageDir, imageName);
-    if (!file) return;
+function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
+    if (!imageNamesStr) return;
     
+    // Split by newline to handle multiple images
+    var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
-    var targetId = null;
     
-    for (var key in layerMap) {
-        if (key == "_self") continue;
-        for (var b=0; b<baseNames.length; b++) {
-            if (key.indexOf(baseNames[b]) >= 0) {
-                targetId = layerMap[key];
-                break;
+    // Reverse loop to stack them in order (if placing below group)
+    // or just process normally. If multiple images and 1 placeholder, 
+    // only the first might work unless we duplicate placeholder?
+    // For A4 (no placeholder), we just stack them.
+    
+    for (var i = 0; i < imageNames.length; i++) {
+        var imageName = imageNames[i];
+        if (!imageName || imageName.length === 0) continue;
+        
+        var file = findImageFile(imageDir, imageName);
+        if (!file) {
+            logToManifest("Image not found: " + imageName);
+            continue;
+        }
+        
+        var targetId = null;
+        
+        // Try to find placeholder
+        for (var key in layerMap) {
+            if (key == "_self") continue;
+            for (var b=0; b<baseNames.length; b++) {
+                if (key.indexOf(baseNames[b]) >= 0) {
+                    targetId = layerMap[key];
+                    break;
+                }
+            }
+            if (targetId) break;
+        }
+        
+        if (targetId) {
+            // Placeholder found: Replace and Align (First image only?)
+            // If we have multiple images but 1 placeholder, usually we just place the first.
+            // Or we could duplicate the placeholder. For now, let's stick to 1-to-1 if placeholder exists.
+            if (i === 0) {
+                selectLayerAM(targetId);
+                var doc = app.activeDocument;
+                var placeholder = doc.activeLayer; 
+                placeAndAlign(doc, null, placeholder, file);
+            }
+        } else if (layerMap["_self"]) {
+            // No placeholder: Place to the RIGHT of the group (A4 Style)
+            try {
+                selectLayerAM(layerMap["_self"]);
+                var doc = app.activeDocument;
+                var group = doc.activeLayer;
+                var groupBounds = group.bounds;
+                
+                // Place image
+                var idPlc = charIDToTypeID("Plc ");
+                var desc = new ActionDescriptor();
+                desc.putPath(charIDToTypeID("null"), file);
+                executeAction(idPlc, desc, DialogModes.NO);
+                
+                var newLayer = doc.activeLayer;
+                newLayer.name = imageName;
+                
+                // --- IMAGE STANDARDIZATION (500x500) ---
+                var nBounds = newLayer.bounds;
+                var nWidth = nBounds[2].value - nBounds[0].value;
+                var nHeight = nBounds[3].value - nBounds[1].value;
+                
+                var targetSize = 500;
+                var scale = (targetSize / Math.max(nWidth, nHeight)) * 100;
+                newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
+                
+                // --- POSITIONING ---
+                var gRight = groupBounds[2].value;
+                var gTop = groupBounds[1].value;
+                
+                var currentBounds = newLayer.bounds;
+                // Offset each image by its index to avoid overlap
+                var dx = (gRight + 50 + (i * 550)) - currentBounds[0].value;
+                var dy = (gTop + 50) - currentBounds[1].value;
+                
+                newLayer.translate(dx, dy);
+                
+                // Move below group
+                newLayer.move(group, ElementPlacement.PLACEAFTER);
+                
+                logToManifest("Placed standardized image " + imageName + " to the right of " + group.name);
+            } catch(e) {
+                logToManifest("Error placing image " + imageName + ": " + e);
             }
         }
-        if (targetId) break;
-    }
-    
-    if (targetId) {
-        selectLayerAM(targetId);
-        var doc = app.activeDocument;
-        var placeholder = doc.activeLayer; 
-        placeAndAlign(doc, null, placeholder, file);
     }
 }
 
@@ -365,7 +443,7 @@ function getLayerNameAM(id) {
 }
 
 // Helper: Process A4 Groups (Duplication & Renaming)
-function processA4Groups(doc, plan) {
+function processA4Groups(doc, plan, win) {
     // 1. Check if we need A4 logic
     var hasA4 = false;
     var maxGrp = 0;
@@ -397,14 +475,16 @@ function processA4Groups(doc, plan) {
     }
     
     // 3. Generate Groups
-    // We assume Template corresponds to Index 01.
-    // We need to generate 02, 03... maxGrp.
-    
     var didChange = false;
     
     for (var i=2; i<=maxGrp; i++) {
         var suffix = (i < 10) ? "0" + i : "" + i;
         var targetName = "A4_Grp_" + suffix;
+        
+        if (win) {
+            win.pnl.lblStatus.text = "Generating " + targetName + "...";
+            win.update();
+        }
         
         if (map[targetName]) {
             logToManifest("Group " + targetName + " already exists. Skipping.");
@@ -423,10 +503,14 @@ function processA4Groups(doc, plan) {
         // Rename Group
         renameLayerAM(newGroupId, targetName);
         
+        // --- A4 OFFSET LOGIC ---
+        var groupBounds = app.activeDocument.activeLayer.bounds;
+        var groupHeight = groupBounds[3].value - groupBounds[1].value;
+        var offsetV = (i - 1) * (groupHeight + 100); // 100px padding between groups
+        translateLayerAM(newGroupId, 0, offsetV);
+        logToManifest("Offsetting " + targetName + " by " + offsetV + "px");
+
         // Rename Children
-        // We need to scan again or just traverse children of the active group?
-        // Using scanLayersAM is safer but slow inside a loop.
-        // Let's use DOM for children renaming since we have the group active
         var activeGroup = app.activeDocument.activeLayer;
         
         // Helper to recurse and rename
@@ -434,12 +518,22 @@ function processA4Groups(doc, plan) {
              for (var k=0; k<layerObj.layers.length; k++) {
                  var child = layerObj.layers[k];
                  var oldName = child.name;
-                 // Replace "_01" with "_XX" (e.g. nazev_01A_A -> nazev_02A_A)
-                 // Be careful not to replace wrong parts. 
-                 // Expectation: layer names contain "_01".
-                 if (oldName.indexOf("_" + oldIdx) >= 0) {
-                     var newLName = oldName.replace("_" + oldIdx, "_" + newIdx);
-                     child.name = newLName;
+                 
+                 // CLEANUP: Strip " copy", " copy 2", etc. generated by Duplicate
+                 // Regex: \s+copy -> space + copy, \s*\d* -> optional space + number, $ -> end
+                 var cleanName = oldName.replace(/\s+copy\s*\d*$/i, "");
+                 
+                 // Replace "_01" with "_XX"
+                 if (cleanName.indexOf("_" + oldIdx) >= 0) {
+                     var newLName = cleanName.replace("_" + oldIdx, "_" + newIdx);
+                     
+                     // Only rename if changed (avoids unnecessary history steps/calls)
+                     if (newLName != oldName) {
+                        child.name = newLName;
+                     }
+                 } else if (cleanName != oldName) {
+                     // Even if index didn't match, we stripped "copy", so update it
+                     child.name = cleanName;
                  }
                  
                  if (child.typename == "LayerSet") {
@@ -470,7 +564,7 @@ function runBuild(doc, plan) {
     // --- Pre-Process A4 Groups ---
     var isA4Mode = false;
     try {
-        if (processA4Groups(doc, plan)) {
+        if (processA4Groups(doc, plan, win)) {
             logToManifest("A4 Structure Generated. Re-scanning...");
             isA4Mode = true;
         } else {
@@ -495,12 +589,19 @@ function runBuild(doc, plan) {
         logToManifest("A4 Mode Active: Hiding Standard Product Groups...");
         for (var i=1; i<=16; i++) {
             var suffix = (i < 10) ? "0" + i : "" + i;
-            // Only hide the main parent group. If variants are nested, this hides them too.
-            // If they are siblings, they might remain visible, but usually they are nested or strictly managed.
-            // User requested to preserve inner visibility state.
-            var baseName = "Product_" + suffix;
-            if (docMap[baseName]) {
-                setVisibleAM(docMap[baseName]["_self"], false);
+            
+            // Explicitly hide regular, K, and EX groups
+            var variants = [
+                "Product_" + suffix,
+                "Product_" + suffix + "_K",
+                "Product_" + suffix + "_EX"
+            ];
+            
+            for (var v=0; v<variants.length; v++) {
+                var gName = variants[v];
+                if (docMap[gName]) {
+                    setVisibleAM(docMap[gName]["_self"], false);
+                }
             }
         }
     }
@@ -652,6 +753,8 @@ function runBuild(doc, plan) {
                     if (!layerId) layerId = groupLayers[lowerKey + "k"];
                     if (!layerId) layerId = groupLayers[lowerKey + "_ex"];
                     if (!layerId) layerId = groupLayers[lowerKey + "ex"];
+                    if (!layerId) layerId = groupLayers[lowerKey + "_a"];
+                    if (!layerId) layerId = groupLayers[lowerKey + "_b"];
 
                     if (layerId) {
                         setVisibleAM(layerId, action.visibility[key]);
