@@ -1,4 +1,5 @@
 @echo off
+setlocal EnableDelayedExpansion
 set "BACKEND_PORT=8000"
 set "FRONTEND_PORT=5173"
 
@@ -7,11 +8,11 @@ cls
 echo ===================================================
 echo           LetakMaster Server Manager
 echo ===================================================
-echo [1] Start Servers (Hidden / Silent)
+echo [1] Start Servers (Hidden/Minimized + Browser)
 echo [2] Stop All Servers
 echo [3] Monitor Status
 echo [4] Show Backend Logs (Tail)
-echo [5] Start Servers (VISIBLE / DEBUG MODE)
+echo [5] Start Servers (Visible Terminals + Browser)
 echo [6] Exit
 echo ===================================================
 call :CHECK_STATUS
@@ -28,10 +29,10 @@ goto MENU
 
 :CHECK_STATUS
 netstat -aon | find ":%BACKEND_PORT%" | find "LISTENING" >nul
-if %errorlevel%==0 (echo Backend  [Port %BACKEND_PORT%]:  RUNNING (Background)) else (echo Backend  [Port %BACKEND_PORT%]:  STOPPED)
+if !errorlevel!==0 (echo Backend  [Port %BACKEND_PORT%]:  RUNNING) else (echo Backend  [Port %BACKEND_PORT%]:  STOPPED)
 
 netstat -aon | find ":%FRONTEND_PORT%" | find "LISTENING" >nul
-if %errorlevel%==0 (echo Frontend [Port %FRONTEND_PORT%]:  RUNNING (Background)) else (echo Frontend [Port %FRONTEND_PORT%]:  STOPPED)
+if !errorlevel!==0 (echo Frontend [Port %FRONTEND_PORT%]:  RUNNING) else (echo Frontend [Port %FRONTEND_PORT%]:  STOPPED)
 exit /b
 
 :MONITOR_PAGE
@@ -65,34 +66,26 @@ call :KILL_SERVERS_SILENT
 
 :: Detect Python
 set "PYTHON_EXE=python"
-if exist ".\python_embed\pythonw.exe" (
-    echo [INFO] Using Bundled Python (Silent): .\python_embed\pythonw.exe
-    set "PYTHON_EXE=.\python_embed\pythonw.exe"
-) else (
-    echo [INFO] Using System Python
+if exist ".\python_embed\python.exe" (
+    echo [INFO] Using Bundled Python: .\python_embed\python.exe
+    set "PYTHON_EXE=.\python_embed\python.exe"
 )
 
-echo Starting Backend (Hidden)...
-:: Launch Python directly with uvicorn via pythonw (no window)
-:: Redirect output to logs.txt
-start "" "%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% > logs.txt 2>&1
+echo Starting Backend (Minimized)...
+:: We use start /min with python.exe (not w) to ensure we can capture stdout to logs.txt
+start /min "LetakMaster Backend" cmd /c ""%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% > logs.txt 2>&1"
 
-echo Starting Frontend (Vite)...
+echo Starting Frontend (Minimized)...
 cd frontend
-:: npm run dev usually requires a window. We can try start /min
 start /min "LetakMaster Frontend" cmd /c "npm run dev > ..\frontend_logs.txt 2>&1"
 cd ..
 
 echo.
-echo ===================================================
-echo Servers Launched in Background!
-echo.
-echo   Integrated GUI: http://localhost:%BACKEND_PORT%
-echo   API Docs: http://localhost:%BACKEND_PORT%/docs
-echo.
-echo use Option [4] to view logs if needed.
-echo ===================================================
-timeout /t 3 >nul
+echo Waiting for servers to initialize...
+timeout /t 4 >nul
+echo Opening Browser...
+start http://localhost:%BACKEND_PORT%
+
 goto MENU
 
 :START_VISIBLE
@@ -114,6 +107,15 @@ echo Starting Frontend (Visible)...
 cd frontend
 start "LetakMaster Frontend" cmd /k "npm run dev"
 cd ..
+
+echo.
+echo Waiting for servers...
+timeout /t 4 >nul
+echo Opening Browser...
+:: In Visible/Dev mode, we prefer the Frontend Port (Vite) if available, 
+:: but fallback to Backend if Node isn't running well.
+start http://localhost:%FRONTEND_PORT%
+
 goto MENU
 
 :SHOW_LOGS
