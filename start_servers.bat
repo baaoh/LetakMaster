@@ -56,43 +56,29 @@ goto MENU
 
 :START_SERVERS
 echo.
-echo === Killing old processes first... ===
+echo === Starting LetakMaster Service... ===
 call :KILL_SERVERS_SILENT
 
 :: Detect Python
 set "PYTHON_EXE=python"
-if exist ".\python_embed\python.exe" (
-    echo [INFO] Using Bundled Python: .\python_embed\python.exe
-    set "PYTHON_EXE=.\python_embed\python.exe"
-) else (
-    echo [INFO] Using System Python (Dev Mode)
+set "LAUNCHER_EXE=python"
+
+if exist ".\python_embed\pythonw.exe" (
+    set "LAUNCHER_EXE=.\python_embed\pythonw.exe"
+) else if exist ".\python_embed\python.exe" (
+    set "LAUNCHER_EXE=.\python_embed\python.exe"
 )
 
-echo.
-echo Starting Backend (Uvicorn)...
-:: /k keeps the window open if it crashes immediately, useful for debugging.
-:: We use start "" to ensure title is set correctly.
-start "LetakMaster Backend" cmd /k ""%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% --reload"
-
-echo Starting Frontend (Vite)...
-cd frontend
-:: /k keeps the window open so we can see errors.
-:: If npm fails, we print a message and pause.
-start "LetakMaster Frontend" cmd /k "npm run dev || (echo. && echo [ERROR] Frontend failed to start. && echo If you do not have Node.js installed, this is expected. && echo You can use the Portable UI at http://localhost:%BACKEND_PORT% && pause)"
-cd ..
+:: Run launcher
+:: We use start "" to run it and let the batch continue/exit
+start "" "%LAUNCHER_EXE%" app/launcher.py
 
 echo.
 echo ===================================================
-echo Servers Launched!
-echo.
-echo FULL DEV MODE (Requires Node):
-echo   Frontend GUI: http://localhost:%FRONTEND_PORT%
-echo.
-echo PORTABLE MODE (Built-in):
-echo   Integrated GUI: http://localhost:%BACKEND_PORT%
-echo   API Docs: http://localhost:%BACKEND_PORT%/docs
+echo Service Launched in Background.
+echo A launcher page should open in your browser shortly.
 echo ===================================================
-timeout /t 3 >nul
+timeout /t 5 >nul
 goto MENU
 
 :KILL_SERVERS_SILENT

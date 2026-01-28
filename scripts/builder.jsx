@@ -203,10 +203,14 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         if (layerId) method = "Suffix_EX_NoUnderscore";
     }
     
-    // NEW: Try "_A" suffix (Common in A4 templates)
+    // NEW: Try "_A" or "_B" suffix (Common in A4 templates)
     if (!layerId) {
         layerId = layerIdMap[layerName.toLowerCase() + "_a"];
         if (layerId) method = "Suffix_A";
+    }
+    if (!layerId) {
+        layerId = layerIdMap[layerName.toLowerCase() + "_b"];
+        if (layerId) method = "Suffix_B";
     }
     
     if (!layerId && layerName.indexOf("EAN") >= 0) {
@@ -357,26 +361,46 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
                 placeAndAlign(doc, null, placeholder, file);
             }
         } else if (layerMap["_self"]) {
-            // No placeholder: Place BELOW the group (A4 Style)
+            // No placeholder: Place to the RIGHT of the group (A4 Style)
             try {
                 selectLayerAM(layerMap["_self"]);
                 var doc = app.activeDocument;
                 var group = doc.activeLayer;
+                var groupBounds = group.bounds;
                 
-                // Place puts it above/inside current selection
+                // Place image
                 var idPlc = charIDToTypeID("Plc ");
                 var desc = new ActionDescriptor();
                 desc.putPath(charIDToTypeID("null"), file);
-                desc.putEnumerated(charIDToTypeID("FTcs"), charIDToTypeID("QCSt"), charIDToTypeID("Qcsa")); 
                 executeAction(idPlc, desc, DialogModes.NO);
                 
                 var newLayer = doc.activeLayer;
                 newLayer.name = imageName;
                 
+                // --- IMAGE STANDARDIZATION (500x500) ---
+                var nBounds = newLayer.bounds;
+                var nWidth = nBounds[2].value - nBounds[0].value;
+                var nHeight = nBounds[3].value - nBounds[1].value;
+                
+                var targetSize = 500;
+                var scale = (targetSize / Math.max(nWidth, nHeight)) * 100;
+                newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
+                
+                // --- POSITIONING ---
+                var gRight = groupBounds[2].value;
+                var gTop = groupBounds[1].value;
+                
+                var currentBounds = newLayer.bounds;
+                // Offset each image by its index to avoid overlap
+                var dx = (gRight + 50 + (i * 550)) - currentBounds[0].value;
+                var dy = (gTop + 50) - currentBounds[1].value;
+                
+                newLayer.translate(dx, dy);
+                
                 // Move below group
                 newLayer.move(group, ElementPlacement.PLACEAFTER);
                 
-                logToManifest("Placed image " + imageName + " below group.");
+                logToManifest("Placed standardized image " + imageName + " to the right of " + group.name);
             } catch(e) {
                 logToManifest("Error placing image " + imageName + ": " + e);
             }
@@ -476,6 +500,13 @@ function processA4Groups(doc, plan, win) {
         // Rename Group
         renameLayerAM(newGroupId, targetName);
         
+        // --- A4 OFFSET LOGIC ---
+        var groupBounds = app.activeDocument.activeLayer.bounds;
+        var groupHeight = groupBounds[3].value - groupBounds[1].value;
+        var offsetV = (i - 1) * (groupHeight + 100); // 100px padding between groups
+        translateLayerAM(newGroupId, 0, offsetV);
+        logToManifest("Offsetting " + targetName + " by " + offsetV + "px");
+
         // Rename Children
         var activeGroup = app.activeDocument.activeLayer;
         
@@ -719,6 +750,8 @@ function runBuild(doc, plan) {
                     if (!layerId) layerId = groupLayers[lowerKey + "k"];
                     if (!layerId) layerId = groupLayers[lowerKey + "_ex"];
                     if (!layerId) layerId = groupLayers[lowerKey + "ex"];
+                    if (!layerId) layerId = groupLayers[lowerKey + "_a"];
+                    if (!layerId) layerId = groupLayers[lowerKey + "_b"];
 
                     if (layerId) {
                         setVisibleAM(layerId, action.visibility[key]);

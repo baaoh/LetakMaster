@@ -364,6 +364,19 @@ class AutomationService:
                     nazev_a = clusterer.generate_smart_title(grp_names)
                     nazev_b = clusterer.generate_variants(grp, nazev_a)
                     
+                    # --- SMART TITLE SPLITTER ---
+                    if len(nazev_a) > 20:
+                        # Find last space within first 21 chars to avoid breaking words
+                        split_idx = nazev_a[:21].rfind(' ')
+                        if split_idx == -1: split_idx = 20
+                        
+                        part_a = nazev_a[:split_idx].strip()
+                        part_b = nazev_a[split_idx:].strip()
+                        
+                        nazev_a = part_a
+                        # Prepend overflow to variants if they exist
+                        nazev_b = f"{part_b}, {nazev_b}" if nazev_b else part_b
+                    
                     prices = [x['price'] for x in grp if x['price'] > 0]
                     min_price = min(prices) if prices else 0.0
                     has_multiple_prices = len(set(prices)) > 1
@@ -565,7 +578,15 @@ class AutomationService:
 
             # Populate action data based on available columns and suffix
             if row[COL_NAZEV_A]: action["data"][f"nazev_{suffix}A"] = safe_str(row[COL_NAZEV_A])
-            if row[COL_NAZEV_B]: action["data"][f"nazev_{suffix}B"] = safe_str(row[COL_NAZEV_B])
+            
+            # Subtitle & Visibility logic
+            if row[COL_NAZEV_B]:
+                action["data"][f"nazev_{suffix}B"] = safe_str(row[COL_NAZEV_B])
+                action["visibility"][f"nazev_{suffix}B"] = True
+            else:
+                # If Nazev B is empty, explicitly hide it
+                action["visibility"][f"nazev_{suffix}B"] = False
+
             if row[COL_CENA_A]: action["data"][f"cena_{suffix}A"] = safe_str(row[COL_CENA_A])
             if row[COL_CENA_B]: action["data"][f"cena_{suffix}B"] = safe_str(row[COL_CENA_B])
             if row[COL_OD]: action["data"][f"od_{suffix}"] = safe_str(row[COL_OD])

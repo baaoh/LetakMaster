@@ -655,6 +655,16 @@ def get_source_file_data(file_id: int, db: Session = Depends(get_db)):
 async def health_check():
     return {"status": "ok"}
 
+@app.get("/api/system/logs")
+def get_system_logs():
+    log_path = os.path.join(os.getcwd(), "logs.txt")
+    if not os.path.exists(log_path):
+        return "No logs found."
+    with open(log_path, "r", encoding="utf-8", errors="replace") as f:
+        # Return last 100 lines
+        lines = f.readlines()
+        return "".join(lines[-100:])
+
 # --- Static Serving ---
 static_dir = os.path.join(os.getcwd(), "frontend_static")
 if os.path.exists(static_dir):
