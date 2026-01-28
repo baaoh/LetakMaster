@@ -15,8 +15,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Stability & UX Overhaul**
   *Link: [./tracks/stability_ux_20260123/](./tracks/stability_ux_20260123/)*
 
-- [x] **Track: Feature: Pre-sized Template Groups**
-  *Link: [./tracks/feature_presized_template_groups_20260126/](./tracks/feature_presized_template_groups_20260126/)*
+- [A4 Layout Refinements](./tracks/a4_layout_refinements_20260128/index.md) - **Active**
+- [Presized Template Groups](./tracks/feature_presized_template_groups_20260126/index.md) - **Done**
 
 - [x] **Track: Image Replacement Improvements**
   *Link: [./tracks/image_replacement_20260123/](./tracks/image_replacement_20260123/)*
