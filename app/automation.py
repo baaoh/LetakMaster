@@ -358,81 +358,95 @@ class AutomationService:
                     group_id_str = f"A4_Grp_{grp_idx:02d}"
                     leader_item = grp[0]
                     
+                    # 1. Calculate Aggregates
                     grp_names = [x['name'] for x in grp]
                     nazev_a = clusterer.generate_smart_title(grp_names)
                     nazev_b = clusterer.generate_variants(grp, nazev_a)
                     
+                    prices = [x['price'] for x in grp if x['price'] > 0]
+                    min_price = min(prices) if prices else 0.0
+                    has_multiple_prices = len(set(prices)) > 1
+                    
                     count = len(grp)
                     label = "EAN:" if count == 1 else (f"{count} druhy" if count <= 4 else "více druhů")
+                    
+                    # Format Min Price
+                    p_int = ""; p_dec = ""
+                    if min_price > 0:
+                        try:
+                            p_int = str(int(min_price))
+                            dec_val = int(round((min_price - int(min_price)) * 100))
+                            p_dec = f"{dec_val:02d}"
+                        except: pass
                     
                     for item in grp:
                         idx = item['offset']
                         src_row = data_range[idx]
                         
-                        output_data[idx][0] = group_id_str
-                        
+                        # Only assign Group ID (and aggregated data) to the leader
+                        # Non-leaders get NO Group ID, so they are ignored by JSON generation.
                         if item == leader_item:
+                            output_data[idx][0] = group_id_str
+                            
                             output_data[idx][1] = nazev_a
                             output_data[idx][2] = nazev_b
                             output_data[idx][4] = label
+                            
+                            # Use Calculated Min Price
+                            output_data[idx][7] = p_int
+                            output_data[idx][8] = p_dec
+                            
+                            # Force "od" (From) if multiple prices or multiple items
+                            # User requirement: "if multiple prices occur, enable OD"
+                            # Also often used if multiple variants exist regardless of price equality
+                            vis_od = "TRUE" if (has_multiple_prices or count > 1) else "FALSE"
+                            output_data[idx][10] = vis_od
+                            output_data[idx][6] = "od"
+                            
+                            # EAN Number / Label
+                            ean_raw = src_row[COL_EAN]
+                            ean_str = ""
+                            if ean_raw is not None:
+                                if isinstance(ean_raw, float): ean_str = str(int(ean_raw))
+                                else: ean_str = str(ean_raw)
+                            output_data[idx][3] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
+                            
+                            # Image Code
+                            output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
+                            
+                            # Availability Logic
+                            val_p = src_row[COL_BRNO]; val_q = src_row[COL_USTI]; val_y = src_row[COL_TDE]
+                            def is_zero(v):
+                                try: return float(v) == 0
+                                except: return False
+                            p0 = is_zero(val_p); q0 = is_zero(val_q); y0 = is_zero(val_y)
+                            msg = "•dostupné na všech pobočkách"
+                            if p0 and q0 and y0: msg = "•pouze dostupné v Praze"
+                            elif p0 and q0: msg = "•není dostupné v Brně, Ústí"
+                            elif p0: msg = "•není dostupné v Brně"
+                            elif q0: msg = "•není dostupné v Ústí"
+                            elif y0: msg = "•není dostupné na TDE"
+                            output_data[idx][5] = msg
+                            
+                            # Visibilities
+                            vis_ean = "TRUE"
+                            if label != "EAN:": vis_ean = "FALSE"
+                            output_data[idx][11] = vis_ean
+                            
+                            vis_dost = "FALSE" if msg == "•dostupné na všech pobočkách" else "TRUE"
+                            output_data[idx][12] = vis_dost
+                            
                         else:
+                            # Non-Leader: Leave Group ID empty to skip generation
+                            output_data[idx][0] = None 
+                            
+                            # We can still fill Name/Desc for Excel reference, 
+                            # but they won't go to the builder.
                             output_data[idx][1] = str(src_row[COL_PRODUCT]) if src_row[COL_PRODUCT] else ""
                             output_data[idx][2] = str(src_row[COL_DESC]) if src_row[COL_DESC] else ""
-                        
-                        ean_raw = src_row[COL_EAN]
-                        ean_str = ""
-                        if ean_raw is not None:
-                            if isinstance(ean_raw, float): ean_str = str(int(ean_raw))
-                            else: ean_str = str(ean_raw)
-                        output_data[idx][3] = "'" + ean_str[-6:] if len(ean_str) > 6 else "'" + ean_str
-                        
-                        val_p = src_row[COL_BRNO]
-                        val_q = src_row[COL_USTI]
-                        val_y = src_row[COL_TDE]
-                        
-                        def is_zero(v):
-                            try: return float(v) == 0
-                            except: return False
                             
-                        p0 = is_zero(val_p); q0 = is_zero(val_q); y0 = is_zero(val_y)
-                        msg = "•dostupné na všech pobočkách"
-                        if p0 and q0 and y0: msg = "•pouze dostupné v Praze"
-                        elif p0 and q0: msg = "•není dostupné v Brně, Ústí"
-                        elif p0: msg = "•není dostupné v Brně"
-                        elif q0: msg = "•není dostupné v Ústí"
-                        elif y0: msg = "•není dostupné na TDE"
-                        
-                        output_data[idx][5] = msg
-                        output_data[idx][6] = "od"
-                        
-                        price_raw = src_row[COL_ACS]
-                        p_int = ""; p_dec = ""
-                        if price_raw is not None:
-                            try:
-                                f = float(str(price_raw).replace(',', '.'))
-                                p_int = str(int(f))
-                                dec_val = int(round((f - int(f)) * 100))
-                                p_dec = f"{dec_val:02d}"
-                            except: p_int = str(price_raw)
-                        output_data[idx][7] = p_int
-                        output_data[idx][8] = p_dec
-                        
-                        output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
-                        
-                        val_w = src_row[COL_PRICE]
-                        has_price_text = val_w is not None and str(val_w).strip() != ""
-                        row_color = h_colors[idx] if idx < len(h_colors) else None
-                        is_highlighted = row_color is not None and row_color != (255, 255, 255) and row_color != 16777215
-                        
-                        vis_od = "TRUE" if (is_highlighted or has_price_text) else "FALSE"
-                        output_data[idx][10] = vis_od
-                        
-                        vis_ean = "TRUE"
-                        if output_data[idx][4] != "EAN:": vis_ean = "FALSE"
-                        output_data[idx][11] = vis_ean
-                        
-                        vis_dost = "FALSE" if msg == "•dostupné na všech pobočkách" else "TRUE"
-                        output_data[idx][12] = vis_dost
+                            # Copy EAN/Image for reference
+                            output_data[idx][9] = str(src_row[COL_INT_KOD]) if src_row[COL_INT_KOD] else ""
 
         sheet.range("AM6").value = HEADERS
         sheet.range("AM7").value = output_data
