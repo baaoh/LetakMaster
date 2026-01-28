@@ -33,7 +33,6 @@ __pycache__/
 .pytest_cache/
 venv/
 .ipynb_checkpoints/
-python_embed/
 
 # Node/Frontend Artifacts
 node_modules/
@@ -49,6 +48,9 @@ frontend/dist/
 # Binaries and Client Apps
 ImageCopier/
 *.exe
+!python_embed/**/*.exe
+!python_embed/**/*.dll
+!python_embed/**/*.pyd
 
 # Project Specific
 OLD/
