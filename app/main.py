@@ -14,6 +14,7 @@ from app.sync_service import SyncService, DiffService
 from app.tkq import broker, generate_psd_task, verify_psd_task
 from app.utils import open_file_dialog, save_file_dialog
 from app.automation import AutomationService
+from app.qa.qa_service import QAService
 from pydantic import BaseModel
 
 # Initialize DB tables at startup
@@ -563,6 +564,100 @@ def run_automation_manual(config: ConfigRequest, db: Session = Depends(get_db)):
         return {"status": "success", "report": report}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Automation failed: {e}")
+
+# --- QA & Discrepancy Check ---
+
+class QAImportRequest(BaseModel):
+    files: list[str]
+
+class QAImportFolderRequest(BaseModel):
+    folder_path: str
+
+@app.post("/qa/import")
+def qa_import_files(req: QAImportRequest, db: Session = Depends(get_db)):
+    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    
+    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
+    try:
+        results = service.run_import(req.files)
+        return {"status": "success", "results": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"QA Import failed: {e}")
+
+@app.post("/qa/import-folder")
+def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get_db)):
+    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    
+    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
+    try:
+        results = service.run_import(req.folder_path)
+        return {"status": "success", "results": results}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"QA Import failed: {e}")
+
+@app.post("/qa/check")
+def qa_run_check(db: Session = Depends(get_db)):
+    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
+    
+    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
+    try:
+        service.run_check()
+        return {"status": "success", "message": "Check complete. Review Excel for highlights."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"QA Check failed: {e}")
+
+@app.get("/qa/inspect")
+def qa_inspect_data(page: int, group: str):
+    # Retrieve coordinates for spotlight
+    # We need to find the scan json for this page
+    # Look in workspaces/qa/scans
+    
+    root = os.getcwd()
+    scans_dir = os.path.join(root, "workspaces", "qa", "scans")
+    
+    # Try finding file matching page number
+    # Scan format: scan_Page 43.json or scan_Page_43.json
+    # We'll just list and check content or name
+    
+    target_file = None
+    if os.path.exists(scans_dir):
+        for f in os.listdir(scans_dir):
+            if f.endswith(".json") and f"Page {page}" in f.replace("_", " "): 
+                # Simple heuristic match
+                target_file = os.path.join(scans_dir, f)
+                break
+                
+    if not target_file:
+        # Fallback: Maybe filename doesn't have "Page" word?
+        pass
+
+    coords = None
+    preview_url = None
+    
+    if target_file:
+        with open(target_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            if "groups" in data and group in data["groups"]:
+                coords = data["groups"][group]["bbox"]
+            
+            # Preview path relative to frontend
+            # The preview filename usually matches the json filename base
+            base = os.path.splitext(os.path.basename(target_file))[0].replace("scan_", "")
+            preview_url = f"/previews/{base}.png"
+
+    if not coords:
+        # Fallback dummy if file missing (for dev UI testing)
+        coords = [100, 100, 500, 500] 
+        
+    return {
+        "page": page,
+        "group": group,
+        "coords": coords, # [x1, y1, x2, y2]
+        "preview_url": preview_url
+    }
 
 # --- Uploads & Diff ---
 
