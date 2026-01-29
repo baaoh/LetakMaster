@@ -1,33 +1,41 @@
 # Implementation Plan: QA Discrepancy Checker
 
-## Phase 1: PSD Scanner (`scripts/scanner.jsx`)
-- [ ] **Create Script:** Develop `scripts/scanner.jsx`.
-    -   Function `scanDocument()`:
-        -   Iterate all layer sets (Groups).
-        -   Identify "Product Groups" (Product_*, A4_Grp_*).
-        -   Inside group, iterate text layers.
-        -   Store Name + Text Content.
-    -   Output: Write to `workspaces/scans/last_scan.json`.
+## Phase 1: Backend Infrastructure (Python)
+- [ ] **Dependencies:** Ensure `psd-tools` and fuzzy matching lib (`thefuzz` or `difflib`) are available.
+- [ ] **PSD Reader (`app/qa/psd_reader.py`):**
+    -   Implement `extract_data_from_psd(file_path)`.
+    -   Logic to parse `Product_XX` / `A4_Grp_XX`.
+    -   Logic to render PNG preview (1600px).
+    -   Logic to extract bounding box coordinates.
+- [ ] **QA Service (`app/qa/qa_service.py`):**
+    -   Bridge between Reader and Excel.
+    -   Implement `import_psd_folder(folder_path)` -> Calls Reader -> Structures Data.
 
-## Phase 2: Backend Comparison (`app/qa_service.py`)
-- [ ] **Service Class:** Create `QAService`.
-- [ ] **Load Excel:** Reuse `AutomationService` or `ExcelService` to read current Master Excel state (specifically columns AM-AY for mapping).
-- [ ] **Load Scan:** Read `last_scan.json`.
-- [ ] **Diff Logic:**
-    -   Iterate Scan Groups.
-    -   Find corresponding Row in Excel (by `PSD_Group` column).
-    -   Compare `PSD Content` vs `Excel Content` (mapped via `HEADERS` logic).
-    -   Generate Report List.
+## Phase 2: Excel Integration
+- [ ] **Write-Back Logic:**
+    -   Extend `ExcelService` to write "Actual" data to columns **BA onwards**.
+    -   Headers: `PSD_ACTUAL_Group`, `PSD_ACTUAL_Nazev_A`, etc.
+- [ ] **Comparison & Formatting:**
+    -   Implement `compare_and_highlight(book)`.
+    -   Read **AM-AY** (Expected) vs **BA+** (Actual).
+    -   Apply Fuzzy Match logic.
+    -   Apply **Orange Highlight** to Columns **D-H** for mismatched rows.
+    -   Insert **Hyperlinks** to `http://localhost:5173/qa/inspect?...`.
 
-## Phase 3: API & Frontend
-- [ ] **API:**
-    -   `POST /qa/scan`: Triggers `scanner.jsx` (via `app.utils.run_script`).
-    -   `GET /qa/report`: Returns the comparison result.
-- [ ] **Frontend (React):**
-    -   New Component `QAView`.
-    -   "Scan" Button (calls `/qa/scan` -> waits -> calls `/qa/report`).
-    -   Table display of discrepancies.
+## Phase 3: Frontend UI
+- [ ] **Tab "Leták checker":**
+    -   Add to main navigation (conditional visibility).
+- [ ] **Import View:**
+    -   "Select Folder" / "Select Files" button.
+    -   Grid of imported page thumbnails.
+- [ ] **Check Action:**
+    -   "Run Check" button -> Calls backend -> Updates Excel.
+    -   Display summary toast ("5 Mismatches found").
+- [ ] **Inspection View (`QAInspect.tsx`):**
+    -   Route `/qa/inspect`.
+    -   Canvas/Image loader.
+    -   "Spotlight" overlay logic using URL params `page` & `group` -> fetch coordinates from backend.
 
-## Phase 4: Integration
-- [ ] **Register:** Add QA tool to the main Dashboard/Launcher.
-- [ ] **Verify:** Test with a modified Excel file (change a price) and verify the mismatch is caught.
+## Phase 4: Integration & Testing
+- [ ] **API Endpoints:** `POST /qa/import`, `POST /qa/check`, `GET /qa/coords/{page}/{group}`.
+- [ ] **Verification:** Run a full flow. Modify a text layer in PSD, run check, verify Excel highlights and Link works.
