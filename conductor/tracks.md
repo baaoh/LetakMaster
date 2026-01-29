@@ -21,6 +21,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: Presized Template Groups**
   *Link: [./tracks/feature_presized_template_groups_20260126/index.md](./tracks/feature_presized_template_groups_20260126/index.md)*
 
+- [ ] **Track: QA & Discrepancy Check**
+  *Link: [./tracks/qa_discrepancy_check_20260129/index.md](./tracks/qa_discrepancy_check_20260129/index.md)*
+
 - [x] **Track: Image Replacement Improvements**
   *Link: [./tracks/image_replacement_20260123/](./tracks/image_replacement_20260123/)*
 
