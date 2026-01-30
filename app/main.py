@@ -571,6 +571,9 @@ class QAImportRequest(BaseModel):
     files: list[str] | None = None
     folder_path: str | None = None
 
+class QAImportFolderRequest(BaseModel):
+    folder_path: str
+
 @app.get("/qa/scans")
 def qa_list_scans(db: Session = Depends(get_db)):
     path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
