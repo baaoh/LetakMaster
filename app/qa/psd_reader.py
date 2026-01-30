@@ -28,22 +28,21 @@ class PSDReader:
         preview_path = os.path.join(self.preview_dir, f"{page_name}.png")
         
         # Render composite
-        try:
-            image = psd.composite()
-            if image:
-                # Resize
-                width, height = image.size
-                if width > 1600:
-                    ratio = 1600 / width
-                    new_height = int(height * ratio)
-                    image = image.resize((1600, new_height), Image.Resampling.LANCZOS)
-                
-                image.save(preview_path, "PNG")
-                print(f"Preview saved: {preview_path}")
-            else:
-                print("Warning: Could not generate composite image.")
-        except Exception as e:
-            print(f"Preview generation failed: {e}")
+        if not os.path.exists(preview_path):
+            try:
+                image = psd.composite()
+                if image:
+                    width, height = image.size
+                    if width > 1600:
+                        ratio = 1600 / width
+                        new_height = int(height * ratio)
+                        image = image.resize((1600, new_height), Image.Resampling.LANCZOS)
+                    image.save(preview_path, "PNG")
+                    print(f"Preview saved: {preview_path}")
+            except Exception as e:
+                print(f"Preview generation failed: {e}")
+        else:
+            print(f"Preview already exists: {preview_path}")
 
         # 2. Extract Data & Coordinates
         extracted_data = {
@@ -51,21 +50,49 @@ class PSDReader:
             "groups": {}
         }
 
+        print(f"--- Scanning Layers for {filename} ---")
+
         # Recursive traversal
-        def traverse(layers):
+        def traverse(layers, depth=0):
             for layer in layers:
                 if layer.is_group():
-                    name = layer.name
-                    # Check for Product Groups (Product_XX, A4_Grp_XX)
-                    if name.startswith("Product_") or name.startswith("A4_Grp_"):
-                        # Capture this group
-                        group_data = self._parse_group(layer)
-                        extracted_data["groups"][name] = group_data
+                    name = layer.name.strip()
+                    # Debug log top-level groups
+                    if depth < 2:
+                        print(f"  {'  '*depth}[GRP] {name}")
+
+                    # Check for Product Groups
+                    # Match: Product_01, Product 01, A4_Grp_01, A4 Grp 01
+                    clean_name = name.lower().replace(" ", "_")
                     
-                    # Continue recursion (in case nested, though usually Products are top level or under "Products")
-                    traverse(layer)
+                    if clean_name.startswith("product_") or clean_name.startswith("a4_grp_"):
+                        # Normalize Key to standard "Product_01" format for consistency
+                        # If it's "Product 01", we want to store it as "Product_01" if possible, 
+                        # or just keep original name but normalized?
+                        # Excel has "Product_01". We must match that.
+                        
+                        # Extract Number
+                        match = re.search(r'(\d+)', clean_name)
+                        if match:
+                            num = int(match.group(1))
+                            suffix = f"{num:02d}"
+                            if "a4" in clean_name:
+                                norm_key = f"A4_Grp_{suffix}"
+                            else:
+                                norm_key = f"Product_{suffix}"
+                                
+                            print(f"    -> MATCH: {name} mapped to {norm_key}")
+                            
+                            group_data = self._parse_group(layer)
+                            extracted_data["groups"][norm_key] = group_data
+                        else:
+                            print(f"    -> IGNORED: {name} (No number found)")
+                    
+                    # Continue recursion
+                    traverse(layer, depth + 1)
 
         traverse(psd)
+        print(f"--- Scan Complete: {len(extracted_data['groups'])} groups found ---")
         
         # 3. Save JSON
         json_path = os.path.join(self.output_dir, f"scan_{page_name}.json")

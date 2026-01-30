@@ -17,6 +17,44 @@ class QAService:
         
         self.reader = PSDReader(self.scans_dir, self.previews_dir)
 
+    def get_existing_scans(self):
+        """
+        Returns list of previously scanned files.
+        """
+        results = []
+        if not os.path.exists(self.scans_dir):
+            return []
+            
+        for f in os.listdir(self.scans_dir):
+            if f.endswith(".json") and f.startswith("scan_"):
+                full_path = os.path.join(self.scans_dir, f)
+                try:
+                    with open(full_path, "r", encoding="utf-8") as jf:
+                        data = json.load(jf)
+                        page_name = data.get("page_name", "")
+                        group_count = len(data.get("groups", {}))
+                        
+                        # Reconstruct preview path
+                        preview_name = f"{page_name}.png"
+                        preview_path = os.path.join(self.previews_dir, preview_name)
+                        
+                        results.append({
+                            "page": page_name,
+                            "json_path": full_path,
+                            "preview_path": preview_path,
+                            "group_count": group_count
+                        })
+                except:
+                    pass
+        
+        # Sort by Page Number
+        import re
+        def sort_key(x):
+            match = re.search(r'(\d+)', x['page'])
+            return int(match.group(1)) if match else 0
+            
+        return sorted(results, key=sort_key)
+
     def run_import(self, psd_folder_or_files):
         """
         Processes a list of PSD files or a folder.

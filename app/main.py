@@ -568,34 +568,68 @@ def run_automation_manual(config: ConfigRequest, db: Session = Depends(get_db)):
 # --- QA & Discrepancy Check ---
 
 class QAImportRequest(BaseModel):
-    files: list[str]
+    files: list[str] | None = None
+    folder_path: str | None = None
 
-class QAImportFolderRequest(BaseModel):
-    folder_path: str
-
-@app.post("/qa/import")
-def qa_import_files(req: QAImportRequest, db: Session = Depends(get_db)):
+@app.get("/qa/scans")
+def qa_list_scans(db: Session = Depends(get_db)):
     path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
-    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
-    
-    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
-    try:
-        results = service.run_import(req.files)
-        return {"status": "success", "results": results}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"QA Import failed: {e}")
+    service = QAService(path_conf.value if path_conf else None)
+    return service.get_existing_scans()
 
 @app.post("/qa/import-folder")
-def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get_db)):
+async def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get_db)):
     path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
     pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
     
     service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
-    try:
-        results = service.run_import(req.folder_path)
-        return {"status": "success", "results": results}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"QA Import failed: {e}")
+    
+    # Streaming Response for Progress
+    def event_generator():
+        folder = req.folder_path
+        if not folder or not os.path.exists(folder):
+            yield json.dumps({"type": "error", "message": "Folder not found"}) + "\n"
+            return
+
+        files = [os.path.join(folder, f) for f in os.listdir(folder) if f.lower().endswith(".psd")]
+        total = len(files)
+        yield json.dumps({"type": "start", "total": total}) + "\n"
+        
+        results = []
+        for i, f in enumerate(files):
+            yield json.dumps({"type": "progress", "current": i+1, "total": total, "file": os.path.basename(f)}) + "\n"
+            try:
+                res = service.reader.process_file(f)
+                if res:
+                    results.append(res)
+                    yield json.dumps({"type": "result", "data": res}) + "\n"
+            except Exception as e:
+                print(f"Error processing {f}: {e}")
+        
+        # Finalize
+        if results:
+            # We need to consolidate and write to Excel
+            # This part is fast enough to do at the end
+            try:
+                consolidated = {}
+                for r in results:
+                    with open(r['json_path'], 'r', encoding='utf-8') as jf:
+                        data = json.load(jf)
+                        page_name = data.get("page_name", "")
+                        import re
+                        match = re.search(r'Page\s*_?\s*(\d+)', page_name, re.IGNORECASE)
+                        page_num = int(match.group(1)) if match else 0
+                        if page_num not in consolidated: consolidated[page_num] = {}
+                        consolidated[page_num].update(data.get("groups", {}))
+                
+                service._write_actuals_to_excel(consolidated)
+                yield json.dumps({"type": "complete", "message": "Import and Excel update complete."}) + "\n"
+            except Exception as e:
+                yield json.dumps({"type": "error", "message": f"Excel Write failed: {str(e)}"}) + "\n"
+        else:
+            yield json.dumps({"type": "complete", "message": "No valid PSDs processed."}) + "\n"
+
+    return StreamingResponse(event_generator(), media_type="application/x-ndjson")
 
 @app.post("/qa/check")
 def qa_run_check(db: Session = Depends(get_db)):
