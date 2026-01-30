@@ -62,20 +62,17 @@ class PSDReader:
                         print(f"  {'  '*depth}[GRP] {name}")
 
                     # Check for Product Groups
-                    # Match: Product_01, Product 01, A4_Grp_01, A4 Grp 01
+                    # Match: Product_01, Product 01, Product 1, A4_Grp_01, A4 Grp 01, A4 Grp 1
                     clean_name = name.lower().replace(" ", "_")
                     
-                    if clean_name.startswith("product_") or clean_name.startswith("a4_grp_"):
-                        # Normalize Key to standard "Product_01" format for consistency
-                        # If it's "Product 01", we want to store it as "Product_01" if possible, 
-                        # or just keep original name but normalized?
-                        # Excel has "Product_01". We must match that.
-                        
-                        # Extract Number
+                    # More permissive regex for finding the number
+                    # Looks for "product" followed by anything then a number
+                    if "product" in clean_name or "a4_grp" in clean_name:
                         match = re.search(r'(\d+)', clean_name)
                         if match:
                             num = int(match.group(1))
                             suffix = f"{num:02d}"
+                            
                             if "a4" in clean_name:
                                 norm_key = f"A4_Grp_{suffix}"
                             else:

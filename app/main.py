@@ -582,10 +582,18 @@ def qa_list_scans(db: Session = Depends(get_db)):
 
 @app.post("/qa/import-folder")
 async def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get_db)):
-    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    # Use latest state workspace instead of master config
+    latest_state = db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
+    excel_path = latest_state.last_workspace_path if latest_state else None
+    
+    # Fallback to master if no state exists (unlikely if automation ran)
+    if not excel_path:
+        path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+        excel_path = path_conf.value if path_conf else None
+        
     pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
     
-    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
+    service = QAService(excel_path, pass_conf.value if pass_conf else None)
     
     # Streaming Response for Progress
     def event_generator():
@@ -636,10 +644,16 @@ async def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get
 
 @app.post("/qa/check")
 def qa_run_check(db: Session = Depends(get_db)):
-    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+    latest_state = db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
+    excel_path = latest_state.last_workspace_path if latest_state else None
+    
+    if not excel_path:
+        path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
+        excel_path = path_conf.value if path_conf else None
+
     pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
     
-    service = QAService(path_conf.value if path_conf else None, pass_conf.value if pass_conf else None)
+    service = QAService(excel_path, pass_conf.value if pass_conf else None)
     try:
         service.run_check()
         return {"status": "success", "message": "Check complete. Review Excel for highlights."}
