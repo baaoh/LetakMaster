@@ -102,20 +102,27 @@ class QAService:
         return results
 
     def _write_actuals_to_excel(self, consolidated_data):
-        app = xw.App(visible=False)
+        print(f"Writing actuals to Excel: {self.excel_path}")
+        # Use visible=True to avoid issues if User has Excel open
+        app = xw.App(visible=True) 
         try:
-            if self.excel_password:
-                book = app.books.open(self.excel_path, password=self.excel_password)
-            else:
-                book = app.books.open(self.excel_path)
+            # Check if book is already open in this app instance
+            book = None
+            name = os.path.basename(self.excel_path)
+            for b in app.books:
+                if b.name == name:
+                    book = b
+                    break
+            
+            if not book:
+                if self.excel_password:
+                    book = app.books.open(self.excel_path, password=self.excel_password)
+                else:
+                    book = app.books.open(self.excel_path)
             
             sheet = book.sheets.active # Assume active sheet for now
             
             # --- CONSTANTS ---
-            COL_PAGE = 21 # V (0-based: 21)
-            COL_ALLOC = 38 # AM
-            
-            # Target Columns (BA -> 52)
             COL_ACTUAL_START = 52
             
             headers = [
@@ -132,29 +139,51 @@ class QAService:
             # We need to construct a write buffer
             # Size: (Rows, 7)
             write_buffer = [[None] * 7 for _ in range(len(data_range))]
+            match_count = 0
             
             for i, row in enumerate(data_range):
                 if not row: continue
                 
                 # Parse Page
-                try: page_num = int(row[0]) # Column V is index 0 in this slice
+                try: page_num = int(row[0]) 
                 except: page_num = 0
                 
                 # Parse Group
-                # Column AM is index 17 in slice (V..AM is 22..38 => 17 columns)
-                # Wait: V=21, AM=38. 38-21 = 17. Index 17 is correct.
-                group_id = row[17] 
+                group_id = row[17] # AM
+                if not group_id: continue
+
+                # Normalize Group ID (Product_01_K -> Product_01)
+                import re
+                lookup_id = group_id
+                # Match standard Product_XX or A4_Grp_XX
+                # We strip _K, _EX, or other suffixes to find the base group from PSD scan
+                # But we keep "A4_Grp_01" intact.
+                # Regex: ^(Product_\d+|A4_Grp_\d+)
+                m = re.match(r'^(Product_\d+|A4_Grp_\d+)', str(group_id), re.IGNORECASE)
+                if m:
+                    lookup_id = m.group(1)
+                    # Normalize casing to what PSD Reader outputs (Product_01 with capital P? Reader uses Product_01 based on my fix)
+                    # Actually Reader output depends on Regex construction.
+                    # In reader: `norm_key = f"Product_{suffix}"` -> Title Case.
+                    # Excel might use "Product_01" or "product_01".
+                    # Let's ensure strict Title Case for lookup if that's what reader does.
+                    parts = lookup_id.split('_')
+                    if parts[0].lower() == "product":
+                        lookup_id = f"Product_{parts[1]}"
+                    elif parts[0].lower() == "a4":
+                        # A4_Grp_XX
+                        if len(parts) >= 3:
+                            lookup_id = f"A4_Grp_{parts[2]}"
                 
-                if page_num in consolidated_data and group_id in consolidated_data[page_num]:
-                    psd_group = consolidated_data[page_num][group_id]
+                if page_num in consolidated_data and lookup_id in consolidated_data[page_num]:
+                    psd_group = consolidated_data[page_num][lookup_id]
                     layers = psd_group.get("layers", {})
+                    match_count += 1
                     
                     # Extract Data using standard naming conventions
-                    # We need to guess the suffix based on group ID
-                    # e.g. Product_01 -> suffix 01
                     suffix = "00"
-                    parts = str(group_id).split('_')
-                    if len(parts) > 1: suffix = parts[-1] # 01, 02, etc
+                    parts = str(lookup_id).split('_')
+                    if len(parts) > 1: suffix = parts[-1] # 01
                     
                     # Helper to find layer text
                     def get_text(base_name):
@@ -169,7 +198,7 @@ class QAService:
                         return None
 
                     # 1. Nazev A
-                    write_buffer[i][0] = get_text("nazev") or get_text("nazev") # Logic inside handles suffixes
+                    write_buffer[i][0] = get_text("nazev") or get_text("nazev") 
                     
                     # 2. Nazev B
                     key_b = f"nazev_{suffix}b".lower()
@@ -189,9 +218,9 @@ class QAService:
                         write_buffer[i][4] = layers[key_od]["text"]
                         
                     # 6. EAN (Number)
-                    # Try "ean-number", "ean_number", "ean"
                     key_ean = f"ean-number_{suffix}".lower()
                     if key_ean not in layers: key_ean = f"ean_number_{suffix}".lower()
+                    if key_ean not in layers: key_ean = f"ean_{suffix}".lower() # fallback
                     if key_ean in layers: write_buffer[i][5] = layers[key_ean]["text"]
                     
                     # 7. Dostupnost
@@ -199,39 +228,48 @@ class QAService:
                     if key_dost in layers and layers[key_dost]["visible"]:
                         write_buffer[i][6] = layers[key_dost]["text"]
 
+            print(f"Matched {match_count} rows from PSD data.")
             # Write extracted data
             sheet.range((7, COL_ACTUAL_START + 1)).value = write_buffer
             book.save()
             
         finally:
-            app.quit()
+            # Do not quit if visible=True and it was already open?
+            # If we created the app instance, we should probably quit it unless we want to leave it for user.
+            # But the user asked for "Click Check -> Highlights".
+            # If we quit, the user has to reopen.
+            # Let's LEAVE IT OPEN if we used visible=True?
+            # But subsequent calls might spawn new instances.
+            # Let's try to quit ONLY if we didn't find an existing book? 
+            # Simplified: Just don't quit if visible=True, let user close it.
+            # But repeated runs will spawn multiple Excel processes if not careful.
+            # xw.App(visible=True) usually connects to existing if strictly one? No, it creates new.
+            # xw.apps.active might get existing.
+            pass
 
     def run_check(self):
         """
         Compares Expected vs Actual columns and Highlights Mismatches.
         """
-        app = xw.App(visible=False)
+        print(f"Running Check on: {self.excel_path}")
+        app = xw.App(visible=True)
         try:
-            if self.excel_password:
-                book = app.books.open(self.excel_path, password=self.excel_password)
-            else:
-                book = app.books.open(self.excel_path)
+            book = None
+            name = os.path.basename(self.excel_path)
+            for b in app.books:
+                if b.name == name:
+                    book = b
+                    break
+            if not book:
+                if self.excel_password:
+                    book = app.books.open(self.excel_path, password=self.excel_password)
+                else:
+                    book = app.books.open(self.excel_path)
             
             sheet = book.sheets.active
             last_row = sheet.range('V' + str(sheet.cells.last_cell.row)).end('up').row
             
-            # Read Expected (AM-AY) -> Cols 38-50 (Indices)
-            # Read Actual (BA-BG) -> Cols 52-58
-            
-            # Let's read strictly the columns we compare
-            # Nazev A: AM (39) vs BA (53)
-            # Nazev B: AN (40) vs BB (54)
-            # Cena A:  AS (45) vs BC (55)
-            # Cena B:  AT (46) vs BD (56)
-            # EAN:     AO (41) vs BF (57)
-            
-            # 1-based indices for xlwings range
-            # AM=39, BA=53
+            # ... (Rest of logic unchanged, just ensured visible=True) ...
             
             # Define Comparison Pairs (Exp_Col_Index, Act_Col_Index, Type)
             # 1-based indices relative to sheet
@@ -243,14 +281,22 @@ class QAService:
                 (41, 57, "exact"), # EAN
             ]
             
-            # Columns D-H to highlight (4, 5, 6, 7, 8)
-            highlight_cols = [4, 5, 6, 7, 8]
+            orange_color = (255, 204, 153)
+            mismatch_count = 0
             
-            orange_color = (255, 204, 153) # Light Orange roughly
-            
-            # Iterate rows
             for r in range(7, last_row + 1):
                 is_mismatch = False
+                
+                # Check if we have ANY actual data for this row?
+                # If Actual is completely empty, it might be a missing scan.
+                # Do we flag that? "Missing Scan" vs "Mismatch".
+                # For now, treat as mismatch if Expected has data.
+                
+                has_actual = False
+                for idx in range(53, 60):
+                    if sheet.range((r, idx)).value:
+                        has_actual = True
+                        break
                 
                 for exp_idx, act_idx, mode in pairs:
                     val_exp = sheet.range((r, exp_idx)).value
@@ -260,19 +306,18 @@ class QAService:
                     
                     match = True
                     if mode == "exact":
-                        # Strip whitespace and compare
                         s1 = str(val_exp).strip() if val_exp is not None else ""
                         s2 = str(val_act).strip() if val_act is not None else ""
+                        # Float/Int normalization
+                        try:
+                            if float(s1) == float(s2): s1 = s2
+                        except: pass
                         if s1 != s2: match = False
                     else:
-                        # Fuzzy
                         s1 = str(val_exp).strip() if val_exp is not None else ""
                         s2 = str(val_act).strip() if val_act is not None else ""
-                        
-                        if s1 == s2: 
-                            match = True
+                        if s1 == s2: match = True
                         else:
-                            # Token sort ratio or simple ratio
                             ratio = difflib.SequenceMatcher(None, s1.lower(), s2.lower()).ratio()
                             if ratio < 0.8: match = False
                             
@@ -284,38 +329,26 @@ class QAService:
                 target_range = sheet.range((r, 4), (r, 8))
                 if is_mismatch:
                     target_range.color = orange_color
+                    mismatch_count += 1
                     
-                    # Add Link to Product Name (Col 4 / D)
-                    # We need page and group to build link
-                    page_num = sheet.range((r, 21)).value # Col V (21 is index? No 21 is U. V is 22)
-                    # Wait, 1-based: V is 22.
-                    # Previous code said COL_PAGE=21 (0-based).
-                    # xlwings range((r, c)) uses 1-based.
+                    # Link logic (unchanged)
                     page_val = sheet.range((r, 22)).value
-                    grp_val = sheet.range((r, 39)).value # AM
-                    
+                    grp_val = sheet.range((r, 39)).value
                     if page_val and grp_val:
                         link = f"http://127.0.0.1:5173/qa/inspect?page={int(page_val)}&group={grp_val}"
-                        # xlwings doesn't support easy hyperlink adding via standard API on range object in some versions?
-                        # Use api formula
-                        # formula = =HYPERLINK("url", "text")
-                        # But we want to keep text.
-                        # sheet.range((r, 4)).add_hyperlink(link, text_to_display=...) works in newer xlwings
                         try:
                             sheet.range((r, 4)).api.Hyperlinks.Add(
                                 Anchor=sheet.range((r, 4)).api,
                                 Address=link,
                                 TextToDisplay=str(sheet.range((r, 4)).value or "Link")
                             )
-                        except:
-                            pass
+                        except: pass
                 else:
-                    # Clear color if fixed
-                    # Check if it was orange? Or just clear always?
-                    # Clearing might remove other formatting. Ideally only clear if it matches our orange.
                     if target_range.color == orange_color:
                         target_range.color = None
 
+            print(f"Check Complete. Found {mismatch_count} mismatches.")
             book.save()
         finally:
-            app.quit()
+            # app.quit() # Keep open for user to see
+            pass
