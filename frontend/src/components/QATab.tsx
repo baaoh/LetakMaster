@@ -19,11 +19,15 @@ export const QATab: React.FC = () => {
     const [message, setMessage] = useState<string | null>(null);
     const [progress, setProgress] = useState({ current: 0, total: 0, file: "" });
 
-    // Load existing scans on mount
-    useEffect(() => {
+    const loadScans = () => {
         axios.get(`${API_BASE}/qa/scans`)
             .then(res => setResults(res.data))
             .catch(err => console.error("Failed to load existing scans", err));
+    };
+
+    // Load existing scans on mount
+    useEffect(() => {
+        loadScans();
     }, []);
 
     const handleImportFolder = async () => {
