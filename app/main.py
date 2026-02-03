@@ -6,7 +6,18 @@ from sqlalchemy.orm import Session, defer
 import os
 import shutil
 import json
+import sys
+import io
 from contextlib import asynccontextmanager
+
+# Reconfigure stdout and stderr to use UTF-8 encoding to prevent UnicodeEncodeError on Windows.
+# This is crucial for logging and printing data with non-ASCII characters (e.g., in filenames or Excel content)
+# when the output is redirected to a file, as is common for server logs.
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
 from app.database import Base, engine, get_db, SourceFile, SourceData, PSDFile, LayerMapping, AppConfig, ProjectState, ProductIndex, PageAsset
 from app.excel_service import ExcelService
 from app.psd_service import PSDService

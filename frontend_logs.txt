@@ -2,8 +2,9 @@
 > frontend@0.0.0 dev
 > vite
 
+[33mYou are using Node.js 20.13.1. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.[39m
 
-  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m320[22m[2m[0m ms[22m
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m2020[22m[2m[0m ms[22m
 
   [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
 [2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m

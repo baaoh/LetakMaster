@@ -1,6 +1,6 @@
 #target photoshop
-var g_injected_images_dir = "M:/@BaoVuong/2026_01_24-Letak/images";
-var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster/workspaces/build_plans/260128_1752_Workspace_State_2.xlsx_State_2";
+var g_injected_images_dir = "";
+var g_injected_json_dir = "M:/@Pavel/automatmaletak/04/LetakMaster/workspaces/build_plans/260202_1458_Workspace_State_9.xlsx_State_9";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -317,17 +317,27 @@ function placeAndAlign(doc, group, placeholder, file) {
     } catch(e) { }
 }
 
-function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
+// Helper: Set Layer Label Color
+function setLayerLabelColorAM(id, colorStr) {
+    try {
+        var desc = new ActionDescriptor();
+        var ref = new ActionReference();
+        ref.putIdentifier(charIDToTypeID("Lyr "), id);
+        desc.putReference(charIDToTypeID("null"), ref);
+        var desc2 = new ActionDescriptor();
+        desc2.putEnumerated(charIDToTypeID("Clr "), charIDToTypeID("Clr "), stringIDToTypeID(colorStr.toLowerCase()));
+        desc.putObject(charIDToTypeID("T   "), charIDToTypeID("Lyr "), desc2);
+        executeAction(charIDToTypeID("setd"), desc, DialogModes.NO);
+    } catch(e) {
+        logToManifest("Color Error: " + e);
+    }
+}
+
+function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
     if (!imageNamesStr) return;
     
-    // Split by newline to handle multiple images
     var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
-    
-    // Reverse loop to stack them in order (if placing below group)
-    // or just process normally. If multiple images and 1 placeholder, 
-    // only the first might work unless we duplicate placeholder?
-    // For A4 (no placeholder), we just stack them.
     
     for (var i = 0; i < imageNames.length; i++) {
         var imageName = imageNames[i];
@@ -340,8 +350,6 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
         }
         
         var targetId = null;
-        
-        // Try to find placeholder
         for (var key in layerMap) {
             if (key == "_self") continue;
             for (var b=0; b<baseNames.length; b++) {
@@ -354,24 +362,20 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
         }
         
         if (targetId) {
-            // Placeholder found: Replace and Align (First image only?)
-            // If we have multiple images but 1 placeholder, usually we just place the first.
-            // Or we could duplicate the placeholder. For now, let's stick to 1-to-1 if placeholder exists.
             if (i === 0) {
                 selectLayerAM(targetId);
                 var doc = app.activeDocument;
                 var placeholder = doc.activeLayer; 
                 placeAndAlign(doc, null, placeholder, file);
+                if (colorLabel) setLayerLabelColorAM(doc.activeLayer.id, colorLabel);
             }
         } else if (layerMap["_self"]) {
-            // No placeholder: Place to the RIGHT of the group (A4 Style)
             try {
                 selectLayerAM(layerMap["_self"]);
                 var doc = app.activeDocument;
                 var group = doc.activeLayer;
                 var groupBounds = group.bounds;
                 
-                // Place image
                 var idPlc = charIDToTypeID("Plc ");
                 var desc = new ActionDescriptor();
                 desc.putPath(charIDToTypeID("null"), file);
@@ -379,8 +383,8 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
                 
                 var newLayer = doc.activeLayer;
                 newLayer.name = imageName;
+                if (colorLabel) setLayerLabelColorAM(newLayer.id, colorLabel);
                 
-                // --- IMAGE STANDARDIZATION (500x500) ---
                 var nBounds = newLayer.bounds;
                 var nWidth = nBounds[2].value - nBounds[0].value;
                 var nHeight = nBounds[3].value - nBounds[1].value;
@@ -389,18 +393,14 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir) {
                 var scale = (targetSize / Math.max(nWidth, nHeight)) * 100;
                 newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
                 
-                // --- POSITIONING ---
                 var gRight = groupBounds[2].value;
                 var gTop = groupBounds[1].value;
                 
                 var currentBounds = newLayer.bounds;
-                // Offset each image by its index to avoid overlap
                 var dx = (gRight + 50 + (i * 550)) - currentBounds[0].value;
                 var dy = (gTop + 50) - currentBounds[1].value;
                 
                 newLayer.translate(dx, dy);
-                
-                // Move below group
                 newLayer.move(group, ElementPlacement.PLACEAFTER);
                 
                 logToManifest("Placed standardized image " + imageName + " to the right of " + group.name);
@@ -420,7 +420,7 @@ function duplicateLayerAM(id) {
     ref.putIdentifier(charIDToTypeID("Lyr "), id);
     desc.putReference(charIDToTypeID("null"), ref);
     executeAction(charIDToTypeID("Dplc"), desc, DialogModes.NO);
-    return app.activeDocument.activeLayer.id; // Return ID of new copy (usually active)
+    return app.activeDocument.activeLayer.id; 
 }
 
 // Helper: Rename Layer by ID
@@ -442,112 +442,88 @@ function getLayerNameAM(id) {
     return executeActionGet(ref).getString(charIDToTypeID("Nm  "));
 }
 
-// Helper: Process A4 Groups (Duplication & Renaming)
+// Helper: Process A4 Groups (Dynamic Generation based on JSON Order)
 function processA4Groups(doc, plan, win) {
-    // 1. Check if we need A4 logic
-    var hasA4 = false;
-    var maxGrp = 0;
+    var targets = [];
+    var seen = {};
     
     for (var i=0; i<plan.actions.length; i++) {
         var grp = plan.actions[i].group;
         if (grp.indexOf("A4_Grp_") === 0) {
-            hasA4 = true;
-            var num = parseInt(grp.split("_")[2], 10);
-            if (num > maxGrp) maxGrp = num;
+            if (!seen[grp]) {
+                targets.push(grp);
+                seen[grp] = true;
+            }
         }
     }
     
-    if (!hasA4) return false; // No change needed
+    if (targets.length === 0) return false;
     
-    logToManifest("A4 Groups Detected. Max Index: " + maxGrp);
+    logToManifest("A4 Groups Requested: " + targets.join(", "));
     
-    // 2. Find Template "A4_01"
     var map = scanLayersAM();
     var templateId = null;
+    var templateHeight = 0;
     
-    // Use "A4_01" as the primary template name
     if (map["A4_01"]) templateId = map["A4_01"]["_self"];
-    if (!templateId && map["A4"]) templateId = map["A4"]["_self"]; // Fallback
+    if (!templateId && map["A4"]) templateId = map["A4"]["_self"];
+    if (!templateId && map["A4_Grp_01"]) templateId = map["A4_Grp_01"]["_self"];
     
     if (!templateId) {
-        logToManifest("CRITICAL: 'A4_01' Template Group not found. Skipping A4 generation.");
+        logToManifest("CRITICAL: Template Group (A4_01 or A4) not found. Skipping A4 generation.");
         return false;
     }
     
-    // 3. Generate Groups
-    var didChange = false;
+    selectLayerAM(templateId);
+    var bounds = app.activeDocument.activeLayer.bounds;
+    templateHeight = bounds[3].value - bounds[1].value;
     
-    for (var i=2; i<=maxGrp; i++) {
-        var suffix = (i < 10) ? "0" + i : "" + i;
-        var targetName = "A4_Grp_" + suffix;
+    var didChange = false;
+    var padding = 100;
+    
+    for (var i=0; i<targets.length; i++) {
+        var targetName = targets[i];
+        if (map[targetName]) continue;
         
         if (win) {
             win.pnl.lblStatus.text = "Generating " + targetName + "...";
             win.update();
         }
         
-        if (map[targetName]) {
-            logToManifest("Group " + targetName + " already exists. Skipping.");
-            continue;
-        }
-        
-        logToManifest("Generating " + targetName + "...");
-        
-        // Select Template
+        logToManifest("Generating " + targetName + " from Template...");
         selectLayerAM(templateId);
-        
-        // Duplicate
-        duplicateLayerAM(templateId);
-        var newGroupId = app.activeDocument.activeLayer.id; // The duplicate is active
-        
-        // Rename Group
+        var newGroupId = duplicateLayerAM(templateId);
         renameLayerAM(newGroupId, targetName);
         
-        // --- A4 OFFSET LOGIC ---
-        var groupBounds = app.activeDocument.activeLayer.bounds;
-        var groupHeight = groupBounds[3].value - groupBounds[1].value;
-        var offsetV = (i - 1) * (groupHeight + 100); // 100px padding between groups
-        translateLayerAM(newGroupId, 0, offsetV);
-        logToManifest("Offsetting " + targetName + " by " + offsetV + "px");
-
-        // Rename Children
+        var offsetV = i * (templateHeight + padding);
+        if (offsetV > 0) {
+            translateLayerAM(newGroupId, 0, offsetV);
+            logToManifest("Offsetting " + targetName + " by " + offsetV + "px");
+        }
+        
+        var parts = targetName.split("_");
+        var suffix = parts[2] || "XX";
         var activeGroup = app.activeDocument.activeLayer;
         
-        // Helper to recurse and rename
-        function renameChildren(layerObj, oldIdx, newIdx) {
+        (function recurse(layerObj, newIdx) {
              for (var k=0; k<layerObj.layers.length; k++) {
                  var child = layerObj.layers[k];
                  var oldName = child.name;
-                 
-                 // CLEANUP: Strip " copy", " copy 2", etc. generated by Duplicate
-                 // Regex: \s+copy -> space + copy, \s*\d* -> optional space + number, $ -> end
                  var cleanName = oldName.replace(/\s+copy\s*\d*$/i, "");
-                 
-                 // Replace "_01" with "_XX"
-                 if (cleanName.indexOf("_" + oldIdx) >= 0) {
-                     var newLName = cleanName.replace("_" + oldIdx, "_" + newIdx);
-                     
-                     // Only rename if changed (avoids unnecessary history steps/calls)
-                     if (newLName != oldName) {
-                        child.name = newLName;
-                     }
-                 } else if (cleanName != oldName) {
-                     // Even if index didn't match, we stripped "copy", so update it
-                     child.name = cleanName;
+                 if (cleanName.indexOf("_01") >= 0) {
+                     cleanName = cleanName.replace("_01", "_" + newIdx);
                  }
-                 
-                 if (child.typename == "LayerSet") {
-                     renameChildren(child, oldIdx, newIdx);
-                 }
+                 if (child.name !== cleanName) child.name = cleanName;
+                 if (child.typename == "LayerSet") recurse(child, newIdx);
              }
-        }
-        
-        renameChildren(activeGroup, "01", suffix);
+        })(activeGroup, suffix);
         
         didChange = true;
     }
     
-    return didChange; // Return true to trigger re-scan
+    if (didChange) setVisibleAM(templateId, false);
+    
+    return didChange;
 }
 
 function runBuild(doc, plan) {
@@ -561,14 +537,12 @@ function runBuild(doc, plan) {
     
     win.show();
     
-    // --- Pre-Process A4 Groups ---
     var isA4Mode = false;
     try {
         if (processA4Groups(doc, plan, win)) {
             logToManifest("A4 Structure Generated. Re-scanning...");
             isA4Mode = true;
         } else {
-            // Check if A4 groups exist in plan even if no generation happened (e.g. only 01 used)
             for (var i=0; i<plan.actions.length; i++) {
                 if (plan.actions[i].group.indexOf("A4_Grp_") === 0) {
                     isA4Mode = true;
@@ -584,49 +558,25 @@ function runBuild(doc, plan) {
     var docMap = scanLayersAM();
     logToManifest("Scan Complete.");
 
-    // If A4 Mode, Hide Standard Products
     if (isA4Mode) {
         logToManifest("A4 Mode Active: Hiding Standard Product Groups...");
         for (var i=1; i<=16; i++) {
             var suffix = (i < 10) ? "0" + i : "" + i;
-            
-            // Explicitly hide regular, K, and EX groups
-            var variants = [
-                "Product_" + suffix,
-                "Product_" + suffix + "_K",
-                "Product_" + suffix + "_EX"
-            ];
-            
+            var variants = ["Product_" + suffix, "Product_" + suffix + "_K", "Product_" + suffix + "_EX"];
             for (var v=0; v<variants.length; v++) {
                 var gName = variants[v];
-                if (docMap[gName]) {
-                    setVisibleAM(docMap[gName]["_self"], false);
-                }
+                if (docMap[gName]) setVisibleAM(docMap[gName]["_self"], false);
             }
         }
     }
 
-    // ... (rest of hideVariantsAM) ...
-
+    // Standard Variants Hiding (Simplified for brevity as it was correct)
     function hideVariantsAM(currentGroupName, hero) {
         var id = parseInt(currentGroupName.replace("Product_", "").replace("A4_Grp_", ""), 10);
-        // ... (rest of function logic needs adjustment for A4?) ...
-        // Actually A4 groups don't have variants (K/EX) mentioned in the prompt, 
-        // they are single "price tag groups". 
-        // So we can leave this logic mostly for Standard Products.
-        // But we should ensure it doesn't crash if it parses "A4_Grp_01" -> id=1.
-        
-        // Standard logic assumes Product_XX. 
-        if (currentGroupName.indexOf("Product_") === -1) return; // Skip hiding for non-Standard groups
+        if (currentGroupName.indexOf("Product_") === -1) return;
         
         var suffixId = (id < 10) ? "0" + id : "" + id;
-        // ... (rest of standard logic) ...
-        
-        var variants = [
-            "Product_" + suffixId, 
-            "Product_" + suffixId + "_K", 
-            "Product_" + suffixId + "_EX"
-        ];
+        var variants = ["Product_" + suffixId, "Product_" + suffixId + "_K", "Product_" + suffixId + "_EX"];
         
         for (var v=0; v<variants.length; v++) {
             if (variants[v] != currentGroupName) {
@@ -651,30 +601,26 @@ function runBuild(doc, plan) {
     }
 
     logToManifest("Starting Action Processing (Total: " + total + ")");
+    
+    // Cycle Colors for Visual Clarity
+    var colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Violet", "Gray"];
 
     for (var i = 0; i < total; i++) {
         var action = plan.actions[i];
         var groupName = action.group;
-        
-        // Map "A4_Grp_01" to "A4" if needed?
-        // Actually our processA4Groups ensures "A4_Grp_01" exists (via rename or alias?)
-        // Wait, processA4Groups duplicates 02...MAX. 
-        // What about 01?
-        // If "A4" is the template, we should probably treat "A4" AS "A4_Grp_01".
-        // SO if action asks for "A4_Grp_01" but map only has "A4", we map it.
-        
         var targetGroup = groupName;
-        if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4_01"]) {
-            targetGroup = "A4_01";
-        } else if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4"]) {
-            targetGroup = "A4";
-        }
+        
+        // QOL: Highlight Color
+        var groupColor = colors[i % colors.length];
+        
+        if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4_01"]) targetGroup = "A4_01";
+        else if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4"]) targetGroup = "A4";
         
         logToManifest("Processing Action: " + groupName + " (Target: " + targetGroup + ")");
         
         if (i % 3 === 0 || i === total - 1) {
             win.pnl.progBar.value = i + 1;
-            win.pnl.lblStatus.text = "Processing " + groupName + " (" + (i + 1) + "/" + total + ")...";
+            win.pnl.lblStatus.text = "Processing " + groupName + "...";
             win.update(); 
         }
         
@@ -684,26 +630,35 @@ function runBuild(doc, plan) {
             continue;
         }
         
+        // Apply Color to Group
+        if (groupLayers["_self"]) {
+            setVisibleAM(groupLayers["_self"], true);
+            setLayerLabelColorAM(groupLayers["_self"], groupColor);
+        }
+        
         try {
-            if (groupLayers["_self"]) {
-                setVisibleAM(groupLayers["_self"], true);
-            }
-            
-            // Only run hideVariants for Products
-            if (targetGroup.indexOf("Product_") === 0) {
-                 hideVariantsAM(targetGroup, action.hero);
-            }
+            if (targetGroup.indexOf("Product_") === 0) hideVariantsAM(targetGroup, action.hero);
             
             var shiftCandidates = {}; 
+            var mainTitle = null; // Store title for renaming
 
             for (var key in action.data) {
-                // logToManifest("Processing Key: " + key); 
                 if (key.indexOf("image_") === 0) {
                     if (g_imagesDir) {
-                        replaceProductImageAM(groupLayers, action.data[key], g_imagesDir);
+                        replaceProductImageAM(groupLayers, action.data[key], g_imagesDir, groupColor);
                     }
                 } else {
                     var result = updateTextLayerAM(groupLayers, key, action.data[key]);
+                    
+                    // Capture Main Title for renaming
+                    // Matches "nazev_XXA" or just "nazev_XX"
+                    if (result && key.toLowerCase().indexOf("nazev_") >= 0) {
+                        var parts = key.split("_");
+                        var suffixChar = parts.length > 1 ? parts[1].slice(-1).toUpperCase() : "";
+                        if (suffixChar === "A" || key.toLowerCase() === "nazev_" + parts[1]) {
+                            mainTitle = result.text;
+                        }
+                    }
                     
                     if (result && key.toLowerCase().indexOf("nazev_") >= 0) {
                         var parts = key.split("_");
@@ -712,23 +667,13 @@ function runBuild(doc, plan) {
                             var lastChar = idPart.charAt(idPart.length - 1).toUpperCase();
                             var baseId = idPart.substring(0, idPart.length - 1);
                             
-                            if (!shiftCandidates[baseId]) {
-                                shiftCandidates[baseId] = { idA: null, textA: "", idB: null, textB: "" };
-                            }
-                            
-                            if (lastChar === "A") {
-                                shiftCandidates[baseId].idA = result.id;
-                                shiftCandidates[baseId].textA = result.text;
-                            } else if (lastChar === "B") {
-                                shiftCandidates[baseId].idB = result.id;
-                                shiftCandidates[baseId].textB = result.text;
-                            }
+                            if (!shiftCandidates[baseId]) shiftCandidates[baseId] = { idA: null, textA: "", idB: null, textB: "" };
+                            if (lastChar === "A") { shiftCandidates[baseId].idA = result.id; shiftCandidates[baseId].textA = result.text; }
+                            else if (lastChar === "B") { shiftCandidates[baseId].idB = result.id; shiftCandidates[baseId].textB = result.text; }
                         }
                     }
                 }
             }
-            
-            // ... (Rest of loop) ...
             
             for (var baseId in shiftCandidates) {
                 var cand = shiftCandidates[baseId];
@@ -736,7 +681,6 @@ function runBuild(doc, plan) {
                     var lenA = cand.textA.length;
                     var firstLineB = cand.textB.split('\r')[0];
                     var lenB = firstLineB.length;
-                    
                     if (lenA < 13 && lenB < 18) {
                         translateLayerAM(cand.idA, 0, 30);
                         translateLayerAM(cand.idB, 0, 30);
@@ -748,17 +692,23 @@ function runBuild(doc, plan) {
                 for (var key in action.visibility) {
                     var lowerKey = key.toLowerCase();
                     var layerId = groupLayers[lowerKey];
-                    
                     if (!layerId) layerId = groupLayers[lowerKey + "_k"];
                     if (!layerId) layerId = groupLayers[lowerKey + "k"];
                     if (!layerId) layerId = groupLayers[lowerKey + "_ex"];
                     if (!layerId) layerId = groupLayers[lowerKey + "ex"];
                     if (!layerId) layerId = groupLayers[lowerKey + "_a"];
                     if (!layerId) layerId = groupLayers[lowerKey + "_b"];
-
-                    if (layerId) {
-                        setVisibleAM(layerId, action.visibility[key]);
-                    }
+                    if (layerId) setVisibleAM(layerId, action.visibility[key]);
+                }
+            }
+            
+            // QOL: Rename Group to Title
+            if (mainTitle && groupLayers["_self"]) {
+                // Ensure name is safe (max length, chars)
+                var safeName = mainTitle.substring(0, 30).replace(/[:\/\\*?"<>|]/g, "");
+                if (safeName.length > 0) {
+                    logToManifest("Renaming " + targetGroup + " to " + safeName);
+                    renameLayerAM(groupLayers["_self"], safeName);
                 }
             }
             

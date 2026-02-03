@@ -29,7 +29,7 @@ class DiffService:
                     # Ideally we have a primary key config. 
                     # For now, let's assuming row-matching isn't perfect without a PK.
                     # We will just iterate for this MVP implementation if no PK.
-                    key = json.dumps(item, sort_keys=True)
+                    key = json.dumps(item, sort_keys=True, default=str)
                 indexed[key] = item
             return indexed
 
@@ -188,8 +188,8 @@ class SyncService:
         yield {"status": "progress", "message": "Saving new state to database..."}
         new_state = ProjectState(
             excel_hash=current_hash,
-            data_snapshot_json=json.dumps(data),
-            page_metadata_json=json.dumps(page_metadata),
+            data_snapshot_json=json.dumps(data, default=str),
+            page_metadata_json=json.dumps(page_metadata, default=str),
             created_by=user_id,
             source_path=file_path,
             source_sheet=sheet_name or "Sheet1",
