@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 from core.models.schema import Project, ProjectState, PageSnapshot, DataDiff
 from server.services.sync_coordinator import SyncCoordinator
-from app.database import get_db
+from core.database import get_db
 
 router = APIRouter(prefix="/sync", tags=["Sync"])
 
