@@ -14,6 +14,7 @@ workspaces/
 archive_files/
 uploads/
 previews_store/
+frontend_static/previews/
 debug_error.log
 
 # --- IDEs & System ---
