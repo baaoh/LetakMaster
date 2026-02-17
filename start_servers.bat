@@ -75,6 +75,7 @@ echo Starting Backend (Hidden)...
 :: Create a temp runner for backend
 (
     echo @echo off
+    echo cd /d "%%~dp0"
     echo "%PYTHON_EXE%" -m uvicorn app.main:app --host 127.0.0.1 --port %BACKEND_PORT% --reload ^> logs.txt 2^>^&1
 ) > run_backend.bat
 
@@ -85,8 +86,8 @@ echo Starting Frontend (Hidden)...
 :: Create a temp runner for frontend
 (
     echo @echo off
-    echo cd frontend
-    echo npm run dev ^> ..\frontend_logs.txt 2^>^&1
+    echo cd /d "%%~dp0frontend"
+    echo call npm run dev ^> ..\frontend_logs.txt 2^>^&1
 ) > run_frontend.bat
 
 :: Launch it silently

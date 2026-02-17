@@ -4,7 +4,7 @@ If WScript.Arguments.Count = 0 Then
 End If 
 
 ' Reconstruct the command line arguments
-command = ""
+command = "cmd /c "
 For Each arg In WScript.Arguments
     ' We need to handle quotes if the argument contains spaces
     If InStr(arg, " ") > 0 Then

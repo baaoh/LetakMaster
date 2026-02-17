@@ -48,6 +48,7 @@ frontend/dist/
 # Binaries and Client Apps
 ImageCopier/
 *.exe
+python_embed/Lib/site-packages/
 !python_embed/**/*.exe
 !python_embed/**/*.dll
 !python_embed/**/*.pyd
@@ -55,6 +56,11 @@ ImageCopier/
 # Project Specific
 OLD/
 Releases/
+debug_*.py
+frontend_logs.txt
+frontend_static/previews/
+frontend_static/assets/*.js
+frontend_static/assets/*.css
 
 # OS/IDE Specific
 .vscode/

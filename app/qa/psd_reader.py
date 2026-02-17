@@ -44,52 +44,37 @@ class PSDReader:
         else:
             print(f"Preview already exists: {preview_path}")
 
-        # 2. Extract Data & Coordinates
+        # 2. Extract Flat Layer List
         extracted_data = {
             "page_name": page_name,
-            "groups": {}
+            "layers": []
         }
 
-        print(f"--- Scanning Layers for {filename} ---")
+        print(f"--- Scanning All Layers for {filename} ---")
 
-        # Recursive traversal
-        def traverse(layers, depth=0):
+        # Recursive traversal to flatten all layers
+        def traverse(layers, parent_name="Root"):
             for layer in layers:
                 if layer.is_group():
-                    name = layer.name.strip()
-                    # Debug log top-level groups
-                    if depth < 2:
-                        print(f"  {'  '*depth}[GRP] {name}")
-
-                    # Check for Product Groups
-                    # Match: Product_01, Product 01, Product 1, A4_Grp_01, A4 Grp 01, A4 Grp 1
-                    clean_name = name.lower().replace(" ", "_")
-                    
-                    # More permissive regex for finding the number
-                    # Looks for "product" followed by anything then a number
-                    if "product" in clean_name or "a4_grp" in clean_name:
-                        match = re.search(r'(\d+)', clean_name)
-                        if match:
-                            num = int(match.group(1))
-                            suffix = f"{num:02d}"
-                            
-                            if "a4" in clean_name:
-                                norm_key = f"A4_Grp_{suffix}"
-                            else:
-                                norm_key = f"Product_{suffix}"
-                                
-                            print(f"    -> MATCH: {name} mapped to {norm_key}")
-                            
-                            group_data = self._parse_group(layer)
-                            extracted_data["groups"][norm_key] = group_data
-                        else:
-                            print(f"    -> IGNORED: {name} (No number found)")
-                    
-                    # Continue recursion
-                    traverse(layer, depth + 1)
+                    # Recurse into groups
+                    traverse(layer, parent_name=layer.name)
+                elif layer.kind == "type":
+                    # Capture Text Layer
+                    text = layer.text.strip()
+                    if text: # Only capture if it has text
+                        # Clean up name: remove " copy", trim
+                        clean_name = re.sub(r'\s+copy\s*\d*$', '', layer.name, flags=re.IGNORECASE).strip()
+                        
+                        extracted_data["layers"].append({
+                            "name": clean_name,
+                            "text": text,
+                            "visible": layer.visible,
+                            "bbox": list(layer.bbox),
+                            "parent_group": parent_name
+                        })
 
         traverse(psd)
-        print(f"--- Scan Complete: {len(extracted_data['groups'])} groups found ---")
+        print(f"--- Scan Complete: {len(extracted_data['layers'])} text layers found ---")
         
         # 3. Save JSON
         json_path = os.path.join(self.output_dir, f"scan_{page_name}.json")
@@ -100,31 +85,6 @@ class PSDReader:
             "page": page_name,
             "json_path": json_path,
             "preview_path": preview_path,
-            "group_count": len(extracted_data["groups"])
+            "layer_count": len(extracted_data["layers"])
         }
 
-    def _parse_group(self, group_layer):
-        data = {
-            "bbox": list(group_layer.bbox), # (left, top, right, bottom)
-            "layers": {}
-        }
-        
-        # We need to find text layers inside
-        # Flatten children for easier search
-        # psd-tools iterators are depth-first
-        
-        for layer in group_layer.descendants():
-            if layer.kind == "type": # Text Layer
-                text = layer.text.strip()
-                # Clean up name: remove " copy", trim
-                name = re.sub(r'\s+copy\s*\d*$', '', layer.name, flags=re.IGNORECASE).strip()
-                
-                # We store it by layer name (e.g., nazev_01A)
-                # Note: There might be duplicates if user manually duped layers with same name.
-                # We overwrite or append? Overwrite is simpler for matching logic.
-                data["layers"][name.lower()] = {
-                    "text": text,
-                    "visible": layer.visible
-                }
-                
-        return data

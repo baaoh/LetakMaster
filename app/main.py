@@ -573,27 +573,16 @@ class QAImportRequest(BaseModel):
 
 class QAImportFolderRequest(BaseModel):
     folder_path: str
+    state_id: int | None = None
 
 @app.get("/qa/scans")
-def qa_list_scans(db: Session = Depends(get_db)):
-    path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
-    service = QAService(path_conf.value if path_conf else None)
+def qa_list_scans(state_id: int | None = None, db: Session = Depends(get_db)):
+    service = QAService(db, state_id=state_id)
     return service.get_existing_scans()
 
 @app.post("/qa/import-folder")
 async def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get_db)):
-    # Use latest state workspace instead of master config
-    latest_state = db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
-    excel_path = latest_state.last_workspace_path if latest_state else None
-    
-    # Fallback to master if no state exists (unlikely if automation ran)
-    if not excel_path:
-        path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
-        excel_path = path_conf.value if path_conf else None
-        
-    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
-    
-    service = QAService(excel_path, pass_conf.value if pass_conf else None)
+    service = QAService(db, state_id=req.state_id)
     
     # Streaming Response for Progress
     def event_generator():
@@ -607,53 +596,66 @@ async def qa_import_folder(req: QAImportFolderRequest, db: Session = Depends(get
         yield json.dumps({"type": "start", "total": total}) + "\n"
         
         results = []
-        for i, f in enumerate(files):
-            yield json.dumps({"type": "progress", "current": i+1, "total": total, "file": os.path.basename(f)}) + "\n"
-            try:
+        
+        try:
+            # We call run_import which returns the results list
+            # But run_import is not a generator.
+            # To provide progress, we might need to break encapsulation or 
+            # make QAService.run_import yield progress?
+            # For now, let's just run it in one go or replicate the loop here.
+            # Since QAService.run_import does complex matching now, replicating is risky.
+            # Let's Modify QAService.run_import to be generator? 
+            # Or just call it and return result at end (no progress bar for individual files).
+            # User wants progress.
+            # Let's rely on QAService.reader directly for progress, then do matching.
+            
+            # 1. Scanning Phase
+            processed_files = []
+            for i, f in enumerate(files):
+                yield json.dumps({"type": "progress", "current": i+1, "total": total, "file": os.path.basename(f), "phase": "scanning"}) + "\n"
                 res = service.reader.process_file(f)
                 if res:
                     results.append(res)
+                    processed_files.append(f)
                     yield json.dumps({"type": "result", "data": res}) + "\n"
-            except Exception as e:
-                print(f"Error processing {f}: {e}")
-        
-        # Finalize
-        if results:
-            # We need to consolidate and write to Excel
-            # This part is fast enough to do at the end
-            try:
-                consolidated = {}
-                for r in results:
-                    with open(r['json_path'], 'r', encoding='utf-8') as jf:
-                        data = json.load(jf)
-                        page_name = data.get("page_name", "")
-                        import re
-                        match = re.search(r'Page\s*_?\s*(\d+)', page_name, re.IGNORECASE)
-                        page_num = int(match.group(1)) if match else 0
-                        if page_num not in consolidated: consolidated[page_num] = {}
-                        consolidated[page_num].update(data.get("groups", {}))
-                
-                service._write_actuals_to_excel(consolidated)
-                yield json.dumps({"type": "complete", "message": "Import and Excel update complete."}) + "\n"
-            except Exception as e:
-                yield json.dumps({"type": "error", "message": f"Excel Write failed: {str(e)}"}) + "\n"
-        else:
-            yield json.dumps({"type": "complete", "message": "No valid PSDs processed."}) + "\n"
+
+            # 2. Matching Phase
+            yield json.dumps({"type": "message", "text": "Matching against Build Plans..."}) + "\n"
+            
+            # We need to manually invoke the matching part of run_import since we split the loop
+            build_plans_dir = service._find_build_plans_dir()
+            consolidated_matches = {}
+            
+            if build_plans_dir:
+                for res in results:
+                    page_name = res["page"]
+                    import re
+                    match = re.search(r'(\d+)', page_name)
+                    page_num = int(match.group(1)) if match else 0
+                    
+                    scan_path = res["json_path"]
+                    plan_path = os.path.join(build_plans_dir, f"build_page_{page_num}.json")
+                    
+                    if os.path.exists(plan_path):
+                        matched_data = service.matcher.match_page(plan_path, scan_path)
+                        consolidated_matches[page_num] = matched_data
+            
+            # 3. Write Excel
+            if service.excel_path and consolidated_matches:
+                 yield json.dumps({"type": "message", "text": "Writing to Excel..."}) + "\n"
+                 service._write_actuals_to_excel(consolidated_matches)
+
+            yield json.dumps({"type": "complete", "message": "Import, Matching, and Update complete."}) + "\n"
+
+        except Exception as e:
+            print(f"QA Import Error: {e}")
+            yield json.dumps({"type": "error", "message": str(e)}) + "\n"
 
     return StreamingResponse(event_generator(), media_type="application/x-ndjson")
 
 @app.post("/qa/check")
-def qa_run_check(db: Session = Depends(get_db)):
-    latest_state = db.query(ProjectState).order_by(ProjectState.created_at.desc()).first()
-    excel_path = latest_state.last_workspace_path if latest_state else None
-    
-    if not excel_path:
-        path_conf = db.query(AppConfig).filter_by(key="master_excel_path").first()
-        excel_path = path_conf.value if path_conf else None
-
-    pass_conf = db.query(AppConfig).filter_by(key="excel_password").first()
-    
-    service = QAService(excel_path, pass_conf.value if pass_conf else None)
+def qa_run_check(state_id: int | None = None, db: Session = Depends(get_db)):
+    service = QAService(db, state_id=state_id)
     try:
         service.run_check()
         return {"status": "success", "message": "Check complete. Review Excel for highlights."}
@@ -661,170 +663,84 @@ def qa_run_check(db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"QA Check failed: {e}")
 
 @app.get("/qa/inspect")
-def qa_inspect_data(page: int, group: str):
-    # Retrieve coordinates for spotlight
-    # We need to find the scan json for this page
-    # Look in workspaces/qa/scans
+def qa_inspect_data(page: int, group: str, state_id: int | None = None, db: Session = Depends(get_db)):
+    service = QAService(db, state_id=state_id)
     
-    root = os.getcwd()
-    scans_dir = os.path.join(root, "workspaces", "qa", "scans")
+    # Path to the Match JSON (Generated by QAService.run_import)
+    match_file = os.path.join(service.scans_dir, f"matches_Page_{page}.json")
     
-    # Try finding file matching page number
-    # Scan format: scan_Page 43.json or scan_Page_43.json
-    # We'll just list and check content or name
-    
-    target_file = None
-    if os.path.exists(scans_dir):
-        for f in os.listdir(scans_dir):
-            if f.endswith(".json") and f"Page {page}" in f.replace("_", " "): 
-                # Simple heuristic match
-                target_file = os.path.join(scans_dir, f)
-                break
-                
-    if not target_file:
-        # Fallback: Maybe filename doesn't have "Page" word?
-        pass
-
     coords = None
     preview_url = None
     
-    if target_file:
-        with open(target_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            if "groups" in data and group in data["groups"]:
-                coords = data["groups"][group]["bbox"]
-            
-            # Preview path relative to frontend
-            # The preview filename usually matches the json filename base
-            base = os.path.splitext(os.path.basename(target_file))[0].replace("scan_", "")
-            preview_url = f"/previews/{base}.png"
+    # 1. Calculate Coords from Match Data
+    if os.path.exists(match_file):
+        try:
+            with open(match_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                matches = data.get("matches", {})
+                
+                if group in matches:
+                    matched_layers = matches[group].get("layers", {})
+                    valid_bboxes = []
+                    
+                    for key, info in matched_layers.items():
+                        if info and info.get("bbox"):
+                            valid_bboxes.append(info["bbox"])
+                            
+                    if valid_bboxes:
+                        # Union
+                        x1 = min(b[0] for b in valid_bboxes)
+                        y1 = min(b[1] for b in valid_bboxes)
+                        x2 = max(b[2] for b in valid_bboxes)
+                        y2 = max(b[3] for b in valid_bboxes)
+                        coords = [x1, y1, x2, y2]
+        except Exception as e:
+            print(f"Error reading match file: {e}")
+
+    # 2. Preview URL
+    # We assume the preview exists if the match exists (created together)
+    # /workspaces/state_{id}/qa/previews/Page 43.png
+    # But filename formatting matters. "Page 43" vs "Page_43".
+    # PSDReader saves as `f"{page_name}.png"`.
+    # `page_name` comes from PSD filename.
+    # We assume standard naming "Page 43.psd".
+    # Let's try to look for the file in previews dir to be sure of the name?
+    
+    found_preview_name = None
+    if os.path.exists(service.previews_dir):
+        # Look for "Page {page}.png" or "Page_{page}.png"
+        candidates = [f"Page {page}.png", f"Page_{page}.png", f"Page{page}.png"]
+        for c in candidates:
+            if os.path.exists(os.path.join(service.previews_dir, c)):
+                found_preview_name = c
+                break
+    
+    if found_preview_name:
+        if service.state_id:
+            preview_url = f"/workspaces/state_{service.state_id}/qa/previews/{found_preview_name}"
+        else:
+            preview_url = f"/previews/{found_preview_name}"
+    else:
+        # Fallback blind guess
+        preview_url = f"/previews/Page {page}.png"
 
     if not coords:
-        # Fallback dummy if file missing (for dev UI testing)
         coords = [100, 100, 500, 500] 
         
     return {
         "page": page,
         "group": group,
-        "coords": coords, # [x1, y1, x2, y2]
+        "coords": coords,
         "preview_url": preview_url
     }
 
-# --- Uploads & Diff ---
-
-UPLOAD_DIR = "uploads"
-if not os.path.exists(UPLOAD_DIR):
-    os.makedirs(UPLOAD_DIR)
-
-@app.post("/upload/excel")
-def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    try:
-        db_file = SourceFile(filename=file.filename, path=file_path)
-        db.add(db_file)
-        db.commit()
-        db.refresh(db_file)
-        service = ExcelService()
-        parsed_data = service.parse_file(file_path, header_row=6)
-        for row_idx, row in enumerate(parsed_data):
-            for col_name, cell_data in row.items():
-                db_data = SourceData(
-                    source_file_id=db_file.id,
-                    row_index=row_idx + 7,
-                    column_name=col_name,
-                    value=str(cell_data["value"]) if cell_data["value"] is not None else None,
-                    formatting_json=json.dumps(cell_data["formatting"])
-                )
-                db.add(db_data)
-        db.commit()
-        return {"file_id": db_file.id, "rows_imported": len(parsed_data)}
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/diff/{id1}/{id2}")
-def get_diff(id1: int, id2: int, db: Session = Depends(get_db)):
-    s1 = db.query(ProjectState).get(id1)
-    s2 = db.query(ProjectState).get(id2)
-    if not s1 or not s2:
-        raise HTTPException(status_code=404, detail="State not found")
-    differ = DiffService()
-    data1 = json.loads(s1.data_snapshot_json)
-    data2 = json.loads(s2.data_snapshot_json)
-    def flatten(rows):
-        flat = []
-        for r in rows:
-            item = {}
-            for k, v in r.items():
-                item[k] = v.get("value")
-            flat.append(item)
-        return flat
-    return differ.compare(flatten(data1), flatten(data2))
-
-@app.post("/psd/register")
-def register_psd(filename: str, path: str, db: Session = Depends(get_db)):
-    db_psd = PSDFile(filename=filename, path=path)
-    db.add(db_psd)
-    db.commit()
-    db.refresh(db_psd)
-    return db_psd
-
-@app.post("/psd/{psd_id}/generate")
-async def trigger_psd_generation(psd_id: int):
-    task = await generate_psd_task.kiq(psd_id)
-    return {"task_id": task.task_id}
-
-@app.post("/psd/{psd_id}/verify")
-async def trigger_psd_verification(psd_id: int):
-    task = await verify_psd_task.kiq(psd_id)
-    return {"task_id": task.task_id}
-
-@app.get("/tasks/{task_id}")
-async def get_task_status(task_id: str):
-    return {"status": "In-memory tasks are executed immediately by InMemoryBroker"}
-
-@app.get("/source-files")
-def list_source_files(db: Session = Depends(get_db)):
-    return db.query(SourceFile).all()
-
-@app.get("/psd-files")
-def list_psd_files(db: Session = Depends(get_db)):
-    return db.query(PSDFile).all()
-
-@app.get("/source-files/{file_id}/data")
-def get_source_file_data(file_id: int, db: Session = Depends(get_db)):
-    return db.query(SourceData).filter(SourceData.source_file_id == file_id).all()
-
-@app.get("/health")
-async def health_check():
-    return {"status": "ok"}
-
-@app.get("/api/system/logs")
-def get_system_logs():
-    log_path = os.path.join(os.getcwd(), "logs.txt")
-    if not os.path.exists(log_path):
-        return "No logs found."
-    with open(log_path, "r", encoding="utf-8", errors="replace") as f:
-        # Return last 100 lines
-        lines = f.readlines()
-        return "".join(lines[-100:])
-
 # --- Static Serving ---
 static_dir = os.path.join(os.getcwd(), "frontend_static")
-if os.path.exists(static_dir):
-    # Mount everything at root. Since this is the LAST mount added,
-    # it serves as a fallback for everything not caught by API routes.
-    # html=True ensures index.html is served for the root path.
-    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
+workspaces_dir = os.path.join(os.getcwd(), "workspaces")
 
-    # Optional: If you want true SPA behavior (routing handled by frontend),
-    # you can still keep the exception handler for 404s to return index.html
-    @app.exception_handler(404)
-    async def spa_fallback(request, exc):
-        if request.method == "GET" and not request.url.path.startswith("/api"):
-            return FileResponse(os.path.join(static_dir, "index.html"))
-        # For API 404s, we still want the standard JSON response
-        from fastapi.responses import JSONResponse
-        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+# Mount workspaces for QA previews
+if os.path.exists(workspaces_dir):
+    app.mount("/workspaces", StaticFiles(directory=workspaces_dir), name="workspaces")
+
+if os.path.exists(static_dir):
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="static")
