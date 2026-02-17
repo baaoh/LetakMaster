@@ -1,0 +1,11 @@
+[2026-01-30 15:29:06] === STARTING SYSTEM DEBUG ===
+[2026-01-30 15:29:06] --- Checking File Access: C:\Users\Bao\Documents\LetakMaster\workspaces\state_5\Workspace_State_5.xlsx ---
+[2026-01-30 15:29:06] Successfully opened for Read/Write.
+[2026-01-30 15:29:06] --- Checking EXCEL.EXE processes ---
+[2026-01-30 15:29:06] Total Excel Processes: 0
+[2026-01-30 15:29:06] --- Checking COM Connectivity (xlwings) ---
+[2026-01-30 15:29:06] xlwings reports 0 active apps.
+[2026-01-30 15:29:06] Attempting to launch hidden Excel instance...
+[2026-01-30 15:29:07] Launched successfully. PID=5184
+[2026-01-30 15:29:07] Quit successfully.
+[2026-01-30 15:29:07] === END DEBUG ===

@@ -1,0 +1,1275 @@
+17:15:20 GMT+0100: Script Started
+17:15:20 GMT+0100: Mode: active
+17:15:20 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster\workspaces\build_plans\260128_1715_Workspace_State_2.xlsx_State_2\build_page_43.json
+17:15:20 GMT+0100: JSON Parsed. Actions: 17
+17:17:34 GMT+0100: runBuild Started for Page 43
+17:17:34 GMT+0100: A4 Groups Detected. Max Index: 17
+17:17:34 GMT+0100: AM Scan: Found 970 layers.
+17:17:34 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+17:17:34 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+17:17:35 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+17:17:35 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+17:17:35 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+17:17:35 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+17:17:35 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+17:17:35 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+17:17:35 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+17:17:35 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+17:17:35 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+17:17:35 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+17:17:35 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+17:17:35 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+17:17:35 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+17:17:35 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+17:17:35 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+17:17:35 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+17:17:35 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+17:17:35 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+17:17:35 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+17:17:35 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+17:17:35 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+17:17:35 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+17:17:35 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+17:17:35 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+17:17:35 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+17:17:35 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+17:17:35 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+17:17:35 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+17:17:35 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+17:17:35 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+17:17:35 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+17:17:35 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+17:17:35 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+17:17:35 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+17:17:35 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+17:17:35 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+17:17:35 GMT+0100: Generating A4_Grp_02...
+17:17:36 GMT+0100: Offsetting A4_Grp_02 by 421px
+17:17:38 GMT+0100: Generating A4_Grp_03...
+17:17:39 GMT+0100: Offsetting A4_Grp_03 by 842px
+17:17:42 GMT+0100: Generating A4_Grp_04...
+17:17:42 GMT+0100: Offsetting A4_Grp_04 by 1263px
+17:17:45 GMT+0100: Generating A4_Grp_05...
+17:17:46 GMT+0100: Offsetting A4_Grp_05 by 1684px
+17:17:49 GMT+0100: Generating A4_Grp_06...
+17:17:50 GMT+0100: Offsetting A4_Grp_06 by 2105px
+17:17:54 GMT+0100: Generating A4_Grp_07...
+17:17:55 GMT+0100: Offsetting A4_Grp_07 by 2526px
+17:17:58 GMT+0100: Generating A4_Grp_08...
+17:17:59 GMT+0100: Offsetting A4_Grp_08 by 2947px
+17:18:02 GMT+0100: Generating A4_Grp_09...
+17:18:03 GMT+0100: Offsetting A4_Grp_09 by 3368px
+17:18:06 GMT+0100: Generating A4_Grp_10...
+17:18:07 GMT+0100: Offsetting A4_Grp_10 by 3789px
+17:18:10 GMT+0100: Generating A4_Grp_11...
+17:18:11 GMT+0100: Offsetting A4_Grp_11 by 4210px
+17:18:14 GMT+0100: Generating A4_Grp_12...
+17:18:15 GMT+0100: Offsetting A4_Grp_12 by 4631px
+17:18:18 GMT+0100: Generating A4_Grp_13...
+17:18:20 GMT+0100: Offsetting A4_Grp_13 by 5052px
+17:18:23 GMT+0100: Generating A4_Grp_14...
+17:18:24 GMT+0100: Offsetting A4_Grp_14 by 5473px
+17:18:27 GMT+0100: Generating A4_Grp_15...
+17:18:29 GMT+0100: Offsetting A4_Grp_15 by 5894px
+17:18:32 GMT+0100: Generating A4_Grp_16...
+17:18:34 GMT+0100: Offsetting A4_Grp_16 by 6315px
+17:18:37 GMT+0100: Generating A4_Grp_17...
+17:18:39 GMT+0100: Offsetting A4_Grp_17 by 6736px
+17:18:42 GMT+0100: A4 Structure Generated. Re-scanning...
+17:18:42 GMT+0100: Scanning Layers AM...
+17:18:42 GMT+0100: AM Scan: Found 1322 layers.
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_02 (ID 21461)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_03 (ID 21483)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_04 (ID 21505)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_05 (ID 21527)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_06 (ID 21549)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_07 (ID 21571)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_08 (ID 21593)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_09 (ID 21615)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_10 (ID 21637)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_11 (ID 21659)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_12 (ID 21681)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_13 (ID 21703)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_14 (ID 21725)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_15 (ID 21747)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_16 (ID 21769)
+17:18:42 GMT+0100: AM Map: Found Group A4_Grp_17 (ID 21791)
+17:18:42 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+17:18:42 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+17:18:42 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+17:18:42 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+17:18:42 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+17:18:42 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+17:18:42 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+17:18:43 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+17:18:43 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+17:18:43 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+17:18:43 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+17:18:43 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+17:18:43 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+17:18:43 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+17:18:43 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+17:18:43 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+17:18:43 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+17:18:43 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+17:18:43 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+17:18:43 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+17:18:43 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+17:18:43 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+17:18:43 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+17:18:43 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+17:18:43 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+17:18:43 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+17:18:43 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+17:18:43 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+17:18:43 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+17:18:43 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+17:18:43 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+17:18:43 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+17:18:43 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+17:18:43 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+17:18:43 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+17:18:43 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+17:18:43 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+17:18:43 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+17:18:43 GMT+0100: Scan Complete.
+17:18:43 GMT+0100: A4 Mode Active: Hiding Standard Product Groups...
+17:18:46 GMT+0100: Starting Action Processing (Total: 17)
+17:18:46 GMT+0100: Processing Action: A4_Grp_04 (Target: A4_Grp_04)
+17:18:46 GMT+0100: Updating nazev_04A (ID: 21503) with: Giana Žampiony
+17:18:46 GMT+0100: setTextAM: Success 21503
+17:18:46 GMT+0100: Updating nazev_04B (ID: 21502) with: krájené ve slaném nálevu 200g/212ml
+17:18:46 GMT+0100: setTextAM: Success 21502
+17:18:46 GMT+0100: Updating cena_04A (ID: 21493) with: 21
+17:18:46 GMT+0100: setTextAM: Success 21493
+17:18:46 GMT+0100: Updating cena_04B (ID: 21492) with: 90
+17:18:47 GMT+0100: setTextAM: Success 21492
+17:18:47 GMT+0100: Updating od_04 (ID: 21495) with: od
+17:18:47 GMT+0100: setTextAM: Success 21495
+17:18:47 GMT+0100: Updating EAN-number_04 (ID: 21501) with: 792746
+17:18:47 GMT+0100: setTextAM: Success 21501
+17:18:47 GMT+0100: Updating EAN:_04 (ID: 21499) with: EAN:
+17:18:47 GMT+0100: setTextAM: Success 21499
+17:18:47 GMT+0100: setTextAM: Success 21498
+17:18:48 GMT+0100: Placed standardized image 404162 to the right of A4_Grp_04
+17:18:48 GMT+0100: Processing Action: A4_Grp_05 (Target: A4_Grp_05)
+17:18:49 GMT+0100: setTextAM: Success 21525
+17:18:49 GMT+0100: Updating nazev_05B (ID: 21524) with: vakuovaná 340g/425ml
+17:18:49 GMT+0100: setTextAM: Success 21524
+17:18:49 GMT+0100: Updating cena_05A (ID: 21515) with: 22
+17:18:49 GMT+0100: setTextAM: Success 21515
+17:18:49 GMT+0100: Updating cena_05B (ID: 21514) with: 90
+17:18:50 GMT+0100: setTextAM: Success 21514
+17:18:50 GMT+0100: Updating od_05 (ID: 21517) with: od
+17:18:50 GMT+0100: setTextAM: Success 21517
+17:18:50 GMT+0100: Updating EAN-number_05 (ID: 21523) with: 793385
+17:18:50 GMT+0100: setTextAM: Success 21523
+17:18:50 GMT+0100: Updating EAN:_05 (ID: 21521) with: EAN:
+17:18:50 GMT+0100: setTextAM: Success 21521
+17:18:50 GMT+0100: setTextAM: Success 21520
+17:18:51 GMT+0100: Placed standardized image 4040354 to the right of A4_Grp_05
+17:18:52 GMT+0100: Processing Action: A4_Grp_06 (Target: A4_Grp_06)
+17:18:52 GMT+0100: Updating nazev_06A (ID: 21547) with: Giana Sardinky 125G
+17:18:52 GMT+0100: setTextAM: Success 21547
+17:18:52 GMT+0100: Updating nazev_06B (ID: 21546) with: Rostlinný Olej, V Rostlinném Oleji S Chilli Eo
+17:18:52 GMT+0100: setTextAM: Success 21546
+17:18:52 GMT+0100: Updating cena_06A (ID: 21537) with: 22
+17:18:52 GMT+0100: setTextAM: Success 21537
+17:18:52 GMT+0100: Updating cena_06B (ID: 21536) with: 90
+17:18:52 GMT+0100: setTextAM: Success 21536
+17:18:52 GMT+0100: Updating od_06 (ID: 21539) with: od
+17:18:53 GMT+0100: setTextAM: Success 21539
+17:18:53 GMT+0100: Updating EAN-number_06 (ID: 21545) with: 792104
+17:18:53 GMT+0100: setTextAM: Success 21545
+17:18:53 GMT+0100: Updating EAN:_06 (ID: 21543) with: 2 druhy
+17:18:53 GMT+0100: setTextAM: Success 21543
+17:18:53 GMT+0100: setTextAM: Success 21542
+17:18:54 GMT+0100: Placed standardized image 4040352 to the right of A4_Grp_06
+17:18:55 GMT+0100: Placed standardized image 4042208 to the right of A4_Grp_06
+17:18:55 GMT+0100: Processing Action: A4_Grp_07 (Target: A4_Grp_07)
+17:18:55 GMT+0100: Updating nazev_07A (ID: 21569) with: Giana sardinky 125g
+17:18:56 GMT+0100: setTextAM: Success 21569
+17:18:56 GMT+0100: setTextAM: Success 21568
+17:18:56 GMT+0100: Updating cena_07A (ID: 21559) with: 22
+17:18:56 GMT+0100: setTextAM: Success 21559
+17:18:56 GMT+0100: Updating cena_07B (ID: 21558) with: 90
+17:18:56 GMT+0100: setTextAM: Success 21558
+17:18:56 GMT+0100: Updating od_07 (ID: 21561) with: od
+17:18:56 GMT+0100: setTextAM: Success 21561
+17:18:56 GMT+0100: Updating EAN-number_07 (ID: 21567) with: 791596
+17:18:57 GMT+0100: setTextAM: Success 21567
+17:18:57 GMT+0100: Updating EAN:_07 (ID: 21565) with: EAN:
+17:18:57 GMT+0100: setTextAM: Success 21565
+17:18:57 GMT+0100: setTextAM: Success 21564
+17:18:58 GMT+0100: Placed standardized image 4042207 to the right of A4_Grp_07
+17:18:58 GMT+0100: Processing Action: A4_Grp_13 (Target: A4_Grp_13)
+17:18:58 GMT+0100: Updating nazev_13A (ID: 21701) with: Sledí Filety 170G V
+17:18:58 GMT+0100: setTextAM: Success 21701
+17:18:58 GMT+0100: setTextAM: Success 21700
+17:18:58 GMT+0100: Updating cena_13A (ID: 21691) with: 29
+17:18:59 GMT+0100: setTextAM: Success 21691
+17:18:59 GMT+0100: Updating cena_13B (ID: 21690) with: 90
+17:18:59 GMT+0100: setTextAM: Success 21690
+17:18:59 GMT+0100: Updating od_13 (ID: 21693) with: od
+17:18:59 GMT+0100: setTextAM: Success 21693
+17:18:59 GMT+0100: Updating EAN-number_13 (ID: 21699) with: 794245
+17:18:59 GMT+0100: setTextAM: Success 21699
+17:18:59 GMT+0100: Updating EAN:_13 (ID: 21697) with: 4 druhy
+17:18:59 GMT+0100: setTextAM: Success 21697
+17:19:00 GMT+0100: setTextAM: Success 21696
+17:19:01 GMT+0100: Placed standardized image 4040475 to the right of A4_Grp_13
+17:19:03 GMT+0100: Placed standardized image 4040474 to the right of A4_Grp_13
+17:19:05 GMT+0100: Placed standardized image 4040477 to the right of A4_Grp_13
+17:19:06 GMT+0100: Placed standardized image 4040476 to the right of A4_Grp_13
+17:19:06 GMT+0100: Processing Action: A4_Grp_09 (Target: A4_Grp_09)
+17:19:06 GMT+0100: Updating nazev_09A (ID: 21613) with: Giana Okurky
+17:19:06 GMT+0100: setTextAM: Success 21613
+17:19:06 GMT+0100: Updating nazev_09B (ID: 21612) with: standard (6-9cm) ve sladkokyselém nálevu 670g/720ml
+17:19:06 GMT+0100: setTextAM: Success 21612
+17:19:06 GMT+0100: Updating cena_09A (ID: 21603) with: 36
+17:19:07 GMT+0100: setTextAM: Success 21603
+17:19:07 GMT+0100: Updating cena_09B (ID: 21602) with: 90
+17:19:07 GMT+0100: setTextAM: Success 21602
+17:19:07 GMT+0100: Updating od_09 (ID: 21605) with: od
+17:19:07 GMT+0100: setTextAM: Success 21605
+17:19:07 GMT+0100: Updating EAN-number_09 (ID: 21611) with: 797314
+17:19:07 GMT+0100: setTextAM: Success 21611
+17:19:07 GMT+0100: Updating EAN:_09 (ID: 21609) with: EAN:
+17:19:07 GMT+0100: setTextAM: Success 21609
+17:19:08 GMT+0100: setTextAM: Success 21608
+17:19:08 GMT+0100: Placed standardized image 4042226 to the right of A4_Grp_09
+17:19:09 GMT+0100: Processing Action: A4_Grp_17 (Target: A4_Grp_17)
+17:19:09 GMT+0100: Updating nazev_17A (ID: 21789) with: Šproty 160g uzené
+17:19:09 GMT+0100: setTextAM: Success 21789
+17:19:09 GMT+0100: Updating nazev_17B (ID: 21788) with: celé v olej Giana
+17:19:09 GMT+0100: setTextAM: Success 21788
+17:19:09 GMT+0100: Updating cena_17A (ID: 21779) with: 37
+17:19:09 GMT+0100: setTextAM: Success 21779
+17:19:09 GMT+0100: Updating cena_17B (ID: 21778) with: 90
+17:19:09 GMT+0100: setTextAM: Success 21778
+17:19:09 GMT+0100: Updating od_17 (ID: 21781) with: od
+17:19:10 GMT+0100: setTextAM: Success 21781
+17:19:10 GMT+0100: Updating EAN-number_17 (ID: 21787) with: 511757
+17:19:10 GMT+0100: setTextAM: Success 21787
+17:19:10 GMT+0100: Updating EAN:_17 (ID: 21785) with: EAN:
+17:19:10 GMT+0100: setTextAM: Success 21785
+17:19:10 GMT+0100: setTextAM: Success 21784
+17:19:12 GMT+0100: Placed standardized image 4040360 to the right of A4_Grp_17
+17:19:12 GMT+0100: Processing Action: A4_Grp_15 (Target: A4_Grp_15)
+17:19:12 GMT+0100: setTextAM: Success 21745
+17:19:12 GMT+0100: setTextAM: Success 21744
+17:19:12 GMT+0100: Updating cena_15A (ID: 21735) with: 23
+17:19:12 GMT+0100: setTextAM: Success 21735
+17:19:12 GMT+0100: Updating cena_15B (ID: 21734) with: 90
+17:19:13 GMT+0100: setTextAM: Success 21734
+17:19:13 GMT+0100: Updating od_15 (ID: 21737) with: od
+17:19:13 GMT+0100: setTextAM: Success 21737
+17:19:13 GMT+0100: Updating EAN-number_15 (ID: 21743) with: 515182
+17:19:13 GMT+0100: setTextAM: Success 21743
+17:19:13 GMT+0100: Updating EAN:_15 (ID: 21741) with: EAN:
+17:19:13 GMT+0100: setTextAM: Success 21741
+17:19:13 GMT+0100: setTextAM: Success 21740
+17:19:15 GMT+0100: Placed standardized image 4040821 to the right of A4_Grp_15
+17:19:15 GMT+0100: Processing Action: A4_Grp_10 (Target: A4_Grp_10)
+17:19:15 GMT+0100: setTextAM: Success 21635
+17:19:15 GMT+0100: setTextAM: Success 21634
+17:19:15 GMT+0100: Updating cena_10A (ID: 21625) with: 23
+17:19:16 GMT+0100: setTextAM: Success 21625
+17:19:16 GMT+0100: Updating cena_10B (ID: 21624) with: 90
+17:19:16 GMT+0100: setTextAM: Success 21624
+17:19:16 GMT+0100: Updating od_10 (ID: 21627) with: od
+17:19:16 GMT+0100: setTextAM: Success 21627
+17:19:16 GMT+0100: Updating EAN-number_10 (ID: 21633) with: 505336
+17:19:16 GMT+0100: setTextAM: Success 21633
+17:19:16 GMT+0100: Updating EAN:_10 (ID: 21631) with: 3 druhy
+17:19:16 GMT+0100: setTextAM: Success 21631
+17:19:17 GMT+0100: setTextAM: Success 21630
+17:19:17 GMT+0100: Placed standardized image 4040371 to the right of A4_Grp_10
+17:19:18 GMT+0100: Placed standardized image 4040367 to the right of A4_Grp_10
+17:19:19 GMT+0100: Placed standardized image 4040820 to the right of A4_Grp_10
+17:19:19 GMT+0100: Processing Action: A4_Grp_16 (Target: A4_Grp_16)
+17:19:19 GMT+0100: setTextAM: Success 21767
+17:19:19 GMT+0100: Updating nazev_16B (ID: 21766) with: Exotic Giana, Italiano Giana, Mexico Giana, ...
+17:19:20 GMT+0100: setTextAM: Success 21766
+17:19:20 GMT+0100: Updating cena_16A (ID: 21757) with: 38
+17:19:20 GMT+0100: setTextAM: Success 21757
+17:19:20 GMT+0100: Updating cena_16B (ID: 21756) with: 90
+17:19:20 GMT+0100: setTextAM: Success 21756
+17:19:20 GMT+0100: Updating od_16 (ID: 21759) with: od
+17:19:20 GMT+0100: setTextAM: Success 21759
+17:19:20 GMT+0100: Updating EAN-number_16 (ID: 21765) with: 505176
+17:19:20 GMT+0100: setTextAM: Success 21765
+17:19:20 GMT+0100: setTextAM: Success 21763
+17:19:21 GMT+0100: setTextAM: Success 21762
+17:19:22 GMT+0100: Placed standardized image 4040370 to the right of A4_Grp_16
+17:19:24 GMT+0100: Placed standardized image 4040369 to the right of A4_Grp_16
+17:19:25 GMT+0100: Placed standardized image 4040368 to the right of A4_Grp_16
+17:19:27 GMT+0100: Placed standardized image 4040449 to the right of A4_Grp_16
+17:19:29 GMT+0100: Placed standardized image 4040405 to the right of A4_Grp_16
+17:19:29 GMT+0100: Processing Action: A4_Grp_14 (Target: A4_Grp_14)
+17:19:29 GMT+0100: setTextAM: Success 21723
+17:19:29 GMT+0100: Updating nazev_14B (ID: 21722) with: ve vl. oleji Giana
+17:19:29 GMT+0100: setTextAM: Success 21722
+17:19:29 GMT+0100: Updating cena_14A (ID: 21713) with: 52
+17:19:29 GMT+0100: setTextAM: Success 21713
+17:19:29 GMT+0100: Updating cena_14B (ID: 21712) with: 90
+17:19:30 GMT+0100: setTextAM: Success 21712
+17:19:30 GMT+0100: Updating od_14 (ID: 21715) with: od
+17:19:30 GMT+0100: setTextAM: Success 21715
+17:19:30 GMT+0100: Updating EAN-number_14 (ID: 21721) with: 791787
+17:19:30 GMT+0100: setTextAM: Success 21721
+17:19:30 GMT+0100: Updating EAN:_14 (ID: 21719) with: EAN:
+17:19:30 GMT+0100: setTextAM: Success 21719
+17:19:30 GMT+0100: setTextAM: Success 21718
+17:19:32 GMT+0100: Placed standardized image 4040365 to the right of A4_Grp_14
+17:19:32 GMT+0100: Processing Action: A4_Grp_03 (Target: A4_Grp_03)
+17:19:32 GMT+0100: setTextAM: Success 21481
+17:19:32 GMT+0100: setTextAM: Success 21480
+17:19:32 GMT+0100: Updating cena_03A (ID: 21471) with: 12
+17:19:33 GMT+0100: setTextAM: Success 21471
+17:19:33 GMT+0100: Updating cena_03B (ID: 21470) with: 90
+17:19:33 GMT+0100: setTextAM: Success 21470
+17:19:33 GMT+0100: Updating od_03 (ID: 21473) with: od
+17:19:33 GMT+0100: setTextAM: Success 21473
+17:19:33 GMT+0100: Updating EAN-number_03 (ID: 21479) with: 514338
+17:19:34 GMT+0100: setTextAM: Success 21479
+17:19:34 GMT+0100: Updating EAN:_03 (ID: 21477) with: 3 druhy
+17:19:34 GMT+0100: setTextAM: Success 21477
+17:19:34 GMT+0100: setTextAM: Success 21476
+17:19:37 GMT+0100: Placed standardized image 4042227 to the right of A4_Grp_03
+17:19:38 GMT+0100: Placed standardized image 4042228 to the right of A4_Grp_03
+17:19:39 GMT+0100: Placed standardized image 4040347 to the right of A4_Grp_03
+17:19:39 GMT+0100: Processing Action: A4_Grp_11 (Target: A4_Grp_11)
+17:19:39 GMT+0100: Updating nazev_11A (ID: 21657) with: Olivy 195g zelené
+17:19:39 GMT+0100: setTextAM: Success 21657
+17:19:40 GMT+0100: setTextAM: Success 21656
+17:19:40 GMT+0100: Updating cena_11A (ID: 21647) with: 12
+17:19:40 GMT+0100: setTextAM: Success 21647
+17:19:40 GMT+0100: Updating cena_11B (ID: 21646) with: 90
+17:19:40 GMT+0100: setTextAM: Success 21646
+17:19:40 GMT+0100: Updating od_11 (ID: 21649) with: od
+17:19:40 GMT+0100: setTextAM: Success 21649
+17:19:40 GMT+0100: Updating EAN-number_11 (ID: 21655) with: 795396
+17:19:41 GMT+0100: setTextAM: Success 21655
+17:19:41 GMT+0100: Updating EAN:_11 (ID: 21653) with: EAN:
+17:19:41 GMT+0100: setTextAM: Success 21653
+17:19:41 GMT+0100: setTextAM: Success 21652
+17:19:43 GMT+0100: Placed standardized image 4040346 to the right of A4_Grp_11
+17:19:44 GMT+0100: Processing Action: A4_Grp_12 (Target: A4_Grp_12)
+17:19:44 GMT+0100: setTextAM: Success 21679
+17:19:44 GMT+0100: Updating nazev_12B (ID: 21678) with: loupaná Giana
+17:19:44 GMT+0100: setTextAM: Success 21678
+17:19:44 GMT+0100: Updating cena_12A (ID: 21669) with: 19
+17:19:44 GMT+0100: setTextAM: Success 21669
+17:19:44 GMT+0100: Updating cena_12B (ID: 21668) with: 90
+17:19:45 GMT+0100: setTextAM: Success 21668
+17:19:45 GMT+0100: Updating od_12 (ID: 21671) with: od
+17:19:45 GMT+0100: setTextAM: Success 21671
+17:19:45 GMT+0100: Updating EAN-number_12 (ID: 21677) with: 508351
+17:19:45 GMT+0100: setTextAM: Success 21677
+17:19:45 GMT+0100: Updating EAN:_12 (ID: 21675) with: EAN:
+17:19:45 GMT+0100: setTextAM: Success 21675
+17:19:45 GMT+0100: setTextAM: Success 21674
+17:19:47 GMT+0100: Placed standardized image 4040701 to the right of A4_Grp_12
+17:19:47 GMT+0100: Processing Action: A4_Grp_01 (Target: A4_01)
+17:19:47 GMT+0100: Updating nazev_01A (ID: 20981) with: Giana Fazole Bílé
+17:19:48 GMT+0100: setTextAM: Success 20981
+17:19:48 GMT+0100: setTextAM: Success 20980
+17:19:48 GMT+0100: Updating cena_01A (ID: 20971) with: 17
+17:19:48 GMT+0100: setTextAM: Success 20971
+17:19:48 GMT+0100: Updating cena_01B (ID: 20970) with: 50
+17:19:49 GMT+0100: setTextAM: Success 20970
+17:19:49 GMT+0100: Updating od_01 (ID: 20973) with: od
+17:19:49 GMT+0100: setTextAM: Success 20973
+17:19:49 GMT+0100: Updating EAN-number_01 (ID: 20979) with: 511290
+17:19:49 GMT+0100: setTextAM: Success 20979
+17:19:49 GMT+0100: setTextAM: Success 20977
+17:19:50 GMT+0100: setTextAM: Success 20976
+17:19:51 GMT+0100: Placed standardized image 4041177 to the right of A4_01
+17:19:54 GMT+0100: Placed standardized image 4040567 to the right of A4_01
+17:19:56 GMT+0100: Placed standardized image 4040566 to the right of A4_01
+17:19:58 GMT+0100: Placed standardized image 4040565 to the right of A4_01
+17:20:00 GMT+0100: Error placing image 4040568: IOError: General Photoshop error occurred. This functionality may not be available in this version of Photoshop.
+- <no additional information available>
+17:20:00 GMT+0100: Processing Action: A4_Grp_02 (Target: A4_Grp_02)
+17:20:00 GMT+0100: Updating nazev_02A (ID: 21459) with: Giana Fazolový mix s
+17:20:00 GMT+0100: setTextAM: Success 21459
+17:20:00 GMT+0100: Updating nazev_02B (ID: 21458) with: cizrnou ve slaném nálevu 400g/425ml
+17:20:00 GMT+0100: setTextAM: Success 21458
+17:20:00 GMT+0100: Updating cena_02A (ID: 21449) with: 17
+17:20:00 GMT+0100: setTextAM: Success 21449
+17:20:00 GMT+0100: Updating cena_02B (ID: 21448) with: 50
+17:20:01 GMT+0100: setTextAM: Success 21448
+17:20:01 GMT+0100: Updating od_02 (ID: 21451) with: od
+17:20:01 GMT+0100: setTextAM: Success 21451
+17:20:01 GMT+0100: Updating EAN-number_02 (ID: 21457) with: 512044
+17:20:01 GMT+0100: setTextAM: Success 21457
+17:20:01 GMT+0100: Updating EAN:_02 (ID: 21455) with: EAN:
+17:20:01 GMT+0100: setTextAM: Success 21455
+17:20:01 GMT+0100: setTextAM: Success 21454
+17:20:10 GMT+0100: Error placing image 4041178: IOError: General Photoshop error occurred. This functionality may not be available in this version of Photoshop.
+- <no additional information available>
+17:20:10 GMT+0100: Processing Action: A4_Grp_08 (Target: A4_Grp_08)
+17:20:10 GMT+0100: Updating nazev_08A (ID: 21591) with: Giana Jahody ve
+17:20:11 GMT+0100: setTextAM: Success 21591
+17:20:11 GMT+0100: Updating nazev_08B (ID: 21590) with: sladkém nálevu 400g/425ml
+17:20:11 GMT+0100: setTextAM: Success 21590
+17:20:11 GMT+0100: Updating cena_08A (ID: 21581) with: 25
+17:20:11 GMT+0100: setTextAM: Success 21581
+17:20:11 GMT+0100: Updating cena_08B (ID: 21580) with: 90
+17:20:12 GMT+0100: setTextAM: Success 21580
+17:20:12 GMT+0100: Updating od_08 (ID: 21583) with: od
+17:20:12 GMT+0100: setTextAM: Success 21583
+17:20:12 GMT+0100: Updating EAN-number_08 (ID: 21589) with: 791503
+17:20:13 GMT+0100: setTextAM: Success 21589
+17:20:13 GMT+0100: Updating EAN:_08 (ID: 21587) with: EAN:
+17:20:14 GMT+0100: setTextAM: Success 21587
+17:20:14 GMT+0100: setTextAM: Success 21586
+17:20:24 GMT+0100: Error placing image 4040356: IOError: General Photoshop error occurred. This functionality may not be available in this version of Photoshop.
+- <no additional information available>
+17:52:25 GMT+0100: Script Started
+17:52:25 GMT+0100: Mode: active
+17:52:26 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster\workspaces\build_plans\260128_1752_Workspace_State_2.xlsx_State_2\build_page_43.json
+17:52:26 GMT+0100: JSON Parsed. Actions: 17
+17:52:26 GMT+0100: runBuild Started for Page 43
+17:52:26 GMT+0100: A4 Groups Detected. Max Index: 17
+17:52:26 GMT+0100: AM Scan: Found 970 layers.
+17:52:26 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+17:52:26 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+17:52:26 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+17:52:26 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+17:52:26 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+17:52:26 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+17:52:26 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+17:52:26 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+17:52:26 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+17:52:26 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+17:52:26 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+17:52:26 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+17:52:26 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+17:52:26 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+17:52:26 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+17:52:26 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+17:52:26 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+17:52:26 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+17:52:26 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+17:52:26 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+17:52:26 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+17:52:26 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+17:52:26 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+17:52:26 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+17:52:26 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+17:52:26 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+17:52:26 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+17:52:26 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+17:52:26 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+17:52:26 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+17:52:26 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+17:52:26 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+17:52:26 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+17:52:26 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+17:52:26 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+17:52:26 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+17:52:26 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+17:52:26 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+17:52:26 GMT+0100: Generating A4_Grp_02...
+17:52:27 GMT+0100: Offsetting A4_Grp_02 by 421px
+17:52:29 GMT+0100: Generating A4_Grp_03...
+17:52:30 GMT+0100: Offsetting A4_Grp_03 by 842px
+17:52:32 GMT+0100: Generating A4_Grp_04...
+17:52:33 GMT+0100: Offsetting A4_Grp_04 by 1263px
+17:52:35 GMT+0100: Generating A4_Grp_05...
+17:52:36 GMT+0100: Offsetting A4_Grp_05 by 1684px
+17:52:38 GMT+0100: Generating A4_Grp_06...
+17:52:38 GMT+0100: Offsetting A4_Grp_06 by 2105px
+17:52:41 GMT+0100: Generating A4_Grp_07...
+17:52:41 GMT+0100: Offsetting A4_Grp_07 by 2526px
+17:52:44 GMT+0100: Generating A4_Grp_08...
+17:52:44 GMT+0100: Offsetting A4_Grp_08 by 2947px
+17:52:47 GMT+0100: Generating A4_Grp_09...
+17:52:48 GMT+0100: Offsetting A4_Grp_09 by 3368px
+17:52:50 GMT+0100: Generating A4_Grp_10...
+17:52:51 GMT+0100: Offsetting A4_Grp_10 by 3789px
+17:52:53 GMT+0100: Generating A4_Grp_11...
+17:52:54 GMT+0100: Offsetting A4_Grp_11 by 4210px
+17:52:56 GMT+0100: Generating A4_Grp_12...
+17:52:57 GMT+0100: Offsetting A4_Grp_12 by 4631px
+17:53:00 GMT+0100: Generating A4_Grp_13...
+17:53:01 GMT+0100: Offsetting A4_Grp_13 by 5052px
+17:53:03 GMT+0100: Generating A4_Grp_14...
+17:53:04 GMT+0100: Offsetting A4_Grp_14 by 5473px
+17:53:07 GMT+0100: Generating A4_Grp_15...
+17:53:08 GMT+0100: Offsetting A4_Grp_15 by 5894px
+17:53:10 GMT+0100: Generating A4_Grp_16...
+17:53:11 GMT+0100: Offsetting A4_Grp_16 by 6315px
+17:53:14 GMT+0100: Generating A4_Grp_17...
+17:53:15 GMT+0100: Offsetting A4_Grp_17 by 6736px
+17:53:18 GMT+0100: A4 Structure Generated. Re-scanning...
+17:53:18 GMT+0100: Scanning Layers AM...
+17:53:18 GMT+0100: AM Scan: Found 1322 layers.
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_02 (ID 21916)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_03 (ID 21938)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_04 (ID 21960)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_05 (ID 21982)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_06 (ID 22004)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_07 (ID 22026)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_08 (ID 22048)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_09 (ID 22070)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_10 (ID 22092)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_11 (ID 22114)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_12 (ID 22136)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_13 (ID 22158)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_14 (ID 22180)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_15 (ID 22202)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_16 (ID 22224)
+17:53:18 GMT+0100: AM Map: Found Group A4_Grp_17 (ID 22246)
+17:53:18 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+17:53:18 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+17:53:18 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+17:53:18 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+17:53:18 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+17:53:18 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+17:53:18 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+17:53:18 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+17:53:18 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+17:53:18 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+17:53:19 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+17:53:19 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+17:53:19 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+17:53:19 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+17:53:19 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+17:53:19 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+17:53:19 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+17:53:19 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+17:53:19 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+17:53:19 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+17:53:19 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+17:53:19 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+17:53:19 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+17:53:19 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+17:53:19 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+17:53:19 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+17:53:19 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+17:53:19 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+17:53:19 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+17:53:19 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+17:53:19 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+17:53:19 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+17:53:19 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+17:53:19 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+17:53:19 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+17:53:19 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+17:53:19 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+17:53:19 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+17:53:19 GMT+0100: Scan Complete.
+17:53:19 GMT+0100: A4 Mode Active: Hiding Standard Product Groups...
+17:53:21 GMT+0100: Starting Action Processing (Total: 17)
+17:53:21 GMT+0100: Processing Action: A4_Grp_04 (Target: A4_Grp_04)
+17:53:21 GMT+0100: Updating nazev_04A (ID: 21958) with: Giana Žampiony
+17:53:21 GMT+0100: setTextAM: Success 21958
+17:53:21 GMT+0100: Updating nazev_04B (ID: 21957) with: krájené ve slaném nálevu 200g/212ml
+17:53:21 GMT+0100: setTextAM: Success 21957
+17:53:21 GMT+0100: Updating cena_04A (ID: 21948) with: 21
+17:53:21 GMT+0100: setTextAM: Success 21948
+17:53:21 GMT+0100: Updating cena_04B (ID: 21947) with: 90
+17:53:21 GMT+0100: setTextAM: Success 21947
+17:53:21 GMT+0100: Updating od_04 (ID: 21950) with: od
+17:53:22 GMT+0100: setTextAM: Success 21950
+17:53:22 GMT+0100: Updating EAN-number_04 (ID: 21956) with: 792746
+17:53:22 GMT+0100: setTextAM: Success 21956
+17:53:22 GMT+0100: Updating EAN:_04 (ID: 21954) with: EAN:
+17:53:22 GMT+0100: setTextAM: Success 21954
+17:53:22 GMT+0100: setTextAM: Success 21953
+17:53:23 GMT+0100: Placed standardized image 404162 to the right of A4_Grp_04
+17:53:23 GMT+0100: Processing Action: A4_Grp_05 (Target: A4_Grp_05)
+17:53:23 GMT+0100: setTextAM: Success 21980
+17:53:23 GMT+0100: Updating nazev_05B (ID: 21979) with: vakuovaná 340g/425ml
+17:53:23 GMT+0100: setTextAM: Success 21979
+17:53:23 GMT+0100: Updating cena_05A (ID: 21970) with: 22
+17:53:24 GMT+0100: setTextAM: Success 21970
+17:53:24 GMT+0100: Updating cena_05B (ID: 21969) with: 90
+17:53:24 GMT+0100: setTextAM: Success 21969
+17:53:24 GMT+0100: Updating od_05 (ID: 21972) with: od
+17:53:24 GMT+0100: setTextAM: Success 21972
+17:53:24 GMT+0100: Updating EAN-number_05 (ID: 21978) with: 793385
+17:53:24 GMT+0100: setTextAM: Success 21978
+17:53:24 GMT+0100: Updating EAN:_05 (ID: 21976) with: EAN:
+17:53:24 GMT+0100: setTextAM: Success 21976
+17:53:25 GMT+0100: setTextAM: Success 21975
+17:53:25 GMT+0100: Placed standardized image 4040354 to the right of A4_Grp_05
+17:53:25 GMT+0100: Processing Action: A4_Grp_06 (Target: A4_Grp_06)
+17:53:25 GMT+0100: Updating nazev_06A (ID: 22002) with: Giana Sardinky 125G
+17:53:26 GMT+0100: setTextAM: Success 22002
+17:53:26 GMT+0100: Updating nazev_06B (ID: 22001) with: Rostlinný Olej, V Rostlinném Oleji S Chilli Eo
+17:53:26 GMT+0100: setTextAM: Success 22001
+17:53:26 GMT+0100: Updating cena_06A (ID: 21992) with: 22
+17:53:26 GMT+0100: setTextAM: Success 21992
+17:53:26 GMT+0100: Updating cena_06B (ID: 21991) with: 90
+17:53:26 GMT+0100: setTextAM: Success 21991
+17:53:26 GMT+0100: Updating od_06 (ID: 21994) with: od
+17:53:26 GMT+0100: setTextAM: Success 21994
+17:53:26 GMT+0100: Updating EAN-number_06 (ID: 22000) with: 792104
+17:53:26 GMT+0100: setTextAM: Success 22000
+17:53:26 GMT+0100: Updating EAN:_06 (ID: 21998) with: 2 druhy
+17:53:27 GMT+0100: setTextAM: Success 21998
+17:53:27 GMT+0100: setTextAM: Success 21997
+17:53:27 GMT+0100: Placed standardized image 4040352 to the right of A4_Grp_06
+17:53:28 GMT+0100: Placed standardized image 4042208 to the right of A4_Grp_06
+17:53:28 GMT+0100: Processing Action: A4_Grp_07 (Target: A4_Grp_07)
+17:53:28 GMT+0100: Updating nazev_07A (ID: 22024) with: Giana sardinky 125g
+17:53:28 GMT+0100: setTextAM: Success 22024
+17:53:29 GMT+0100: setTextAM: Success 22023
+17:53:29 GMT+0100: Updating cena_07A (ID: 22014) with: 22
+17:53:29 GMT+0100: setTextAM: Success 22014
+17:53:29 GMT+0100: Updating cena_07B (ID: 22013) with: 90
+17:53:29 GMT+0100: setTextAM: Success 22013
+17:53:29 GMT+0100: Updating od_07 (ID: 22016) with: od
+17:53:29 GMT+0100: setTextAM: Success 22016
+17:53:29 GMT+0100: Updating EAN-number_07 (ID: 22022) with: 791596
+17:53:29 GMT+0100: setTextAM: Success 22022
+17:53:29 GMT+0100: Updating EAN:_07 (ID: 22020) with: EAN:
+17:53:29 GMT+0100: setTextAM: Success 22020
+17:53:30 GMT+0100: setTextAM: Success 22019
+17:53:30 GMT+0100: Placed standardized image 4042207 to the right of A4_Grp_07
+17:53:30 GMT+0100: Processing Action: A4_Grp_13 (Target: A4_Grp_13)
+17:53:30 GMT+0100: Updating nazev_13A (ID: 22156) with: Sledí Filety 170G V
+17:53:31 GMT+0100: setTextAM: Success 22156
+17:53:31 GMT+0100: setTextAM: Success 22155
+17:53:31 GMT+0100: Updating cena_13A (ID: 22146) with: 29
+17:53:31 GMT+0100: setTextAM: Success 22146
+17:53:31 GMT+0100: Updating cena_13B (ID: 22145) with: 90
+17:53:31 GMT+0100: setTextAM: Success 22145
+17:53:31 GMT+0100: Updating od_13 (ID: 22148) with: od
+17:53:31 GMT+0100: setTextAM: Success 22148
+17:53:31 GMT+0100: Updating EAN-number_13 (ID: 22154) with: 794245
+17:53:31 GMT+0100: setTextAM: Success 22154
+17:53:31 GMT+0100: Updating EAN:_13 (ID: 22152) with: 4 druhy
+17:53:32 GMT+0100: setTextAM: Success 22152
+17:53:32 GMT+0100: setTextAM: Success 22151
+17:53:33 GMT+0100: Placed standardized image 4040475 to the right of A4_Grp_13
+17:53:33 GMT+0100: Placed standardized image 4040474 to the right of A4_Grp_13
+17:53:34 GMT+0100: Placed standardized image 4040477 to the right of A4_Grp_13
+17:53:35 GMT+0100: Placed standardized image 4040476 to the right of A4_Grp_13
+17:53:35 GMT+0100: Processing Action: A4_Grp_09 (Target: A4_Grp_09)
+17:53:35 GMT+0100: Updating nazev_09A (ID: 22068) with: Giana Okurky
+17:53:35 GMT+0100: setTextAM: Success 22068
+17:53:35 GMT+0100: Updating nazev_09B (ID: 22067) with: standard (6-9cm) ve sladkokyselém nálevu 670g/720ml
+17:53:35 GMT+0100: setTextAM: Success 22067
+17:53:35 GMT+0100: Updating cena_09A (ID: 22058) with: 36
+17:53:36 GMT+0100: setTextAM: Success 22058
+17:53:36 GMT+0100: Updating cena_09B (ID: 22057) with: 90
+17:53:36 GMT+0100: setTextAM: Success 22057
+17:53:36 GMT+0100: Updating od_09 (ID: 22060) with: od
+17:53:36 GMT+0100: setTextAM: Success 22060
+17:53:36 GMT+0100: Updating EAN-number_09 (ID: 22066) with: 797314
+17:53:36 GMT+0100: setTextAM: Success 22066
+17:53:36 GMT+0100: Updating EAN:_09 (ID: 22064) with: EAN:
+17:53:36 GMT+0100: setTextAM: Success 22064
+17:53:37 GMT+0100: setTextAM: Success 22063
+17:53:37 GMT+0100: Placed standardized image 4042226 to the right of A4_Grp_09
+17:53:37 GMT+0100: Processing Action: A4_Grp_17 (Target: A4_Grp_17)
+17:53:37 GMT+0100: Updating nazev_17A (ID: 22244) with: Šproty 160g uzené
+17:53:38 GMT+0100: setTextAM: Success 22244
+17:53:38 GMT+0100: Updating nazev_17B (ID: 22243) with: celé v olej Giana
+17:53:38 GMT+0100: setTextAM: Success 22243
+17:53:38 GMT+0100: Updating cena_17A (ID: 22234) with: 37
+17:53:38 GMT+0100: setTextAM: Success 22234
+17:53:38 GMT+0100: Updating cena_17B (ID: 22233) with: 90
+17:53:38 GMT+0100: setTextAM: Success 22233
+17:53:38 GMT+0100: Updating od_17 (ID: 22236) with: od
+17:53:39 GMT+0100: setTextAM: Success 22236
+17:53:39 GMT+0100: Updating EAN-number_17 (ID: 22242) with: 511757
+17:53:39 GMT+0100: setTextAM: Success 22242
+17:53:39 GMT+0100: Updating EAN:_17 (ID: 22240) with: EAN:
+17:53:39 GMT+0100: setTextAM: Success 22240
+17:53:39 GMT+0100: setTextAM: Success 22239
+17:53:40 GMT+0100: Placed standardized image 4040360 to the right of A4_Grp_17
+17:53:40 GMT+0100: Processing Action: A4_Grp_15 (Target: A4_Grp_15)
+17:53:40 GMT+0100: setTextAM: Success 22200
+17:53:41 GMT+0100: setTextAM: Success 22199
+17:53:41 GMT+0100: Updating cena_15A (ID: 22190) with: 23
+17:53:41 GMT+0100: setTextAM: Success 22190
+17:53:41 GMT+0100: Updating cena_15B (ID: 22189) with: 90
+17:53:41 GMT+0100: setTextAM: Success 22189
+17:53:41 GMT+0100: Updating od_15 (ID: 22192) with: od
+17:53:41 GMT+0100: setTextAM: Success 22192
+17:53:41 GMT+0100: Updating EAN-number_15 (ID: 22198) with: 515182
+17:53:41 GMT+0100: setTextAM: Success 22198
+17:53:41 GMT+0100: Updating EAN:_15 (ID: 22196) with: EAN:
+17:53:41 GMT+0100: setTextAM: Success 22196
+17:53:42 GMT+0100: setTextAM: Success 22195
+17:53:42 GMT+0100: Placed standardized image 4040821 to the right of A4_Grp_15
+17:53:43 GMT+0100: Processing Action: A4_Grp_10 (Target: A4_Grp_10)
+17:53:43 GMT+0100: setTextAM: Success 22090
+17:53:43 GMT+0100: setTextAM: Success 22089
+17:53:43 GMT+0100: Updating cena_10A (ID: 22080) with: 23
+17:53:43 GMT+0100: setTextAM: Success 22080
+17:53:43 GMT+0100: Updating cena_10B (ID: 22079) with: 90
+17:53:43 GMT+0100: setTextAM: Success 22079
+17:53:43 GMT+0100: Updating od_10 (ID: 22082) with: od
+17:53:43 GMT+0100: setTextAM: Success 22082
+17:53:43 GMT+0100: Updating EAN-number_10 (ID: 22088) with: 505336
+17:53:44 GMT+0100: setTextAM: Success 22088
+17:53:44 GMT+0100: Updating EAN:_10 (ID: 22086) with: 3 druhy
+17:53:44 GMT+0100: setTextAM: Success 22086
+17:53:44 GMT+0100: setTextAM: Success 22085
+17:53:45 GMT+0100: Placed standardized image 4040371 to the right of A4_Grp_10
+17:53:45 GMT+0100: Placed standardized image 4040367 to the right of A4_Grp_10
+17:53:46 GMT+0100: Placed standardized image 4040820 to the right of A4_Grp_10
+17:53:46 GMT+0100: Processing Action: A4_Grp_16 (Target: A4_Grp_16)
+17:53:46 GMT+0100: setTextAM: Success 22222
+17:53:46 GMT+0100: Updating nazev_16B (ID: 22221) with: Exotic Giana, Italiano Giana, Mexico Giana, ...
+17:53:46 GMT+0100: setTextAM: Success 22221
+17:53:46 GMT+0100: Updating cena_16A (ID: 22212) with: 38
+17:53:47 GMT+0100: setTextAM: Success 22212
+17:53:47 GMT+0100: Updating cena_16B (ID: 22211) with: 90
+17:53:47 GMT+0100: setTextAM: Success 22211
+17:53:47 GMT+0100: Updating od_16 (ID: 22214) with: od
+17:53:47 GMT+0100: setTextAM: Success 22214
+17:53:47 GMT+0100: Updating EAN-number_16 (ID: 22220) with: 505176
+17:53:47 GMT+0100: setTextAM: Success 22220
+17:53:47 GMT+0100: setTextAM: Success 22218
+17:53:47 GMT+0100: setTextAM: Success 22217
+17:53:49 GMT+0100: Placed standardized image 4040370 to the right of A4_Grp_16
+17:53:50 GMT+0100: Placed standardized image 4040369 to the right of A4_Grp_16
+17:53:51 GMT+0100: Placed standardized image 4040368 to the right of A4_Grp_16
+17:53:52 GMT+0100: Placed standardized image 4040449 to the right of A4_Grp_16
+17:53:54 GMT+0100: Placed standardized image 4040405 to the right of A4_Grp_16
+17:53:54 GMT+0100: Processing Action: A4_Grp_14 (Target: A4_Grp_14)
+17:53:54 GMT+0100: setTextAM: Success 22178
+17:53:54 GMT+0100: Updating nazev_14B (ID: 22177) with: ve vl. oleji Giana
+17:53:54 GMT+0100: setTextAM: Success 22177
+17:53:54 GMT+0100: Updating cena_14A (ID: 22168) with: 52
+17:53:54 GMT+0100: setTextAM: Success 22168
+17:53:54 GMT+0100: Updating cena_14B (ID: 22167) with: 90
+17:53:55 GMT+0100: setTextAM: Success 22167
+17:53:55 GMT+0100: Updating od_14 (ID: 22170) with: od
+17:53:55 GMT+0100: setTextAM: Success 22170
+17:53:55 GMT+0100: Updating EAN-number_14 (ID: 22176) with: 791787
+17:53:55 GMT+0100: setTextAM: Success 22176
+17:53:55 GMT+0100: Updating EAN:_14 (ID: 22174) with: EAN:
+17:53:55 GMT+0100: setTextAM: Success 22174
+17:53:55 GMT+0100: setTextAM: Success 22173
+17:53:56 GMT+0100: Placed standardized image 4040365 to the right of A4_Grp_14
+17:53:56 GMT+0100: Processing Action: A4_Grp_03 (Target: A4_Grp_03)
+17:53:57 GMT+0100: setTextAM: Success 21936
+17:53:57 GMT+0100: setTextAM: Success 21935
+17:53:57 GMT+0100: Updating cena_03A (ID: 21926) with: 12
+17:53:57 GMT+0100: setTextAM: Success 21926
+17:53:57 GMT+0100: Updating cena_03B (ID: 21925) with: 90
+17:53:57 GMT+0100: setTextAM: Success 21925
+17:53:57 GMT+0100: Updating od_03 (ID: 21928) with: od
+17:53:57 GMT+0100: setTextAM: Success 21928
+17:53:57 GMT+0100: Updating EAN-number_03 (ID: 21934) with: 514338
+17:53:57 GMT+0100: setTextAM: Success 21934
+17:53:57 GMT+0100: Updating EAN:_03 (ID: 21932) with: 3 druhy
+17:53:58 GMT+0100: setTextAM: Success 21932
+17:53:58 GMT+0100: setTextAM: Success 21931
+17:53:59 GMT+0100: Placed standardized image 4042227 to the right of A4_Grp_03
+17:54:00 GMT+0100: Placed standardized image 4042228 to the right of A4_Grp_03
+17:54:01 GMT+0100: Placed standardized image 4040347 to the right of A4_Grp_03
+17:54:01 GMT+0100: Processing Action: A4_Grp_11 (Target: A4_Grp_11)
+17:54:01 GMT+0100: Updating nazev_11A (ID: 22112) with: Olivy 195g zelené
+17:54:01 GMT+0100: setTextAM: Success 22112
+17:54:02 GMT+0100: setTextAM: Success 22111
+17:54:02 GMT+0100: Updating cena_11A (ID: 22102) with: 12
+17:54:02 GMT+0100: setTextAM: Success 22102
+17:54:02 GMT+0100: Updating cena_11B (ID: 22101) with: 90
+17:54:02 GMT+0100: setTextAM: Success 22101
+17:54:02 GMT+0100: Updating od_11 (ID: 22104) with: od
+17:54:02 GMT+0100: setTextAM: Success 22104
+17:54:02 GMT+0100: Updating EAN-number_11 (ID: 22110) with: 795396
+17:54:02 GMT+0100: setTextAM: Success 22110
+17:54:02 GMT+0100: Updating EAN:_11 (ID: 22108) with: EAN:
+17:54:02 GMT+0100: setTextAM: Success 22108
+17:54:03 GMT+0100: setTextAM: Success 22107
+17:54:03 GMT+0100: Placed standardized image 4040346 to the right of A4_Grp_11
+17:54:04 GMT+0100: Processing Action: A4_Grp_12 (Target: A4_Grp_12)
+17:54:04 GMT+0100: setTextAM: Success 22134
+17:54:04 GMT+0100: Updating nazev_12B (ID: 22133) with: loupaná Giana
+17:54:04 GMT+0100: setTextAM: Success 22133
+17:54:04 GMT+0100: Updating cena_12A (ID: 22124) with: 19
+17:54:04 GMT+0100: setTextAM: Success 22124
+17:54:04 GMT+0100: Updating cena_12B (ID: 22123) with: 90
+17:54:04 GMT+0100: setTextAM: Success 22123
+17:54:04 GMT+0100: Updating od_12 (ID: 22126) with: od
+17:54:05 GMT+0100: setTextAM: Success 22126
+17:54:05 GMT+0100: Updating EAN-number_12 (ID: 22132) with: 508351
+17:54:05 GMT+0100: setTextAM: Success 22132
+17:54:05 GMT+0100: Updating EAN:_12 (ID: 22130) with: EAN:
+17:54:05 GMT+0100: setTextAM: Success 22130
+17:54:05 GMT+0100: setTextAM: Success 22129
+17:54:06 GMT+0100: Placed standardized image 4040701 to the right of A4_Grp_12
+17:54:06 GMT+0100: Processing Action: A4_Grp_01 (Target: A4_01)
+17:54:06 GMT+0100: Updating nazev_01A (ID: 20981) with: Giana Fazole Bílé
+17:54:06 GMT+0100: setTextAM: Success 20981
+17:54:06 GMT+0100: setTextAM: Success 20980
+17:54:06 GMT+0100: Updating cena_01A (ID: 20971) with: 17
+17:54:07 GMT+0100: setTextAM: Success 20971
+17:54:07 GMT+0100: Updating cena_01B (ID: 20970) with: 50
+17:54:07 GMT+0100: setTextAM: Success 20970
+17:54:07 GMT+0100: Updating od_01 (ID: 20973) with: od
+17:54:07 GMT+0100: setTextAM: Success 20973
+17:54:07 GMT+0100: Updating EAN-number_01 (ID: 20979) with: 511290
+17:54:07 GMT+0100: setTextAM: Success 20979
+17:54:07 GMT+0100: setTextAM: Success 20977
+17:54:07 GMT+0100: setTextAM: Success 20976
+17:54:08 GMT+0100: Placed standardized image 4041177 to the right of A4_01
+17:54:10 GMT+0100: Placed standardized image 4040567 to the right of A4_01
+17:54:11 GMT+0100: Placed standardized image 4040566 to the right of A4_01
+17:54:12 GMT+0100: Placed standardized image 4040565 to the right of A4_01
+17:54:13 GMT+0100: Placed standardized image 4040568 to the right of A4_01
+17:54:13 GMT+0100: Processing Action: A4_Grp_02 (Target: A4_Grp_02)
+17:54:13 GMT+0100: Updating nazev_02A (ID: 21914) with: Giana Fazolový mix s
+17:54:13 GMT+0100: setTextAM: Success 21914
+17:54:13 GMT+0100: Updating nazev_02B (ID: 21913) with: cizrnou ve slaném nálevu 400g/425ml
+17:54:13 GMT+0100: setTextAM: Success 21913
+17:54:13 GMT+0100: Updating cena_02A (ID: 21904) with: 17
+17:54:14 GMT+0100: setTextAM: Success 21904
+17:54:14 GMT+0100: Updating cena_02B (ID: 21903) with: 50
+17:54:14 GMT+0100: setTextAM: Success 21903
+17:54:14 GMT+0100: Updating od_02 (ID: 21906) with: od
+17:54:14 GMT+0100: setTextAM: Success 21906
+17:54:14 GMT+0100: Updating EAN-number_02 (ID: 21912) with: 512044
+17:54:14 GMT+0100: setTextAM: Success 21912
+17:54:14 GMT+0100: Updating EAN:_02 (ID: 21910) with: EAN:
+17:54:14 GMT+0100: setTextAM: Success 21910
+17:54:14 GMT+0100: setTextAM: Success 21909
+17:54:15 GMT+0100: Placed standardized image 4041178 to the right of A4_Grp_02
+17:54:15 GMT+0100: Processing Action: A4_Grp_08 (Target: A4_Grp_08)
+17:54:15 GMT+0100: Updating nazev_08A (ID: 22046) with: Giana Jahody ve
+17:54:16 GMT+0100: setTextAM: Success 22046
+17:54:16 GMT+0100: Updating nazev_08B (ID: 22045) with: sladkém nálevu 400g/425ml
+17:54:16 GMT+0100: setTextAM: Success 22045
+17:54:16 GMT+0100: Updating cena_08A (ID: 22036) with: 25
+17:54:16 GMT+0100: setTextAM: Success 22036
+17:54:16 GMT+0100: Updating cena_08B (ID: 22035) with: 90
+17:54:16 GMT+0100: setTextAM: Success 22035
+17:54:16 GMT+0100: Updating od_08 (ID: 22038) with: od
+17:54:16 GMT+0100: setTextAM: Success 22038
+17:54:16 GMT+0100: Updating EAN-number_08 (ID: 22044) with: 791503
+17:54:16 GMT+0100: setTextAM: Success 22044
+17:54:17 GMT+0100: Updating EAN:_08 (ID: 22042) with: EAN:
+17:54:17 GMT+0100: setTextAM: Success 22042
+17:54:17 GMT+0100: setTextAM: Success 22041
+17:54:18 GMT+0100: Placed standardized image 4040356 to the right of A4_Grp_08
+09:54:39 GMT+0100: Script Started
+09:54:39 GMT+0100: Mode: active
+09:54:39 GMT+0100: Reading JSON: C:\Users\Bao\Documents\LetakMaster\workspaces\build_plans\260129_0954_Workspace_State_2.xlsx_State_2\build_page_43.json
+09:54:39 GMT+0100: JSON Parsed. Actions: 16
+09:54:39 GMT+0100: runBuild Started for Page 43
+09:54:39 GMT+0100: A4 Groups Requested: A4_Grp_04, A4_Grp_05, A4_Grp_06, A4_Grp_07, A4_Grp_12, A4_Grp_09, A4_Grp_15, A4_Grp_14, A4_Grp_g16, A4_Grp_13, A4_Grp_03, A4_Grp_10, A4_Grp_11, A4_Grp_01, A4_Grp_02, A4_Grp_08
+09:54:39 GMT+0100: AM Scan: Found 970 layers.
+09:54:39 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+09:54:39 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+09:54:39 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+09:54:39 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+09:54:39 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+09:54:39 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+09:54:39 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+09:54:39 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+09:54:39 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+09:54:39 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+09:54:39 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+09:54:39 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+09:54:39 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+09:54:39 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+09:54:39 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+09:54:39 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+09:54:39 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+09:54:39 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+09:54:39 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+09:54:39 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+09:54:39 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+09:54:39 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+09:54:39 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+09:54:39 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+09:54:39 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+09:54:39 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+09:54:39 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+09:54:39 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+09:54:39 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+09:54:39 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+09:54:39 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+09:54:39 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+09:54:39 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+09:54:39 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+09:54:39 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+09:54:39 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+09:54:39 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+09:54:39 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+09:54:40 GMT+0100: Generating A4_Grp_04 from Template...
+09:54:42 GMT+0100: Generating A4_Grp_05 from Template...
+09:54:42 GMT+0100: Offsetting A4_Grp_05 by 421px
+09:54:44 GMT+0100: Generating A4_Grp_06 from Template...
+09:54:45 GMT+0100: Offsetting A4_Grp_06 by 842px
+09:54:47 GMT+0100: Generating A4_Grp_07 from Template...
+09:54:48 GMT+0100: Offsetting A4_Grp_07 by 1263px
+09:54:50 GMT+0100: Generating A4_Grp_12 from Template...
+09:54:50 GMT+0100: Offsetting A4_Grp_12 by 1684px
+09:54:53 GMT+0100: Generating A4_Grp_09 from Template...
+09:54:53 GMT+0100: Offsetting A4_Grp_09 by 2105px
+09:54:55 GMT+0100: Generating A4_Grp_15 from Template...
+09:54:56 GMT+0100: Offsetting A4_Grp_15 by 2526px
+09:54:58 GMT+0100: Generating A4_Grp_14 from Template...
+09:54:59 GMT+0100: Offsetting A4_Grp_14 by 2947px
+09:55:01 GMT+0100: Generating A4_Grp_g16 from Template...
+09:55:02 GMT+0100: Offsetting A4_Grp_g16 by 3368px
+09:55:04 GMT+0100: Generating A4_Grp_13 from Template...
+09:55:05 GMT+0100: Offsetting A4_Grp_13 by 3789px
+09:55:07 GMT+0100: Generating A4_Grp_03 from Template...
+09:55:08 GMT+0100: Offsetting A4_Grp_03 by 4210px
+09:55:10 GMT+0100: Generating A4_Grp_10 from Template...
+09:55:11 GMT+0100: Offsetting A4_Grp_10 by 4631px
+09:55:13 GMT+0100: Generating A4_Grp_11 from Template...
+09:55:14 GMT+0100: Offsetting A4_Grp_11 by 5052px
+09:55:16 GMT+0100: Generating A4_Grp_01 from Template...
+09:55:17 GMT+0100: Offsetting A4_Grp_01 by 5473px
+09:55:19 GMT+0100: Generating A4_Grp_02 from Template...
+09:55:20 GMT+0100: Offsetting A4_Grp_02 by 5894px
+09:55:23 GMT+0100: Generating A4_Grp_08 from Template...
+09:55:23 GMT+0100: Offsetting A4_Grp_08 by 6315px
+09:55:26 GMT+0100: A4 Structure Generated. Re-scanning...
+09:55:26 GMT+0100: Scanning Layers AM...
+09:55:26 GMT+0100: AM Scan: Found 1322 layers.
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_04 (ID 22376)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_05 (ID 22398)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_06 (ID 22420)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_07 (ID 22442)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_12 (ID 22464)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_09 (ID 22486)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_15 (ID 22508)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_14 (ID 22530)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_g16 (ID 22552)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_13 (ID 22574)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_03 (ID 22596)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_10 (ID 22618)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_11 (ID 22640)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_01 (ID 22662)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_02 (ID 22684)
+09:55:26 GMT+0100: AM Map: Found Group A4_Grp_08 (ID 22706)
+09:55:26 GMT+0100: AM Map: Found Group A4_01 (ID 20983)
+09:55:26 GMT+0100: AM Map: Found Group Product_01 (ID 485)
+09:55:26 GMT+0100: AM Map: Found Group Product_02 (ID 17683)
+09:55:26 GMT+0100: AM Map: Found Group Product_03 (ID 17709)
+09:55:26 GMT+0100: AM Map: Found Group Product_04 (ID 17735)
+09:55:26 GMT+0100: AM Map: Found Group Product_05 (ID 17761)
+09:55:26 GMT+0100: AM Map: Found Group Product_06 (ID 17787)
+09:55:26 GMT+0100: AM Map: Found Group Product_07 (ID 17813)
+09:55:26 GMT+0100: AM Map: Found Group Product_08 (ID 17839)
+09:55:26 GMT+0100: AM Map: Found Group Product_09 (ID 17865)
+09:55:26 GMT+0100: AM Map: Found Group Product_10 (ID 17891)
+09:55:26 GMT+0100: AM Map: Found Group Product_11 (ID 17917)
+09:55:26 GMT+0100: AM Map: Found Group Product_12 (ID 17943)
+09:55:27 GMT+0100: AM Map: Found Group Product_13 (ID 17969)
+09:55:27 GMT+0100: AM Map: Found Group Product_14 (ID 17995)
+09:55:27 GMT+0100: AM Map: Found Group Product_15 (ID 18021)
+09:55:27 GMT+0100: AM Map: Found Group Product_16 (ID 18047)
+09:55:27 GMT+0100: AM Map: Found Group Product_01_K (ID 18305)
+09:55:27 GMT+0100: AM Map: Found Group Product_02_K (ID 20239)
+09:55:27 GMT+0100: AM Map: Found Group Product_03_K (ID 20265)
+09:55:27 GMT+0100: AM Map: Found Group Product_04_K (ID 20291)
+09:55:27 GMT+0100: AM Map: Found Group Product_05_K (ID 20317)
+09:55:27 GMT+0100: AM Map: Found Group Product_06_K (ID 20343)
+09:55:27 GMT+0100: AM Map: Found Group Product_07_K (ID 20369)
+09:55:27 GMT+0100: AM Map: Found Group Product_08_K (ID 20395)
+09:55:27 GMT+0100: AM Map: Found Group Product_09_K (ID 20421)
+09:55:27 GMT+0100: AM Map: Found Group Product_10_K (ID 20447)
+09:55:27 GMT+0100: AM Map: Found Group Product_11_K (ID 20473)
+09:55:27 GMT+0100: AM Map: Found Group Product_12_K (ID 20499)
+09:55:27 GMT+0100: AM Map: Found Group Product_01_EX (ID 18833)
+09:55:27 GMT+0100: AM Map: Found Group Product_02_EX (ID 20045)
+09:55:27 GMT+0100: AM Map: Found Group Product_03_EX (ID 20069)
+09:55:27 GMT+0100: AM Map: Found Group Product_05_EX (ID 20093)
+09:55:27 GMT+0100: AM Map: Found Group Product_06_EX (ID 20141)
+09:55:27 GMT+0100: AM Map: Found Group Product_07_EX (ID 20165)
+09:55:27 GMT+0100: AM Map: Found Group Product_09_EX (ID 20213)
+09:55:27 GMT+0100: AM Map: Found Group Product_10_EX (ID 20189)
+09:55:27 GMT+0100: AM Map: Found Group Product_11_EX (ID 20117)
+09:55:27 GMT+0100: Scan Complete.
+09:55:27 GMT+0100: A4 Mode Active: Hiding Standard Product Groups...
+09:55:29 GMT+0100: Starting Action Processing (Total: 16)
+09:55:29 GMT+0100: Processing Action: A4_Grp_04 (Target: A4_Grp_04)
+09:55:29 GMT+0100: Updating nazev_04A (ID: 22374) with: Giana Žampiony
+09:55:29 GMT+0100: setTextAM: Success 22374
+09:55:29 GMT+0100: Updating nazev_04B (ID: 22373) with: krájené ve slaném nálevu 200g/212ml
+09:55:29 GMT+0100: setTextAM: Success 22373
+09:55:29 GMT+0100: Updating cena_04A (ID: 22364) with: 21
+09:55:29 GMT+0100: setTextAM: Success 22364
+09:55:29 GMT+0100: Updating cena_04B (ID: 22363) with: 90
+09:55:29 GMT+0100: setTextAM: Success 22363
+09:55:29 GMT+0100: Updating od_04 (ID: 22366) with: od
+09:55:30 GMT+0100: setTextAM: Success 22366
+09:55:30 GMT+0100: Updating EAN-number_04 (ID: 22372) with: 792746
+09:55:30 GMT+0100: setTextAM: Success 22372
+09:55:30 GMT+0100: Updating EAN:_04 (ID: 22370) with: EAN:
+09:55:30 GMT+0100: setTextAM: Success 22370
+09:55:30 GMT+0100: setTextAM: Success 22369
+09:55:31 GMT+0100: Placed standardized image 404162 to the right of A4_Grp_04
+09:55:31 GMT+0100: Renaming A4_Grp_04 to Giana Žampiony
+09:55:31 GMT+0100: Processing Action: A4_Grp_05 (Target: A4_Grp_05)
+09:55:31 GMT+0100: setTextAM: Success 22396
+09:55:31 GMT+0100: Updating nazev_05B (ID: 22395) with: vakuovaná 340g/425ml
+09:55:31 GMT+0100: setTextAM: Success 22395
+09:55:31 GMT+0100: Updating cena_05A (ID: 22386) with: 22
+09:55:31 GMT+0100: setTextAM: Success 22386
+09:55:31 GMT+0100: Updating cena_05B (ID: 22385) with: 90
+09:55:32 GMT+0100: setTextAM: Success 22385
+09:55:32 GMT+0100: Updating od_05 (ID: 22388) with: od
+09:55:32 GMT+0100: setTextAM: Success 22388
+09:55:32 GMT+0100: Updating EAN-number_05 (ID: 22394) with: 793385
+09:55:32 GMT+0100: setTextAM: Success 22394
+09:55:32 GMT+0100: Updating EAN:_05 (ID: 22392) with: EAN:
+09:55:32 GMT+0100: setTextAM: Success 22392
+09:55:32 GMT+0100: setTextAM: Success 22391
+09:55:33 GMT+0100: Placed standardized image 4040354 to the right of A4_Grp_05
+09:55:33 GMT+0100: Processing Action: A4_Grp_06 (Target: A4_Grp_06)
+09:55:33 GMT+0100: Updating nazev_06A (ID: 22418) with: Giana Sardinky 125G
+09:55:33 GMT+0100: setTextAM: Success 22418
+09:55:33 GMT+0100: Updating nazev_06B (ID: 22417) with: Rostlinný Olej, V Rostlinném Oleji S Chilli Eo
+09:55:34 GMT+0100: setTextAM: Success 22417
+09:55:34 GMT+0100: Updating cena_06A (ID: 22408) with: 22
+09:55:34 GMT+0100: setTextAM: Success 22408
+09:55:34 GMT+0100: Updating cena_06B (ID: 22407) with: 90
+09:55:34 GMT+0100: setTextAM: Success 22407
+09:55:34 GMT+0100: Updating od_06 (ID: 22410) with: od
+09:55:34 GMT+0100: setTextAM: Success 22410
+09:55:34 GMT+0100: Updating EAN-number_06 (ID: 22416) with: 792104
+09:55:34 GMT+0100: setTextAM: Success 22416
+09:55:34 GMT+0100: Updating EAN:_06 (ID: 22414) with: 2 druhy
+09:55:34 GMT+0100: setTextAM: Success 22414
+09:55:35 GMT+0100: setTextAM: Success 22413
+09:55:35 GMT+0100: Placed standardized image 4040352 to the right of A4_Grp_06
+09:55:36 GMT+0100: Placed standardized image 4042208 to the right of A4_Grp_06
+09:55:36 GMT+0100: Renaming A4_Grp_06 to Giana Sardinky 125G
+09:55:36 GMT+0100: Processing Action: A4_Grp_07 (Target: A4_Grp_07)
+09:55:36 GMT+0100: Updating nazev_07A (ID: 22440) with: Giana sardinky 125g
+09:55:36 GMT+0100: setTextAM: Success 22440
+09:55:36 GMT+0100: setTextAM: Success 22439
+09:55:36 GMT+0100: Updating cena_07A (ID: 22430) with: 22
+09:55:37 GMT+0100: setTextAM: Success 22430
+09:55:37 GMT+0100: Updating cena_07B (ID: 22429) with: 90
+09:55:37 GMT+0100: setTextAM: Success 22429
+09:55:37 GMT+0100: Updating od_07 (ID: 22432) with: od
+09:55:37 GMT+0100: setTextAM: Success 22432
+09:55:37 GMT+0100: Updating EAN-number_07 (ID: 22438) with: 791596
+09:55:37 GMT+0100: setTextAM: Success 22438
+09:55:37 GMT+0100: Updating EAN:_07 (ID: 22436) with: EAN:
+09:55:37 GMT+0100: setTextAM: Success 22436
+09:55:38 GMT+0100: setTextAM: Success 22435
+09:55:39 GMT+0100: Placed standardized image 4042207 to the right of A4_Grp_07
+09:55:39 GMT+0100: Renaming A4_Grp_07 to Giana sardinky 125g
+09:55:39 GMT+0100: Processing Action: A4_Grp_12 (Target: A4_Grp_12)
+09:55:39 GMT+0100: Updating nazev_12A (ID: 22462) with: Sledí Filety 170G V
+09:55:39 GMT+0100: setTextAM: Success 22462
+09:55:39 GMT+0100: setTextAM: Success 22461
+09:55:39 GMT+0100: Updating cena_12A (ID: 22452) with: 29
+09:55:39 GMT+0100: setTextAM: Success 22452
+09:55:40 GMT+0100: Updating cena_12B (ID: 22451) with: 90
+09:55:40 GMT+0100: setTextAM: Success 22451
+09:55:40 GMT+0100: Updating od_12 (ID: 22454) with: od
+09:55:40 GMT+0100: setTextAM: Success 22454
+09:55:40 GMT+0100: Updating EAN-number_12 (ID: 22460) with: 794245
+09:55:40 GMT+0100: setTextAM: Success 22460
+09:55:40 GMT+0100: Updating EAN:_12 (ID: 22458) with: 4 druhy
+09:55:40 GMT+0100: setTextAM: Success 22458
+09:55:40 GMT+0100: setTextAM: Success 22457
+09:55:41 GMT+0100: Placed standardized image 4040475 to the right of A4_Grp_12
+09:55:42 GMT+0100: Placed standardized image 4040474 to the right of A4_Grp_12
+09:55:42 GMT+0100: Placed standardized image 4040477 to the right of A4_Grp_12
+09:55:43 GMT+0100: Placed standardized image 4040476 to the right of A4_Grp_12
+09:55:43 GMT+0100: Renaming A4_Grp_12 to Sledí Filety 170G V
+09:55:43 GMT+0100: Processing Action: A4_Grp_09 (Target: A4_Grp_09)
+09:55:43 GMT+0100: Updating nazev_09A (ID: 22484) with: Giana Okurky
+09:55:44 GMT+0100: setTextAM: Success 22484
+09:55:44 GMT+0100: Updating nazev_09B (ID: 22483) with: standard (6-9cm) ve sladkokyselém nálevu 670g/720ml
+09:55:44 GMT+0100: setTextAM: Success 22483
+09:55:44 GMT+0100: Updating cena_09A (ID: 22474) with: 36
+09:55:44 GMT+0100: setTextAM: Success 22474
+09:55:44 GMT+0100: Updating cena_09B (ID: 22473) with: 90
+09:55:44 GMT+0100: setTextAM: Success 22473
+09:55:44 GMT+0100: Updating od_09 (ID: 22476) with: od
+09:55:44 GMT+0100: setTextAM: Success 22476
+09:55:44 GMT+0100: Updating EAN-number_09 (ID: 22482) with: 797314
+09:55:45 GMT+0100: setTextAM: Success 22482
+09:55:45 GMT+0100: Updating EAN:_09 (ID: 22480) with: EAN:
+09:55:45 GMT+0100: setTextAM: Success 22480
+09:55:45 GMT+0100: setTextAM: Success 22479
+09:55:46 GMT+0100: Placed standardized image 4042226 to the right of A4_Grp_09
+09:55:46 GMT+0100: Renaming A4_Grp_09 to Giana Okurky
+09:55:46 GMT+0100: Processing Action: A4_Grp_15 (Target: A4_Grp_15)
+09:55:46 GMT+0100: Updating nazev_15A (ID: 22506) with: Šproty 160g uzené
+09:55:46 GMT+0100: setTextAM: Success 22506
+09:55:46 GMT+0100: Updating nazev_15B (ID: 22505) with: celé v olej Giana
+09:55:46 GMT+0100: setTextAM: Success 22505
+09:55:46 GMT+0100: Updating cena_15A (ID: 22496) with: 37
+09:55:46 GMT+0100: setTextAM: Success 22496
+09:55:47 GMT+0100: Updating cena_15B (ID: 22495) with: 90
+09:55:47 GMT+0100: setTextAM: Success 22495
+09:55:47 GMT+0100: Updating od_15 (ID: 22498) with: od
+09:55:47 GMT+0100: setTextAM: Success 22498
+09:55:47 GMT+0100: Updating EAN-number_15 (ID: 22504) with: 511757
+09:55:47 GMT+0100: setTextAM: Success 22504
+09:55:47 GMT+0100: Updating EAN:_15 (ID: 22502) with: EAN:
+09:55:47 GMT+0100: setTextAM: Success 22502
+09:55:47 GMT+0100: setTextAM: Success 22501
+09:55:48 GMT+0100: Placed standardized image 4040360 to the right of A4_Grp_15
+09:55:48 GMT+0100: Renaming A4_Grp_15 to Šproty 160g uzené
+09:55:48 GMT+0100: Processing Action: A4_Grp_14 (Target: A4_Grp_14)
+09:55:49 GMT+0100: setTextAM: Success 22528
+09:55:49 GMT+0100: setTextAM: Success 22527
+09:55:49 GMT+0100: Updating cena_14A (ID: 22518) with: 23
+09:55:49 GMT+0100: setTextAM: Success 22518
+09:55:49 GMT+0100: Updating cena_14B (ID: 22517) with: 90
+09:55:49 GMT+0100: setTextAM: Success 22517
+09:55:49 GMT+0100: Updating od_14 (ID: 22520) with: od
+09:55:49 GMT+0100: setTextAM: Success 22520
+09:55:49 GMT+0100: Updating EAN-number_14 (ID: 22526) with: 512914
+09:55:50 GMT+0100: setTextAM: Success 22526
+09:55:50 GMT+0100: Updating EAN:_14 (ID: 22524) with: 2 druhy
+09:55:50 GMT+0100: setTextAM: Success 22524
+09:55:50 GMT+0100: setTextAM: Success 22523
+09:55:51 GMT+0100: Placed standardized image 4040820 to the right of A4_Grp_14
+09:55:52 GMT+0100: Placed standardized image 4040821 to the right of A4_Grp_14
+09:55:52 GMT+0100: Processing Action: A4_Grp_g16 (Target: A4_Grp_g16)
+09:55:52 GMT+0100: setTextAM: Success 22550
+09:55:52 GMT+0100: setTextAM: Success 22549
+09:55:52 GMT+0100: Updating cena_g16A (ID: 22540) with: 38
+09:55:53 GMT+0100: setTextAM: Success 22540
+09:55:53 GMT+0100: Updating cena_g16B (ID: 22539) with: 90
+09:55:53 GMT+0100: setTextAM: Success 22539
+09:55:53 GMT+0100: Updating od_g16 (ID: 22542) with: od
+09:55:53 GMT+0100: setTextAM: Success 22542
+09:55:53 GMT+0100: Updating EAN-number_g16 (ID: 22548) with: 505336
+09:55:53 GMT+0100: setTextAM: Success 22548
+09:55:53 GMT+0100: setTextAM: Success 22546
+09:55:54 GMT+0100: setTextAM: Success 22545
+09:55:55 GMT+0100: Placed standardized image 4040371 to the right of A4_Grp_g16
+09:55:55 GMT+0100: Placed standardized image 4040367 to the right of A4_Grp_g16
+09:55:57 GMT+0100: Placed standardized image 4040370 to the right of A4_Grp_g16
+09:55:58 GMT+0100: Placed standardized image 4040369 to the right of A4_Grp_g16
+09:55:59 GMT+0100: Placed standardized image 4040368 to the right of A4_Grp_g16
+09:56:00 GMT+0100: Placed standardized image 4040449 to the right of A4_Grp_g16
+09:56:01 GMT+0100: Placed standardized image 4040405 to the right of A4_Grp_g16
+09:56:02 GMT+0100: Processing Action: A4_Grp_13 (Target: A4_Grp_13)
+09:56:02 GMT+0100: setTextAM: Success 22572
+09:56:02 GMT+0100: Updating nazev_13B (ID: 22571) with: ve vl. oleji Giana
+09:56:02 GMT+0100: setTextAM: Success 22571
+09:56:02 GMT+0100: Updating cena_13A (ID: 22562) with: 52
+09:56:02 GMT+0100: setTextAM: Success 22562
+09:56:02 GMT+0100: Updating cena_13B (ID: 22561) with: 90
+09:56:02 GMT+0100: setTextAM: Success 22561
+09:56:02 GMT+0100: Updating od_13 (ID: 22564) with: od
+09:56:03 GMT+0100: setTextAM: Success 22564
+09:56:03 GMT+0100: Updating EAN-number_13 (ID: 22570) with: 791787
+09:56:03 GMT+0100: setTextAM: Success 22570
+09:56:03 GMT+0100: Updating EAN:_13 (ID: 22568) with: EAN:
+09:56:03 GMT+0100: setTextAM: Success 22568
+09:56:03 GMT+0100: setTextAM: Success 22567
+09:56:04 GMT+0100: Placed standardized image 4040365 to the right of A4_Grp_13
+09:56:04 GMT+0100: Processing Action: A4_Grp_03 (Target: A4_Grp_03)
+09:56:05 GMT+0100: setTextAM: Success 22594
+09:56:05 GMT+0100: setTextAM: Success 22593
+09:56:05 GMT+0100: Updating cena_03A (ID: 22584) with: 12
+09:56:05 GMT+0100: setTextAM: Success 22584
+09:56:05 GMT+0100: Updating cena_03B (ID: 22583) with: 90
+09:56:05 GMT+0100: setTextAM: Success 22583
+09:56:05 GMT+0100: Updating od_03 (ID: 22586) with: od
+09:56:05 GMT+0100: setTextAM: Success 22586
+09:56:05 GMT+0100: Updating EAN-number_03 (ID: 22592) with: 514338
+09:56:06 GMT+0100: setTextAM: Success 22592
+09:56:06 GMT+0100: Updating EAN:_03 (ID: 22590) with: 3 druhy
+09:56:06 GMT+0100: setTextAM: Success 22590
+09:56:06 GMT+0100: setTextAM: Success 22589
+09:56:07 GMT+0100: Placed standardized image 4042227 to the right of A4_Grp_03
+09:56:09 GMT+0100: Placed standardized image 4042228 to the right of A4_Grp_03
+09:56:10 GMT+0100: Placed standardized image 4040347 to the right of A4_Grp_03
+09:56:10 GMT+0100: Processing Action: A4_Grp_10 (Target: A4_Grp_10)
+09:56:10 GMT+0100: Updating nazev_10A (ID: 22616) with: Olivy 195g zelené
+09:56:10 GMT+0100: setTextAM: Success 22616
+09:56:10 GMT+0100: setTextAM: Success 22615
+09:56:10 GMT+0100: Updating cena_10A (ID: 22606) with: 12
+09:56:11 GMT+0100: setTextAM: Success 22606
+09:56:11 GMT+0100: Updating cena_10B (ID: 22605) with: 90
+09:56:11 GMT+0100: setTextAM: Success 22605
+09:56:11 GMT+0100: Updating od_10 (ID: 22608) with: od
+09:56:11 GMT+0100: setTextAM: Success 22608
+09:56:11 GMT+0100: Updating EAN-number_10 (ID: 22614) with: 795396
+09:56:11 GMT+0100: setTextAM: Success 22614
+09:56:11 GMT+0100: Updating EAN:_10 (ID: 22612) with: EAN:
+09:56:11 GMT+0100: setTextAM: Success 22612
+09:56:12 GMT+0100: setTextAM: Success 22611
+09:56:13 GMT+0100: Placed standardized image 4040346 to the right of A4_Grp_10
+09:56:13 GMT+0100: Renaming A4_Grp_10 to Olivy 195g zelené
+09:56:13 GMT+0100: Processing Action: A4_Grp_11 (Target: A4_Grp_11)
+09:56:13 GMT+0100: setTextAM: Success 22638
+09:56:13 GMT+0100: Updating nazev_11B (ID: 22637) with: loupaná Giana
+09:56:14 GMT+0100: setTextAM: Success 22637
+09:56:14 GMT+0100: Updating cena_11A (ID: 22628) with: 19
+09:56:14 GMT+0100: setTextAM: Success 22628
+09:56:14 GMT+0100: Updating cena_11B (ID: 22627) with: 90
+09:56:14 GMT+0100: setTextAM: Success 22627
+09:56:14 GMT+0100: Updating od_11 (ID: 22630) with: od
+09:56:14 GMT+0100: setTextAM: Success 22630
+09:56:14 GMT+0100: Updating EAN-number_11 (ID: 22636) with: 508351
+09:56:14 GMT+0100: setTextAM: Success 22636
+09:56:14 GMT+0100: Updating EAN:_11 (ID: 22634) with: EAN:
+09:56:15 GMT+0100: setTextAM: Success 22634
+09:56:15 GMT+0100: setTextAM: Success 22633
+09:56:16 GMT+0100: Placed standardized image 4040701 to the right of A4_Grp_11
+09:56:16 GMT+0100: Processing Action: A4_Grp_01 (Target: A4_Grp_01)
+09:56:16 GMT+0100: Updating nazev_01A (ID: 22660) with: Giana Fazole Bílé
+09:56:16 GMT+0100: setTextAM: Success 22660
+09:56:16 GMT+0100: setTextAM: Success 22659
+09:56:17 GMT+0100: Updating cena_01A (ID: 22650) with: 17
+09:56:17 GMT+0100: setTextAM: Success 22650
+09:56:17 GMT+0100: Updating cena_01B (ID: 22649) with: 50
+09:56:17 GMT+0100: setTextAM: Success 22649
+09:56:17 GMT+0100: Updating od_01 (ID: 22652) with: od
+09:56:17 GMT+0100: setTextAM: Success 22652
+09:56:17 GMT+0100: Updating EAN-number_01 (ID: 22658) with: 511290
+09:56:17 GMT+0100: setTextAM: Success 22658
+09:56:17 GMT+0100: setTextAM: Success 22656
+09:56:18 GMT+0100: setTextAM: Success 22655
+09:56:19 GMT+0100: Placed standardized image 4041177 to the right of A4_Grp_01
+09:56:20 GMT+0100: Placed standardized image 4040567 to the right of A4_Grp_01
+09:56:21 GMT+0100: Placed standardized image 4040566 to the right of A4_Grp_01
+09:56:22 GMT+0100: Placed standardized image 4040565 to the right of A4_Grp_01
+09:56:23 GMT+0100: Placed standardized image 4040568 to the right of A4_Grp_01
+09:56:23 GMT+0100: Renaming A4_Grp_01 to Giana Fazole Bílé
+09:56:23 GMT+0100: Processing Action: A4_Grp_02 (Target: A4_Grp_02)
+09:56:23 GMT+0100: Updating nazev_02A (ID: 22682) with: Giana Fazolový mix s
+09:56:24 GMT+0100: setTextAM: Success 22682
+09:56:24 GMT+0100: Updating nazev_02B (ID: 22681) with: cizrnou ve slaném nálevu 400g/425ml
+09:56:24 GMT+0100: setTextAM: Success 22681
+09:56:24 GMT+0100: Updating cena_02A (ID: 22672) with: 17
+09:56:24 GMT+0100: setTextAM: Success 22672
+09:56:24 GMT+0100: Updating cena_02B (ID: 22671) with: 50
+09:56:24 GMT+0100: setTextAM: Success 22671
+09:56:24 GMT+0100: Updating od_02 (ID: 22674) with: od
+09:56:24 GMT+0100: setTextAM: Success 22674
+09:56:25 GMT+0100: Updating EAN-number_02 (ID: 22680) with: 512044
+09:56:25 GMT+0100: setTextAM: Success 22680
+09:56:25 GMT+0100: Updating EAN:_02 (ID: 22678) with: EAN:
+09:56:25 GMT+0100: setTextAM: Success 22678
+09:56:25 GMT+0100: setTextAM: Success 22677
+09:56:26 GMT+0100: Placed standardized image 4041178 to the right of A4_Grp_02
+09:56:27 GMT+0100: Renaming A4_Grp_02 to Giana Fazolový mix s
+09:56:27 GMT+0100: Processing Action: A4_Grp_08 (Target: A4_Grp_08)
+09:56:27 GMT+0100: Updating nazev_08A (ID: 22704) with: Giana Jahody ve
+09:56:27 GMT+0100: setTextAM: Success 22704
+09:56:27 GMT+0100: Updating nazev_08B (ID: 22703) with: sladkém nálevu 400g/425ml
+09:56:27 GMT+0100: setTextAM: Success 22703
+09:56:27 GMT+0100: Updating cena_08A (ID: 22694) with: 25
+09:56:27 GMT+0100: setTextAM: Success 22694
+09:56:27 GMT+0100: Updating cena_08B (ID: 22693) with: 90
+09:56:28 GMT+0100: setTextAM: Success 22693
+09:56:28 GMT+0100: Updating od_08 (ID: 22696) with: od
+09:56:28 GMT+0100: setTextAM: Success 22696
+09:56:28 GMT+0100: Updating EAN-number_08 (ID: 22702) with: 791503
+09:56:28 GMT+0100: setTextAM: Success 22702
+09:56:28 GMT+0100: Updating EAN:_08 (ID: 22700) with: EAN:
+09:56:28 GMT+0100: setTextAM: Success 22700
+09:56:28 GMT+0100: setTextAM: Success 22699
+09:56:30 GMT+0100: Placed standardized image 4040356 to the right of A4_Grp_08
+09:56:30 GMT+0100: Renaming A4_Grp_08 to Giana Jahody ve

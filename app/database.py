@@ -1,20 +1,26 @@
+import os
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import create_engine, ForeignKey, String, Integer, DateTime, Text, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./letak_master.db"
+# Collaborative Mode: Use environment variable for PostgreSQL, fallback to local SQLite
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./letak_master.db")
+
+# Use 'check_same_thread' only for SQLite
+connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, connect_args=connect_args
 )
 
-# Enable Write-Ahead Logging (WAL) for concurrency
+# Enable Write-Ahead Logging (WAL) for SQLite concurrency
 @event.listens_for(engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
-    cursor = dbapi_connection.cursor()
-    cursor.execute("PRAGMA journal_mode=WAL")
-    cursor.close()
+    if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.close()
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

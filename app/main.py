@@ -192,8 +192,9 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
     if json_dir and not os.path.isabs(json_dir):
         json_dir = os.path.abspath(json_dir)
     
-    images_dir_js = images_dir.replace("\\", "/")
-    json_dir_js = json_dir.replace("\\", "/")
+    # Use json.dumps to safely escape paths for JavaScript string literals
+    images_dir_js = json.dumps(images_dir.replace("\\", "/"))
+    json_dir_js = json.dumps(json_dir.replace("\\", "/"))
     
     script_path = os.path.abspath(os.path.join("scripts", "builder.jsx"))
     if not os.path.exists(script_path):
@@ -205,7 +206,7 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
         safe_lines = [line for line in lines if not line.strip().startswith("#target")]
         script_content = "".join(safe_lines)
         
-    injection = f'var g_injected_images_dir = "{images_dir_js}";\nvar g_injected_json_dir = "{json_dir_js}";\nvar g_injected_automation = true;'
+    injection = f'var g_injected_images_dir = {images_dir_js};\nvar g_injected_json_dir = {json_dir_js};\nvar g_injected_automation = true;'
     final_script = injection + "\n" + script_content
     
     # We still write this for debugging purposes, though we run the string directly
@@ -496,8 +497,11 @@ async def open_state_excel(state_id: int, force_new: bool = False, db: Session =
                 # This ensures even if the archive was dirty (legacy) or had external links,
                 # the user gets a clean file.
                 service._deep_clean_excel(target_path)
+                
+                # Inject VBA Trigger (Converts to .xlsm if successful)
+                return service.inject_vba_trigger(target_path)
             
-            await run_in_threadpool(_copy_and_fix)
+            target_path = await run_in_threadpool(_copy_and_fix)
             copied = True
         except:
             pass

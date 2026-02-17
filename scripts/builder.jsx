@@ -270,6 +270,7 @@ function placeAndAlign(doc, group, placeholder, file) {
         var pCenterX = pLeft + (pWidth / 2);
         var pCenterY = pTop + (pHeight / 2);
 
+        // Ensure placeholder is active
         doc.activeLayer = placeholder;
         
         var idPlc = charIDToTypeID("Plc ");
@@ -280,7 +281,13 @@ function placeAndAlign(doc, group, placeholder, file) {
         var idQCSt = charIDToTypeID("QCSt");
         var idQcsa = charIDToTypeID("Qcsa");
         desc.putEnumerated(idFTcs, idQCSt, idQcsa); 
-        executeAction(idPlc, desc, DialogModes.NO);
+        
+        try {
+            executeAction(idPlc, desc, DialogModes.NO);
+        } catch(e) {
+            logToManifest("Place Command Failed for " + file.name + ": " + e);
+            return null;
+        }
         
         var newLayer = doc.activeLayer;
         
@@ -309,9 +316,19 @@ function placeAndAlign(doc, group, placeholder, file) {
         
         newLayer.translate(dx, dy);
         
-        placeholder.visible = false;
+        // Final check: if placeholder was inside a group, the new layer might be outside 
+        // depending on placement mode. Ensure it's inside the parent of placeholder.
+        if (placeholder.parent && newLayer.parent != placeholder.parent) {
+             newLayer.move(placeholder, ElementPlacement.PLACEBEFORE);
+        }
         
-    } catch(e) { }
+        placeholder.visible = false;
+        return newLayer;
+        
+    } catch(e) { 
+        logToManifest("placeAndAlign Critical Error: " + e);
+    }
+    return null;
 }
 
 // Helper: Set Layer Label Color
@@ -335,6 +352,7 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
     
     var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
+    var suffixes = ["a", "b", "c", "d", "e"];
     
     for (var i = 0; i < imageNames.length; i++) {
         var imageName = imageNames[i];
@@ -347,26 +365,48 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
         }
         
         var targetId = null;
-        for (var key in layerMap) {
-            if (key == "_self") continue;
+        var currentSuffix = suffixes[i] || "";
+        
+        // 1. Try to find placeholder with specific suffix for this image index
+        if (currentSuffix) {
             for (var b=0; b<baseNames.length; b++) {
-                if (key.indexOf(baseNames[b]) >= 0) {
+                var key = baseNames[b] + "_" + currentSuffix;
+                if (layerMap[key]) {
+                    targetId = layerMap[key];
+                    break;
+                }
+                // Try without underscore
+                key = baseNames[b] + currentSuffix;
+                if (layerMap[key]) {
                     targetId = layerMap[key];
                     break;
                 }
             }
-            if (targetId) break;
+        }
+        
+        // 2. Fallback: Try to find ANY placeholder if this is the first image
+        if (!targetId && i === 0) {
+            for (var key in layerMap) {
+                if (key == "_self") continue;
+                for (var b=0; b<baseNames.length; b++) {
+                    if (key.indexOf(baseNames[b]) >= 0) {
+                        targetId = layerMap[key];
+                        break;
+                    }
+                }
+                if (targetId) break;
+            }
         }
         
         if (targetId) {
-            if (i === 0) {
-                selectLayerAM(targetId);
-                var doc = app.activeDocument;
-                var placeholder = doc.activeLayer; 
-                placeAndAlign(doc, null, placeholder, file);
-                if (colorLabel) setLayerLabelColorAM(doc.activeLayer.id, colorLabel);
-            }
+            logToManifest("Replacing Placeholder (ID: " + targetId + ") with " + imageName);
+            selectLayerAM(targetId);
+            var doc = app.activeDocument;
+            var placeholder = doc.activeLayer; 
+            var newLyr = placeAndAlign(doc, null, placeholder, file);
+            if (newLyr && colorLabel) setLayerLabelColorAM(newLyr.id, colorLabel);
         } else if (layerMap["_self"]) {
+            // 3. Fallback: Place to the side of the group if no placeholder found
             try {
                 selectLayerAM(layerMap["_self"]);
                 var doc = app.activeDocument;

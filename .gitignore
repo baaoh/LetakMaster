@@ -1,73 +1,23 @@
-# User Data and Workspaces
+# --- Python & Environment ---
+python_embed/
+__pycache__/
+*.pyc
+.env
+.venv
+env/
+
+# --- Databases & Local State ---
+*.db
+*.db-wal
+*.db-shm
 workspaces/
 archive_files/
 uploads/
-*.xls
-*.xlsx
+previews_store/
+debug_error.log
 
-# Allow test data
-!tests/*.xls
-!tests/*.xlsx
-!tests/*.psd
-
-# Photoshop Files and Assets
-*.psd
-PSD files/
-LetakMaster_Alpha_v1/
-LetakMaster_Alpha_v1.01/
-
-# Databases
-*.db
-*.db-shm
-*.db-wal
-
-# Logs and Debugging
-*.log
-debug_manifest.*
-logs.txt
-
-# Python Artifacts
-__pycache__/
-*/__pycache__/
-.coverage
-.pytest_cache/
-venv/
-.ipynb_checkpoints/
-
-# Node/Frontend Artifacts
-node_modules/
-frontend/node_modules/
-frontend/dist/
-.eslintcache
-
-# Static Frontend (Built assets)
-# If you want to keep the built version in the repo for "Zero Install", comment the next line.
-# However, usually it's best to ignore it if the source is in 'frontend/'
-# frontend_static/
-
-# Binaries and Client Apps
-ImageCopier/
-*.exe
-python_embed/Lib/site-packages/
-!python_embed/**/*.exe
-!python_embed/**/*.dll
-!python_embed/**/*.pyd
-
-# Project Specific
-OLD/
-Releases/
-debug_*.py
-frontend_logs.txt
-frontend_static/previews/
-frontend_static/assets/*.js
-frontend_static/assets/*.css
-
-# OS/IDE Specific
+# --- IDEs & System ---
 .vscode/
 .idea/
 Thumbs.db
 .DS_Store
-
-# AI Context
-.gemini/
-.gemini-clipboard/

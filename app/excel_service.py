@@ -15,7 +15,7 @@ class ExcelService:
 
     def _deep_clean_excel(self, file_path: str):
         """
-        Uses openpyxl to strip ALL named ranges AND external links from the workbook.
+        Uses openpyxl to strip ALL named ranges, external links, and table references.
         This fixes the XML corruption issue where copied sheets carry over broken references.
         """
         try:
@@ -24,20 +24,22 @@ class ExcelService:
             
             # 1. Clear Global Defined Names
             if hasattr(wb, 'defined_names'):
-                # Get list of all names
-                keys = list(wb.defined_names.keys())
-                for key in keys:
-                    try:
-                        del wb.defined_names[key]
-                    except:
-                        pass
+                wb.defined_names.definedName = []
             
-            # 2. Clear External Links
-            # This is the "Repaired Records: External formula reference" fix.
+            # 2. Clear Worksheet-specific names and Tables
+            for sheet in wb.worksheets:
+                # Clear sheet-level defined names if any (though openpyxl usually keeps them in wb.defined_names with localSheetId)
+                # But we'll be thorough.
+                
+                # Clear Tables - often source of "Removed Records" if names clash
+                if hasattr(sheet, '_tables'):
+                    sheet._tables = []
+            
+            # 3. Clear External Links (The "Repaired Records: External formula reference" fix)
             if hasattr(wb, '_external_links'):
                 wb._external_links = []
             
-            # 3. Save changes
+            # 4. Save changes
             wb.save(file_path)
             wb.close()
             print("DEBUG: Deep clean complete.")
@@ -327,9 +329,9 @@ class ExcelService:
             app.activate(steal_focus=True)
             
             if password:
-                wb = app.books.open(file_path, password=password)
+                wb = app.books.open(file_path, password=password, read_only=False)
             else:
-                wb = app.books.open(file_path)
+                wb = app.books.open(file_path, read_only=False)
                 
             wb.activate()
             return True
@@ -530,3 +532,50 @@ class ExcelService:
         except Exception as e:
             print(f"Failed to open as new book: {e}")
             raise e
+
+    def inject_vba_trigger(self, file_path: str):
+        """
+        Injects the Workbook_Open trigger from scripts/VBA_TRIGGER.txt into the file.
+        Note: This converts the file to .xlsm and requires 'Trust access to VBA project' to be enabled.
+        """
+        vba_file = os.path.join(os.getcwd(), "scripts", "VBA_TRIGGER.txt")
+        if not os.path.exists(vba_file):
+            print("VBA Trigger script not found.")
+            return file_path
+            
+        with open(vba_file, "r", encoding="utf-8") as f:
+            vba_code = f.read()
+
+        app = xw.App(visible=False)
+        try:
+            wb = app.books.open(file_path)
+            try:
+                # Access the VBProject
+                # This WILL fail if the user hasn't enabled 'Trust access to the VBA project object model'
+                comp = wb.api.VBProject.VBComponents("ThisWorkbook")
+                comp.CodeModule.AddFromString(vba_code)
+                print("VBA Trigger injected successfully.")
+            except Exception as e:
+                print(f"VBA Injection failed (likely 'Trust Access' not enabled): {e}")
+                wb.close()
+                return file_path
+
+            # Save as XLSM
+            base_path = os.path.splitext(file_path)[0]
+            xlsm_path = base_path + ".xlsm"
+            
+            # 52 = xlOpenXMLWorkbookMacroEnabled
+            wb.api.SaveAs(xlsm_path, 52)
+            wb.close()
+            
+            # Remove original XLSX if different
+            if xlsm_path != file_path and os.path.exists(file_path):
+                try: os.remove(file_path)
+                except: pass
+                
+            return xlsm_path
+        except Exception as e:
+            print(f"Failed to inject VBA: {e}")
+            return file_path
+        finally:
+            app.quit()

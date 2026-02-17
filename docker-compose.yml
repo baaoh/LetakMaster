@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # 1. The Hub API (Linux Python Environment)
+  hub:
+    build: .
+    container_name: letakmaster_hub
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://letak_user:your_secure_password@db:5432/letak_master
+      - LETAK_ROOT_PATH=/shared_assets
+    volumes:
+      # Map the NAS shared folder to /shared_assets inside the container
+      - /volume1/LetakMaster_Assets:/shared_assets
+    depends_on:
+      - db
+
+  # 2. The Shared Database (PostgreSQL)
+  db:
+    image: postgres:15
+    container_name: letakmaster_db
+    restart: always
+    environment:
+      - POSTGRES_USER=letak_user
+      - POSTGRES_PASSWORD=your_secure_password
+      - POSTGRES_DB=letak_master
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
