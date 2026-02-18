@@ -143,7 +143,7 @@ Add-Type -TypeDefinition @'\nusing System;\nusing System.Runtime.InteropServices
 async def run_builder_script(state_id: int | None = None, db: Session = Depends(get_db)):
     """
     Dynamically generates and runs the builder script with injected paths.
-    Prioritizes the paths linked to the specific State ID if provided.
+    Prioritizes the latest generated plans.
     """
     from fastapi.concurrency import run_in_threadpool
     
@@ -152,36 +152,43 @@ async def run_builder_script(state_id: int | None = None, db: Session = Depends(
     json_conf = db.query(AppConfig).filter_by(key="build_json_path").first()
     
     images_dir = img_conf.value if img_conf and img_conf.value else ""
-    json_dir = json_conf.value if json_conf and json_conf.value else ""
+    json_dir = "" # Start with empty to force discovery
     
-    # Override with State Specifics if available
+    # 1. Check State ID Specifics
     if state_id:
         state = db.query(ProjectState).get(state_id)
         if state and state.last_build_plans_path:
             json_dir = state.last_build_plans_path
+
+    # 2. Auto-Discovery Logic: Find the latest generated plan folder
+    plans_root = os.path.join(os.getcwd(), "workspaces", "build_plans")
+    if os.path.exists(plans_root):
+        # Look for folders like 250127_1230_...
+        subdirs = [os.path.join(plans_root, d) for d in os.listdir(plans_root) if os.path.isdir(os.path.join(plans_root, d))]
+        
+        # Filter by State ID if available
+        if state_id:
+            state_suffix = f"_State_{state_id}"
+            subdirs = [d for d in subdirs if state_suffix in os.path.basename(d)]
+        
+        if subdirs:
+            # Sort by Modification Time (Newest First)
+            subdirs.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+            discovered_dir = subdirs[0]
             
-    # Auto-Discovery Logic: If json_dir is still empty/invalid, find the latest generated plan
-    if not json_dir or not os.path.exists(json_dir):
-        # Check workspaces/build_plans for the newest folder
-        plans_root = os.path.join(os.getcwd(), "workspaces", "build_plans")
-        if os.path.exists(plans_root):
-            subdirs = [os.path.join(plans_root, d) for d in os.listdir(plans_root) if os.path.isdir(os.path.join(plans_root, d))]
-            
-            # Filter by State ID if available
-            if state_id:
-                state_suffix = f"_State_{state_id}"
-                # We look for folders ending with this suffix or containing it clearly
-                state_matches = [d for d in subdirs if state_suffix in os.path.basename(d)]
-                if state_matches:
-                    subdirs = state_matches
-            
-            if subdirs:
-                # Sort by Modification Time (Newest First) - Foolproof
-                subdirs.sort(key=lambda x: os.path.getmtime(x), reverse=True)
-                json_dir = subdirs[0]
-                
-            if json_dir:
-                print(f"Auto-Discovered Latest Build Plans: {json_dir}")
+            # Use discovered if it's newer or we have nothing
+            if not json_dir:
+                json_dir = discovered_dir
+            else:
+                # If we have one from DB, but discovered one is NEWER, take discovered
+                if os.path.getmtime(discovered_dir) > os.path.getmtime(json_dir):
+                    json_dir = discovered_dir
+                    
+            print(f"Auto-Discovered Latest Build Plans: {json_dir}")
+
+    # 3. Fallback to Config
+    if (not json_dir or not os.path.exists(json_dir)) and json_conf and json_conf.value:
+        json_dir = json_conf.value
 
     if not json_dir or not os.path.exists(json_dir):
         raise HTTPException(status_code=400, detail="No Build Plans found. Please run 'Export Build Plans' first.")

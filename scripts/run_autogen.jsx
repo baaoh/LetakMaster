@@ -1,6 +1,6 @@
 #target photoshop
 var g_injected_images_dir = "D:/TAMDA/LetakMaster-dev/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2244_Workspace_State_1.xlsx_State_1";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2258_Workspace_State_1.xlsx_State_1";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -194,50 +194,60 @@ function formatTitleCase(str) {
     return words.join(' ');
 }
 
-// New Helper: Update Text using ID Map
-function updateTextLayerAM(layerIdMap, layerName, text) {
-    var layerId = null;
-    var method = "Direct";
-
-    layerId = layerIdMap[layerName.toLowerCase()];
+// Helper: Robust Layer ID Lookup
+function findLayerId(layerIdMap, layerName) {
+    var lowerName = layerName.toLowerCase();
+    var layerId = layerIdMap[lowerName];
     
+    // 1. Try common suffixes if not found directly
+    var suffixes = ["_k", "k", "_ex", "ex", "_a", "a", "_b", "b"];
     if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "_k"];
-        if (layerId) method = "Suffix_K";
-    }
-    if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "k"];
-        if (layerId) method = "Suffix_K_NoUnderscore";
-    }
-    if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "_ex"];
-        if (layerId) method = "Suffix_EX";
-    }
-    if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "ex"];
-        if (layerId) method = "Suffix_EX_NoUnderscore";
-    }
-    
-    // NEW: Try "_A" or "_B" suffix (Common in A4 templates)
-    if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "_a"];
-        if (layerId) method = "Suffix_A";
-    }
-    if (!layerId) {
-        layerId = layerIdMap[layerName.toLowerCase() + "_b"];
-        if (layerId) method = "Suffix_B";
-    }
-    
-    if (!layerId && layerName.indexOf("EAN") >= 0) {
-        var vars = ["ean", "ean:", "ean_label"];
-        for (var i=0; i<vars.length; i++) {
-             if (layerIdMap[vars[i]]) {
-                 layerId = layerIdMap[vars[i]];
-                 method = "Fallback_Var_" + vars[i];
-                 break;
-             }
+        for (var i = 0; i < suffixes.length; i++) {
+            layerId = layerIdMap[lowerName + suffixes[i]];
+            if (layerId) break;
         }
     }
+    
+    // 2. Specialized Fallbacks for EAN
+    if (!layerId && lowerName.indexOf("ean") >= 0) {
+        var baseSuffix = "";
+        var match = lowerName.match(/_(\w+)$/);
+        if (match) baseSuffix = "_" + match[1];
+
+        var eanVars = ["ean", "ean:", "ean_label", "ean-number"];
+        for (var i = 0; i < eanVars.length; i++) {
+            var v = eanVars[i] + baseSuffix;
+            if (layerIdMap[v]) {
+                layerId = layerIdMap[v];
+                break;
+            }
+            // Try with variants of the suffix too
+            for (var j = 0; j < suffixes.length; j++) {
+                if (layerIdMap[v + suffixes[j]]) {
+                    layerId = layerIdMap[v + suffixes[j]];
+                    break;
+                }
+            }
+            if (layerId) break;
+        }
+    }
+
+    // 3. Specialized Fallbacks for Dostupnost
+    if (!layerId && lowerName.indexOf("dostupnost") >= 0) {
+        var baseSuffix = "";
+        var match = lowerName.match(/_(\w+)$/);
+        if (match) baseSuffix = "_" + match[1];
+        
+        var v = "dostupnost" + baseSuffix;
+        if (layerIdMap[v]) layerId = layerIdMap[v];
+    }
+    
+    return layerId;
+}
+
+// New Helper: Update Text using ID Map
+function updateTextLayerAM(layerIdMap, layerName, text) {
+    var layerId = findLayerId(layerIdMap, layerName);
 
     if (layerId) {
         // Sanitize Text
@@ -261,7 +271,7 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         
         return { id: layerId, text: safeText };
     } else {
-        logToManifest("Failed to find layer ID for: " + layerName + " (Method: " + method + ")");
+        logToManifest("Failed to find layer ID for: " + layerName);
     }
     
     return null;
@@ -738,15 +748,13 @@ function runBuild(doc, plan) {
             
             if (action.visibility) {
                 for (var key in action.visibility) {
-                    var lowerKey = key.toLowerCase();
-                    var layerId = groupLayers[lowerKey];
-                    if (!layerId) layerId = groupLayers[lowerKey + "_k"];
-                    if (!layerId) layerId = groupLayers[lowerKey + "k"];
-                    if (!layerId) layerId = groupLayers[lowerKey + "_ex"];
-                    if (!layerId) layerId = groupLayers[lowerKey + "ex"];
-                    if (!layerId) layerId = groupLayers[lowerKey + "_a"];
-                    if (!layerId) layerId = groupLayers[lowerKey + "_b"];
-                    if (layerId) setVisibleAM(layerId, action.visibility[key]);
+                    var layerId = findLayerId(groupLayers, key);
+                    if (layerId) {
+                        logToManifest("Setting Visibility for " + key + " (ID: " + layerId + "): " + action.visibility[key]);
+                        setVisibleAM(layerId, action.visibility[key]);
+                    } else {
+                        logToManifest("Failed to find layer for visibility: " + key);
+                    }
                 }
             }
             

@@ -680,8 +680,11 @@ class AutomationService:
                 return str(val)
             
             def is_true(val):
-                """Check if a value represents TRUE (case-insensitive)."""
-                return str(val).upper() == "TRUE"
+                """Robustly check if a value represents TRUE."""
+                if val is None: return False
+                if isinstance(val, bool): return val
+                s = str(val).upper().strip()
+                return s in ["TRUE", "1", "1.0", "T", "YES", "ANO", "OK"]
 
             # Populate action data based on available columns and suffix
             if row[COL_NAZEV_A]: action["data"][f"nazev_{suffix}A"] = safe_str(row[COL_NAZEV_A])
