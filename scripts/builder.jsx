@@ -356,6 +356,7 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
     
     var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
+    var exPlaceholderBase = "exsmartobject";
     
     for (var i = 0; i < imageNames.length; i++) {
         var imageName = imageNames[i];
@@ -368,15 +369,29 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
         }
         
         var targetId = null;
+        
+        // 1. Try to find EX-specific placeholder first (highest priority)
         for (var key in layerMap) {
             if (key == "_self") continue;
-            for (var b=0; b<baseNames.length; b++) {
-                if (key.indexOf(baseNames[b]) >= 0) {
-                    targetId = layerMap[key];
-                    break;
-                }
+            if (key.indexOf(exPlaceholderBase) >= 0) {
+                targetId = layerMap[key];
+                logToManifest("Found EX Placeholder: " + key + " (ID: " + targetId + ")");
+                break;
             }
-            if (targetId) break;
+        }
+
+        // 2. Fallback to standard baseNames
+        if (!targetId) {
+            for (var key in layerMap) {
+                if (key == "_self") continue;
+                for (var b=0; b<baseNames.length; b++) {
+                    if (key.indexOf(baseNames[b]) >= 0) {
+                        targetId = layerMap[key];
+                        break;
+                    }
+                }
+                if (targetId) break;
+            }
         }
         
         if (targetId) {
@@ -385,7 +400,7 @@ function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
                 var doc = app.activeDocument;
                 var placeholder = doc.activeLayer; 
                 placeAndAlign(doc, null, placeholder, file);
-                if (colorLabel) setLayerLabelColorAM(doc.activeLayer.id, colorLabel);
+                if (colorLabel) setLayerLabelColorAM(doc.activeLayer.id, groupColor);
             }
         } else if (layerMap["_self"]) {
             try {
@@ -585,6 +600,18 @@ function runBuild(doc, plan) {
                 var gName = variants[v];
                 if (docMap[gName]) setVisibleAM(docMap[gName]["_self"], false);
             }
+        }
+    } else {
+        logToManifest("Grid Mode Active: Hiding A4 Groups...");
+        // 1. Hide explicit A4 placeholders and groups
+        if (docMap["A4_01"]) setVisibleAM(docMap["A4_01"]["_self"], false);
+        if (docMap["A4"]) setVisibleAM(docMap["A4"]["_self"], false);
+        
+        // 2. Hide any generated A4_Grp_XX
+        for (var i=1; i<=10; i++) {
+            var suffix = (i < 10) ? "0" + i : "" + i;
+            var gName = "A4_Grp_" + suffix;
+            if (docMap[gName]) setVisibleAM(docMap[gName]["_self"], false);
         }
     }
 

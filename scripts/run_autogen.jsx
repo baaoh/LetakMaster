@@ -1,6 +1,6 @@
 #target photoshop
 var g_injected_images_dir = "D:/TAMDA/LetakMaster-dev/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2209_Workspace_State_1.xlsx_State_1";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2244_Workspace_State_1.xlsx_State_1";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -182,6 +182,18 @@ function setVisibleAM(id, visible) {
     executeAction(charIDToTypeID(visible ? "Shw " : "Hd  "), desc, DialogModes.NO);
 }
 
+// Helper: Title Case Converter (Removes ALL CAPS)
+function formatTitleCase(str) {
+    if (!str) return "";
+    var words = str.toLowerCase().split(' ');
+    for (var i = 0; i < words.length; i++) {
+        if (words[i].length > 0) {
+            words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+        }
+    }
+    return words.join(' ');
+}
+
 // New Helper: Update Text using ID Map
 function updateTextLayerAM(layerIdMap, layerName, text) {
     var layerId = null;
@@ -230,6 +242,15 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
     if (layerId) {
         // Sanitize Text
         var safeText = text.toString();
+        
+        // Remove ALL CAPS for Main Title Layers (containing "nazev" and "A")
+        if (layerName.toLowerCase().indexOf("nazev") >= 0 && layerName.toUpperCase().indexOf("A") >= 0) {
+            // Check if string is largely ALL CAPS
+            if (safeText === safeText.toUpperCase() && safeText.length > 2) {
+                safeText = formatTitleCase(safeText);
+            }
+        }
+
         safeText = safeText.replace(/\\n/g, "\r");
         safeText = safeText.replace(/\r\n/g, "\r").replace(/\n/g, "\r");
         
