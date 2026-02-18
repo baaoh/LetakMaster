@@ -379,15 +379,31 @@ class ProductClusterer:
                 # Price Check
                 p1 = leader.get('price', 0.0)
                 p2 = candidate.get('price', 0.0)
-                price_ok = True
+                
+                price_exact = (p1 == p2 and p1 > 0)
+                price_ok = False
                 if p1 > 0 and p2 > 0:
                     price_ok = self.check_value_similarity(p1, p2, threshold_ratio=1.6)
                 
                 # Similarity Check
                 score = self.calculate_similarity_score(leader, candidate)
                 
+                # Weight Check
+                w1, u1 = self.extract_weight_data(leader.get('weight_text') or leader['name'])
+                w2, u2 = self.extract_weight_data(candidate.get('weight_text') or candidate['name'])
+                weight_exact = (w1 == w2 and u1 == u2 and w1 is not None)
+
                 # Decision Matrix
-                if price_ok:
+                if price_exact:
+                    # If prices are identical AND weights are identical, we are even more permissive
+                    # for flavor variants (score > 0.4)
+                    if weight_exact:
+                        if score > 0.40:
+                            is_match = True
+                    # Just identical price, permissive if same head word (score > 0.5)
+                    elif score > 0.50:
+                        is_match = True
+                elif price_ok:
                     if score > 0.60: # Threshold for similar price
                         is_match = True
                 else:
@@ -396,8 +412,6 @@ class ProductClusterer:
                         is_match = True
                         
                         # Extra Safety: Check units match if extracting weights
-                        w1, u1 = self.extract_weight_data(leader.get('weight_text') or leader['name'])
-                        w2, u2 = self.extract_weight_data(candidate.get('weight_text') or candidate['name'])
                         if w1 and w2 and u1 != u2:
                             is_match = False # Different units (kg vs l) -> unlikely match
                             
