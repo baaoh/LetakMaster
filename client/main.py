@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.utils.config import settings
+from client.api import automation
 
 app = FastAPI(title="LetakMaster Agent", version="2.0.0")
 
@@ -11,6 +12,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(automation.router)
 
 @app.get("/")
 async def root():

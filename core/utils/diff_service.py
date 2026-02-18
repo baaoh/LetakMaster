@@ -4,24 +4,18 @@ import json
 class DiffService:
     """
     The engine for 'Git-Style' Sync.
-    Compares two data snapshots (List of Rows) and returns granular changes.
+    Now updated to handle High-Fidelity 'full_data' structures.
     """
     def __init__(self, key_field: str = "product_name"):
         self.key_field = key_field
 
     def calculate_diff(self, old_data: List[Dict], new_data: List[Dict]) -> Tuple[List[Dict], List[Dict]]:
-        """
-        Calculates changes between two versions of a page's data.
-        Returns: (List[DataDiffRecords], SummaryString)
-        """
         diff_records = []
-        summary_parts = []
         
         old_map = {str(r.get(self.key_field)): r for r in old_data}
         new_map = {str(r.get(self.key_field)): r for r in new_data}
         
         all_keys = set(old_map.keys()) | set(new_map.keys())
-        
         added, removed, modified = 0, 0, 0
         
         for key in all_keys:
@@ -47,7 +41,6 @@ class DiffService:
                     "change_type": "Info"
                 })
             else:
-                # Row exists in both, check fields
                 row_changes = self._compare_rows(key, old_row, new_row)
                 if row_changes:
                     modified += 1
@@ -58,20 +51,31 @@ class DiffService:
 
     def _compare_rows(self, product_name: str, old_row: Dict, new_row: Dict) -> List[Dict]:
         changes = []
-        # Key fields to check for changes
-        fields_to_check = ["price", "hero", "weight_text", "product_name"]
         
-        for field in fields_to_check:
-            v_old = old_row.get(field)
-            v_new = new_row.get(field)
+        # Mapping our friendly names to Excel Column Letters
+        # price = AC, hero = AK, weight = AA, EAN = W
+        critical_fields = {
+            "AC": "Price",
+            "AK": "Hero Status",
+            "W": "EAN",
+            "V": "Product Name"
+        }
+        
+        old_full = old_row.get("full_data", {})
+        new_full = new_row.get("full_data", {})
+        
+        for col_letter, friendly_name in critical_fields.items():
+            # Get values from inside the 'full_data' -> col -> 'value' structure
+            v_old = old_full.get(col_letter, {}).get("value")
+            v_new = new_full.get(col_letter, {}).get("value")
             
-            if v_old != v_new:
-                severity = "Critical" if field in ["price", "hero"] else "Info"
+            if str(v_old) != str(v_new):
+                severity = "Critical" if friendly_name in ["Price", "Hero Status"] else "Info"
                 changes.append({
                     "product_name": product_name,
-                    "field_name": field,
-                    "old_value": str(v_old),
-                    "new_value": str(v_new),
+                    "field_name": friendly_name,
+                    "old_value": str(v_old) if v_old is not None else "",
+                    "new_value": str(v_new) if v_new is not None else "",
                     "change_type": severity
                 })
         return changes

@@ -2,26 +2,38 @@ import os
 from pydantic import BaseModel
 from typing import Optional
 
+def load_env():
+    """Manual .env loader. Forces values into os.environ."""
+    env_path = os.path.join(os.getcwd(), ".env")
+    if os.path.exists(env_path):
+        print(f"Loading config from {env_path}...")
+        with open(env_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" in line:
+                    key, val = line.split("=", 1)
+                    k = key.strip()
+                    v = val.strip()
+                    # FORCE override existing environment variables
+                    os.environ[k] = v
+                    print(f"  - Set {k}={v}")
+
+# Load env BEFORE anything else
+load_env()
+
 class Settings(BaseModel):
-    """
-    Portable configuration for LetakMaster.
-    Reads from environment variables (set via .env or system).
-    """
     # 1. Database Configuration
-    # Fallback to local SQLite if no Postgres URL is provided
     database_url: str = os.getenv("DATABASE_URL", "sqlite:///./letak_master.db")
 
     # 2. Network / Hub Configuration
-    # The URL where the Synology Hub API is running
     hub_url: str = os.getenv("HUB_URL", "http://localhost:8000")
     
     # 3. Path Management
-    # The 'Universal Root' for the shared network drive
-    # Client might use 'L:/' while Synology uses '/volume1/...'
     letak_root_path: str = os.getenv("LETAK_ROOT_PATH", os.getcwd())
 
     # 4. User Identity
-    # Used to track who made which 'Commit' in the shared history
     user_id: str = os.getenv("LETAK_USER_ID", os.getenv("COMPUTERNAME", "unknown_user"))
 
 # Global settings instance

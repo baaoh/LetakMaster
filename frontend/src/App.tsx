@@ -1,47 +1,34 @@
 import { useState, useEffect } from 'react'
-import { Container, Tabs, Tab } from 'react-bootstrap'
+import { Container, Tabs, Tab, Badge } from 'react-bootstrap'
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
+import { CollaborationTab } from './components/CollaborationTab'
 import { DataInputTab } from './components/DataInputTab'
 import { TraceabilityTab } from './components/TraceabilityTab'
 import { QATab } from './components/QATab'
 import { QAInspectView } from './components/QAInspectView'
-import axios from 'axios'
-
-const API_BASE = "http://127.0.0.1:8000"
 
 function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [canQA, setCanQA] = useState(false);
 
-  // Determine active tab from URL or default to 'data'
+  // Determine active tab from URL or default to 'shared'
   const activeTab = location.pathname.startsWith('/qa') ? 'qa' : 
-                    location.pathname.startsWith('/trace') ? 'trace' : 'data';
-
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const resp = await axios.get(`${API_BASE}/history`);
-        // Enable QA if there is at least one sync/automation state
-        if (resp.data && resp.data.length > 0) {
-          setCanQA(true);
-        }
-      } catch (e) {
-        console.error("Failed to check project status", e);
-      }
-    };
-    checkStatus();
-  }, []);
+                    location.pathname.startsWith('/trace') ? 'trace' : 
+                    location.pathname.startsWith('/local') ? 'local' : 'shared';
 
   const handleSelect = (key: string | null) => {
     if (key === 'qa') navigate('/qa');
     else if (key === 'trace') navigate('/trace');
+    else if (key === 'local') navigate('/local');
     else navigate('/');
   };
 
   return (
     <Container fluid className="py-4">
-      <h1 className="mb-4">LetakMaster Dashboard</h1>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h1 className="m-0">LetakMaster <span className="text-primary">v2.0</span></h1>
+        <Badge bg="success">Collaborative Mode Active</Badge>
+      </div>
       
       <Tabs 
         activeKey={activeTab} 
@@ -49,18 +36,17 @@ function Dashboard() {
         className="mb-3"
         onSelect={handleSelect}
       >
-        <Tab eventKey="data" title="Data Input & History">
+        <Tab eventKey="shared" title="🌍 Shared History & Diffs">
+          <CollaborationTab />
+        </Tab>
+        <Tab eventKey="local" title="💻 Local Workspace (Legacy)">
           <DataInputTab />
         </Tab>
-        <Tab eventKey="trace" title="Traceability & Search">
+        <Tab eventKey="trace" title="🔍 Traceability">
           <TraceabilityTab />
         </Tab>
-        <Tab eventKey="qa" title="Leták checker" disabled={!canQA}>
-          {canQA ? <QATab /> : (
-            <div className="p-5 text-center text-muted">
-              Please sync an Excel file and run Layout Automation first.
-            </div>
-          )}
+        <Tab eventKey="qa" title="✅ Leták Checker">
+          <QATab />
         </Tab>
       </Tabs>
     </Container>
@@ -81,4 +67,3 @@ function App() {
 }
 
 export default App
-
