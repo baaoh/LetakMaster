@@ -391,6 +391,10 @@ class AutomationService:
                 # --- A4 / UNSTRUCTURED LOGIC (Fallback) ---
                 print(f"Page {page_num}: Total Hero {total_hero} != {expected_hero}. Running Clustering Logic...")
                 
+                # Global Page Context for Brands
+                all_page_names = [p['name'] for p in products if p['name']]
+                clusterer.set_page_context(all_page_names)
+                
                 manual_items = []
                 auto_items = []
                 

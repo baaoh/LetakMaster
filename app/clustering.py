@@ -10,7 +10,40 @@ class ProductClusterer:
             "vitana", "maggi", "dr.oetker", "hellmann's", "hellmanns", 
             "instant", "instantní", "sáčková", "polévka", "hotová", "hotova"
         }
+        self.page_brands = set()
         
+    def set_page_context(self, all_names):
+        """
+        Analyzes all names on a page to identify probable brands based on frequency.
+        """
+        self.page_brands = set()
+        if not all_names: return
+        
+        first_words = []
+        first_two_words = []
+        
+        for name in all_names:
+            if not name: continue
+            clean = self.clean_name(name)
+            words = clean.split()
+            if len(words) >= 1:
+                first_words.append(words[0])
+            if len(words) >= 2:
+                first_two_words.append(" ".join(words[:2]))
+        
+        # Count frequencies
+        freq1 = Counter(first_words)
+        freq2 = Counter(first_two_words)
+        
+        # If a word/phrase appears more than once as a starter, it's likely a brand
+        for word, count in freq1.items():
+            if count > 1 or word in self.stop_words:
+                self.page_brands.add(word)
+        
+        for phrase, count in freq2.items():
+            if count > 1:
+                self.page_brands.add(phrase)
+
     def extract_weight_data(self, text):
         """Returns (value, unit) or (None, None)"""
         if not text: return (None, None)
@@ -142,6 +175,19 @@ class ProductClusterer:
                 break # Stop at first difference for Title
         
         if common:
+            # BRAND HEURISTIC: Check against page context or limit to brand-like length
+            full_common = " ".join(common).lower()
+            
+            # If the discovered common prefix matches a known page brand, use it
+            if full_common in self.page_brands:
+                return full_common.title()
+
+            # Fallback to previous logic: Limit to brand-like length
+            if len(common) > 1 and len(common[1]) > 3:
+                common = common[:1]
+            elif len(common) > 2:
+                common = common[:2]
+                
             return " ".join(common).title()
             
         # Fallback: Just use SequenceMatcher on the raw strings to find the common block
@@ -150,6 +196,17 @@ class ProductClusterer:
         if match.size > 3:
             candidate = names[0][match.a : match.a + match.size].strip()
             candidate = candidate.strip(" -,.")
+            
+            # Check against page brands
+            if candidate.lower() in self.page_brands:
+                return candidate.title()
+
+            # Apply same length heuristic to candidate
+            c_words = candidate.split()
+            if len(c_words) > 1 and len(c_words[1]) > 3:
+                candidate = c_words[0]
+            elif len(c_words) > 2:
+                candidate = " ".join(c_words[:2])
             return candidate.title()
             
         return names[0].split()[0].title() # Absolute fallback: First word
@@ -170,14 +227,24 @@ class ProductClusterer:
         clean_name = " ".join(clean_name.split())
         
         # 2. Determine Title (Brand + maybe 1st word)
-        # Heuristic: First word is usually brand. If 2nd word is short or uppercase, include it.
         words = clean_name.split()
         if not words: return full_name, ""
         
         title_count = 1
-        if len(words) > 1:
-            # If second word is short (<= 3 chars) or capitalized like a brand (e.g. "JimmyFox Candy")
-            if len(words[1]) <= 3 or words[1][0].isupper():
+        
+        # Try matching page brands first (Longest match first)
+        c_name_lower = clean_name.lower()
+        matched_brand = ""
+        for brand in sorted(list(self.page_brands), key=len, reverse=True):
+            if c_name_lower.startswith(brand):
+                matched_brand = brand
+                title_count = len(brand.split())
+                break
+
+        if not matched_brand and len(words) > 1:
+            # BRAND HEURISTIC: Only include 2nd word if it's very short (<= 3 chars)
+            # This prevents "Spray Candy" from being treated as part of the Brand "JimmyFox"
+            if len(words[1]) <= 3:
                 title_count = 2
         
         title = " ".join(words[:title_count])
