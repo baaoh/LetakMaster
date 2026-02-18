@@ -279,6 +279,16 @@ function findLayerId(layerIdMap, layerName) {
 // New Helper: Update Text using ID Map
 function updateTextLayerAM(layerIdMap, layerName, text) {
     var layerId = findLayerId(layerIdMap, layerName);
+    
+    // Fallback: If not found and name contains an underscore variant (e.g., nazev_01A_K),
+    // try removing the last part to see if findLayerId can find it via its own heuristics.
+    if (!layerId && layerName.indexOf("_") >= 0) {
+        var parts = layerName.split("_");
+        if (parts.length > 2) {
+            var baseName = parts.slice(0, -1).join("_");
+            layerId = findLayerId(layerIdMap, baseName);
+        }
+    }
 
     if (layerId) {
         // Sanitize Text

@@ -198,20 +198,30 @@ function formatTitleCase(str) {
 function findLayerId(layerIdMap, layerName) {
     var lowerName = layerName.toLowerCase();
     
-    // Helper to check map with variants (space/underscore)
+    // Helper to check map with variants (space/underscore/colon)
     function checkVariants(name) {
         if (layerIdMap[name]) return layerIdMap[name];
-        var alt = name.replace(/_/g, " ");
-        if (layerIdMap[alt]) return layerIdMap[alt];
-        alt = name.replace(/ /g, "_");
-        if (layerIdMap[alt]) return layerIdMap[alt];
+        
+        var variants = [
+            name.replace(/_/g, " "),
+            name.replace(/ /g, "_"),
+            name.replace(/:/g, ""),
+            name.replace(/ /g, ": "),
+            name.replace(/_/g, ": ")
+        ];
+        
+        for (var i = 0; i < variants.length; i++) {
+            if (layerIdMap[variants[i]]) return layerIdMap[variants[i]];
+        }
         return null;
     }
 
     var layerId = checkVariants(lowerName);
     
-    // 1. Try common suffixes if not found directly
+    // Suffixes to try (for Grid K/EX and A4 A/B)
     var suffixes = ["_k", " k", "k", "_ex", " ex", "ex", "_a", " a", "a", "_b", " b", "b"];
+
+    // 1. Try common suffixes if not found directly
     if (!layerId) {
         for (var i = 0; i < suffixes.length; i++) {
             layerId = checkVariants(lowerName + suffixes[i]);
@@ -229,10 +239,17 @@ function findLayerId(layerIdMap, layerName) {
         for (var i = 0; i < eanVars.length; i++) {
             var v = eanVars[i];
             
-            // Try with suffix variations
-            var candidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix];
-            for (var c = 0; c < candidates.length; c++) {
-                layerId = checkVariants(candidates[c]);
+            // Try with suffix variations (e.g., EAN_01)
+            var baseCandidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix, v];
+            for (var c = 0; c < baseCandidates.length; c++) {
+                layerId = checkVariants(baseCandidates[c]);
+                if (layerId) break;
+                
+                // Try with grid suffixes (e.g., EAN_01_K)
+                for (var s = 0; s < suffixes.length; s++) {
+                    layerId = checkVariants(baseCandidates[c] + suffixes[s]);
+                    if (layerId) break;
+                }
                 if (layerId) break;
             }
             if (layerId) break;
@@ -246,9 +263,15 @@ function findLayerId(layerIdMap, layerName) {
         if (match) baseSuffix = match[1];
         
         var v = "dostupnost";
-        var candidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix];
-        for (var c = 0; c < candidates.length; c++) {
-            layerId = checkVariants(candidates[c]);
+        var baseCandidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix, v];
+        for (var c = 0; c < baseCandidates.length; c++) {
+            layerId = checkVariants(baseCandidates[c]);
+            if (layerId) break;
+            
+            for (var s = 0; s < suffixes.length; s++) {
+                layerId = checkVariants(baseCandidates[c] + suffixes[s]);
+                if (layerId) break;
+            }
             if (layerId) break;
         }
     }

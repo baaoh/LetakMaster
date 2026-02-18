@@ -658,27 +658,31 @@ class AutomationService:
                 "visibility": {}
             }
             
+            # Determine precise suffix and variant
+            # Product_01_K -> num="01", var="_K", full="01_K"
+            # A4_Grp_02 -> num="02", var="", full="02"
+            num_part = "00"
+            var_part = ""
+            
+            parts = psd_group.split('_')
             try:
-                # Extract suffix for JSON keys
                 if psd_group.startswith("A4_Grp_"):
-                    # A4_Grp_02 -> suffix "02"
-                    # A4_Grp_G1 -> suffix "G1"
-                    suffix = psd_group.split('_')[2]
+                    num_part = parts[2]
                 elif psd_group.startswith("Product_"):
-                    # Product_01 -> "01"
-                    suffix = psd_group.split('_')[1]
+                    num_part = parts[1]
+                    if len(parts) > 2:
+                        var_part = "_" + parts[2]
                 else:
-                    suffix = psd_group.split('_')[1]
+                    num_part = parts[1]
             except IndexError:
-                suffix = "00" 
+                pass
             
-            def safe_str(val):
-                """Safely convert value to string, handling None and floats."""
-                if val is None: return ""
-                # Convert floats that are integers to int string (e.g., 5.0 -> "5")
-                if isinstance(val, float) and val.is_integer(): return str(int(val))
-                return str(val)
-            
+            # Suffix for keys: 01_K, 07_EX, 02
+            suffix = num_part + var_part
+            # Suffix for text keys: 01A_K, 07A_EX, 02A
+            def text_key(base, sub):
+                return f"{base}_{num_part}{sub}{var_part}"
+
             def is_true(val):
                 """Robustly check if a value represents TRUE."""
                 if val is None: return False
@@ -687,18 +691,18 @@ class AutomationService:
                 return s in ["TRUE", "1", "1.0", "T", "YES", "ANO", "OK"]
 
             # Populate action data based on available columns and suffix
-            if row[COL_NAZEV_A]: action["data"][f"nazev_{suffix}A"] = safe_str(row[COL_NAZEV_A])
+            if row[COL_NAZEV_A]: action["data"][text_key("nazev", "A")] = safe_str(row[COL_NAZEV_A])
             
             # Subtitle & Visibility logic
             if row[COL_NAZEV_B]:
-                action["data"][f"nazev_{suffix}B"] = safe_str(row[COL_NAZEV_B])
-                action["visibility"][f"nazev_{suffix}B"] = True
+                action["data"][text_key("nazev", "B")] = safe_str(row[COL_NAZEV_B])
+                action["visibility"][text_key("nazev", "B")] = True
             else:
                 # If Nazev B is empty, explicitly hide it
-                action["visibility"][f"nazev_{suffix}B"] = False
+                action["visibility"][text_key("nazev", "B")] = False
 
-            if row[COL_CENA_A]: action["data"][f"cena_{suffix}A"] = safe_str(row[COL_CENA_A])
-            if row[COL_CENA_B]: action["data"][f"cena_{suffix}B"] = safe_str(row[COL_CENA_B])
+            if row[COL_CENA_A]: action["data"][text_key("cena", "A")] = safe_str(row[COL_CENA_A])
+            if row[COL_CENA_B]: action["data"][text_key("cena", "B")] = safe_str(row[COL_CENA_B])
             if row[COL_OD]: action["data"][f"od_{suffix}"] = safe_str(row[COL_OD])
             if row[COL_EAN_NUM]: action["data"][f"EAN-number_{suffix}"] = safe_str(row[COL_EAN_NUM])
             if row[COL_EAN_LBL]: action["data"][f"EAN:_{suffix}"] = safe_str(row[COL_EAN_LBL])
