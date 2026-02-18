@@ -467,18 +467,17 @@ class AutomationService:
                     
                     # 1. Calculate Aggregates
                     grp_names = [x['name'] for x in grp]
+                    
+                    # New Logic: Clusterer handles smart splitting and weight movement
                     nazev_a = clusterer.generate_smart_title(grp_names)
                     nazev_b = clusterer.generate_variants(grp, nazev_a)
                     
-                    # --- SMART TITLE SPLITTER ---
-                    if len(nazev_a) > 20:
-                        split_idx = nazev_a[:21].rfind(' ')
-                        if split_idx == -1: split_idx = 20
-                        part_a = nazev_a[:split_idx].strip()
-                        part_b = nazev_a[split_idx:].strip()
-                        nazev_a = part_a
-                        nazev_b = f"{part_b}, {nazev_b}" if nazev_b else part_b
-                    
+                    # Ensure weight is on a new line if not already
+                    if "\n" not in nazev_b and len(grp_names) == 1:
+                        # Re-run smart split for single item to be sure
+                        ta, tb = clusterer.smart_split(grp_names[0])
+                        nazev_a, nazev_b = ta, tb
+
                     prices = [x['price'] for x in grp if x['price'] > 0]
                     min_price = min(prices) if prices else 0.0
                     has_multiple_prices = len(set(prices)) > 1

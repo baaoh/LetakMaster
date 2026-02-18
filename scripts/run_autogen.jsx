@@ -1,6 +1,6 @@
 #target photoshop
-var g_injected_images_dir = "M:/@BaoVuong/2026_01_24-Letak/images";
-var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster/workspaces/build_plans/260129_0954_Workspace_State_2.xlsx_State_2";
+var g_injected_images_dir = "D:/TAMDA/LetakMaster-dev/workspaces/images";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2209_Workspace_State_1.xlsx_State_1";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;

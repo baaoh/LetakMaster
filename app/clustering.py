@@ -114,7 +114,11 @@ class ProductClusterer:
         Extracts the common prefix/tokens that represent the Group Name.
         """
         if not names: return ""
-        if len(names) == 1: return names[0]
+        
+        # If it's a single item, we want a smart split instead of just returning the name
+        if len(names) == 1:
+            title, subtitle = self.smart_split(names[0])
+            return title
         
         # Tokenize all names
         token_lists = [self.clean_name(n).split() for n in names]
@@ -135,10 +139,11 @@ class ProductClusterer:
             if is_in_all:
                 common.append(token)
             else:
-                # Heuristic: If we have enough common words, maybe stop?
-                # For now, let's keep collecting common words even if skipped
-                pass
+                break # Stop at first difference for Title
         
+        if common:
+            return " ".join(common).title()
+            
         # Fallback: Just use SequenceMatcher on the raw strings to find the common block
         matcher = difflib.SequenceMatcher(None, names[0], names[1])
         match = matcher.find_longest_match(0, len(names[0]), 0, len(names[1]))
@@ -147,10 +152,88 @@ class ProductClusterer:
             candidate = candidate.strip(" -,.")
             return candidate.title()
             
-        if common:
-            return " ".join(common).title()
+        return names[0].split()[0].title() # Absolute fallback: First word
+
+    def smart_split(self, full_name):
+        """
+        Splits a single product name into (Title, Subtitle) where weights
+        go to the bottom row of the subtitle.
+        """
+        if not full_name: return "", ""
+        
+        # 1. Extract weight/volume
+        weight_pattern = r'(\d+(?:[.,]\d+)?\s*(?:g|kg|ml|l|ks|ks/bal)\b)'
+        weights = re.findall(weight_pattern, full_name, re.IGNORECASE)
+        
+        # Clean name of weights for title/subtitle splitting
+        clean_name = re.sub(weight_pattern, '', full_name, flags=re.IGNORECASE)
+        clean_name = " ".join(clean_name.split())
+        
+        # 2. Determine Title (Brand + maybe 1st word)
+        # Heuristic: First word is usually brand. If 2nd word is short or uppercase, include it.
+        words = clean_name.split()
+        if not words: return full_name, ""
+        
+        title_count = 1
+        if len(words) > 1:
+            # If second word is short (<= 3 chars) or capitalized like a brand (e.g. "JimmyFox Candy")
+            if len(words[1]) <= 3 or words[1][0].isupper():
+                title_count = 2
+        
+        title = " ".join(words[:title_count])
+        subtitle_core = " ".join(words[title_count:])
+        
+        # 3. Assemble Subtitle
+        # Subtitle = Core + Newline + Weight
+        weight_text = self.format_weight_range(weights)
+        
+        if subtitle_core and weight_text:
+            subtitle = f"{subtitle_core}\n{weight_text}"
+        elif weight_text:
+            subtitle = weight_text
+        else:
+            subtitle = subtitle_core
             
-        return names[0]
+        return title, subtitle
+
+    def format_weight_range(self, weight_list):
+        """
+        Converts a list of weights like ['10g', '14g', '13g'] into '10g - 17g'.
+        """
+        if not weight_list: return ""
+        
+        # Group by unit
+        by_unit = {}
+        for w in weight_list:
+            val, unit = self.extract_weight_data(w)
+            if val is not None:
+                if unit not in by_unit: by_unit[unit] = []
+                by_unit[unit].append(val)
+        
+        if not by_unit:
+            # Fallback for patterns we couldn't parse
+            return " ".join(sorted(list(set(weight_list))))
+        
+        parts = []
+        # Sort units to keep 'g' before 'kg' or similar if mixed (though rare)
+        for unit in sorted(by_unit.keys()):
+            vals = sorted(list(set(by_unit[unit])))
+            if len(vals) > 1:
+                min_v = vals[0]
+                max_v = vals[-1]
+                
+                def fmt(v):
+                    if float(v).is_integer(): return str(int(v))
+                    return str(v).replace('.', ',')
+                
+                parts.append(f"{fmt(min_v)}{unit} - {fmt(max_v)}{unit}")
+            else:
+                def fmt(v):
+                    if float(v).is_integer(): return str(int(v))
+                    return str(v).replace('.', ',')
+                parts.append(f"{fmt(vals[0])}{unit}")
+        
+        return " ".join(parts)
 
     def generate_variants(self, items, group_title):
         """
@@ -159,39 +242,47 @@ class ProductClusterer:
         variants = []
         title_lower = group_title.lower()
         
+        # Global weight extraction for the group
+        group_weights = []
+        
         for item in items:
             name = item['name']
             name_lower = name.lower()
             
-            # Simple subtraction
-            # We remove the group title tokens from the name
+            # Extract weights for this item
+            item_weight_raw = item.get('weight_text', '') or name
+            w_pattern = r'(\d+(?:[.,]\d+)?\s*(?:g|kg|ml|l|ks)\b)'
+            item_weights = re.findall(w_pattern, item_weight_raw, re.IGNORECASE)
+            group_weights.extend(item_weights)
+            
+            # Subtract title
             title_tokens = title_lower.split()
             name_tokens = name_lower.split()
             
-            diff_tokens = [t for t in name_tokens if t not in title_tokens]
+            # Remove weights from name_tokens before diffing
+            name_tokens_no_w = [t for t in name_tokens if not re.match(r'^\d+(?:[.,]\d+)?(?:g|kg|ml|l|ks)$', t)]
+            
+            diff_tokens = [t for t in name_tokens_no_w if t not in title_tokens]
             diff = " ".join(diff_tokens)
             
             # Cleanup
-            diff = re.sub(r'^\W+|\W+$', '', diff) # trim non-alphanumeric
-            
-            # Remove weights from variant text if they are redundant (optional)
+            diff = re.sub(r'^\W+|\W+$', '', diff)
             
             if diff:
                 variants.append(diff.title())
-            else:
-                # If exact match, look for weight difference
-                w_text = item.get('weight_text', '')
-                if w_text: variants.append(w_text)
 
         # Unique & Limit
         unique = sorted(list(set(variants)))
-        # Filter out empty or pure punctuation
         unique = [u for u in unique if re.search(r'[a-zA-Z0-9]', u)]
         
-        if not unique: return ""
+        core_subtitle = ", ".join(unique)
         
-        # Concatenate ALL variants without truncation as per user request
-        return ", ".join(unique)
+        # Format weights as a range if possible
+        weight_row = self.format_weight_range(group_weights)
+        
+        if core_subtitle and weight_row:
+            return f"{core_subtitle}\n{weight_row}"
+        return core_subtitle or weight_row
 
     def group_items(self, items):
         """
