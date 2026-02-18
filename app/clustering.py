@@ -175,20 +175,14 @@ class ProductClusterer:
                 break # Stop at first difference for Title
         
         if common:
-            # BRAND HEURISTIC: Check against page context or limit to brand-like length
-            full_common = " ".join(common).lower()
-            
-            # If the discovered common prefix matches a known page brand, use it
-            if full_common in self.page_brands:
-                return full_common.title()
-
-            # Fallback to previous logic: Limit to brand-like length
-            if len(common) > 1 and len(common[1]) > 3:
-                common = common[:1]
-            elif len(common) > 2:
-                common = common[:2]
-                
-            return " ".join(common).title()
+            # FOR GROUPS: Use the entire common prefix (already weight-free)
+            # Limit to 4 words to prevent extremely long titles, but otherwise keep it whole.
+            # This ensures "Kotlíkové Brambůrky" stays together in the title.
+            full_common = " ".join(common)
+            words = full_common.split()
+            if len(words) > 4:
+                return " ".join(words[:4]).title()
+            return full_common.title()
             
         # Fallback: Just use SequenceMatcher on the raw strings to find the common block
         matcher = difflib.SequenceMatcher(None, names[0], names[1])
@@ -196,17 +190,9 @@ class ProductClusterer:
         if match.size > 3:
             candidate = names[0][match.a : match.a + match.size].strip()
             candidate = candidate.strip(" -,.")
-            
-            # Check against page brands
-            if candidate.lower() in self.page_brands:
-                return candidate.title()
-
-            # Apply same length heuristic to candidate
             c_words = candidate.split()
-            if len(c_words) > 1 and len(c_words[1]) > 3:
-                candidate = c_words[0]
-            elif len(c_words) > 2:
-                candidate = " ".join(c_words[:2])
+            if len(c_words) > 4:
+                return " ".join(c_words[:4]).title()
             return candidate.title()
             
         return names[0].split()[0].title() # Absolute fallback: First word
