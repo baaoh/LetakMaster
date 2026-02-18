@@ -1,6 +1,6 @@
 #target photoshop
 var g_injected_images_dir = "D:/TAMDA/LetakMaster-dev/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2304_Workspace_State_1.xlsx_State_1";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2322_Workspace_State_1.xlsx_State_1";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -213,6 +213,15 @@ function findLayerId(layerIdMap, layerName) {
         for (var i = 0; i < variants.length; i++) {
             if (layerIdMap[variants[i]]) return layerIdMap[variants[i]];
         }
+
+        // Last resort: normalized alphanumeric match
+        var normSearch = name.replace(/[^a-z0-9]/g, "");
+        for (var key in layerIdMap) {
+            if (key.replace(/[^a-z0-9]/g, "") === normSearch) {
+                return layerIdMap[key];
+            }
+        }
+
         return null;
     }
 
@@ -282,6 +291,16 @@ function findLayerId(layerIdMap, layerName) {
 // New Helper: Update Text using ID Map
 function updateTextLayerAM(layerIdMap, layerName, text) {
     var layerId = findLayerId(layerIdMap, layerName);
+    
+    // Fallback: If not found and name contains an underscore variant (e.g., nazev_01A_K),
+    // try removing the last part to see if findLayerId can find it via its own heuristics.
+    if (!layerId && layerName.indexOf("_") >= 0) {
+        var parts = layerName.split("_");
+        if (parts.length > 2) {
+            var baseName = parts.slice(0, -1).join("_");
+            layerId = findLayerId(layerIdMap, baseName);
+        }
+    }
 
     if (layerId) {
         // Sanitize Text

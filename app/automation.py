@@ -683,6 +683,12 @@ class AutomationService:
             def text_key(base, sub):
                 return f"{base}_{num_part}{sub}{var_part}"
 
+            def safe_str(val):
+                """Safely convert value to string, handling None and floats."""
+                if val is None: return ""
+                if isinstance(val, float) and val.is_integer(): return str(int(val))
+                return str(val)
+
             def is_true(val):
                 """Robustly check if a value represents TRUE."""
                 if val is None: return False
