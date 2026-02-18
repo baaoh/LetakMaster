@@ -1,6 +1,6 @@
 #target photoshop
 var g_injected_images_dir = "D:/TAMDA/LetakMaster-dev/workspaces/images";
-var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2258_Workspace_State_1.xlsx_State_1";
+var g_injected_json_dir = "D:/TAMDA/LetakMaster/workspaces/build_plans/260218_2304_Workspace_State_1.xlsx_State_1";
 var g_injected_automation = true;
 
 var scriptFolder = new File($.fileName).parent;
@@ -197,13 +197,24 @@ function formatTitleCase(str) {
 // Helper: Robust Layer ID Lookup
 function findLayerId(layerIdMap, layerName) {
     var lowerName = layerName.toLowerCase();
-    var layerId = layerIdMap[lowerName];
+    
+    // Helper to check map with variants (space/underscore)
+    function checkVariants(name) {
+        if (layerIdMap[name]) return layerIdMap[name];
+        var alt = name.replace(/_/g, " ");
+        if (layerIdMap[alt]) return layerIdMap[alt];
+        alt = name.replace(/ /g, "_");
+        if (layerIdMap[alt]) return layerIdMap[alt];
+        return null;
+    }
+
+    var layerId = checkVariants(lowerName);
     
     // 1. Try common suffixes if not found directly
-    var suffixes = ["_k", "k", "_ex", "ex", "_a", "a", "_b", "b"];
+    var suffixes = ["_k", " k", "k", "_ex", " ex", "ex", "_a", " a", "a", "_b", " b", "b"];
     if (!layerId) {
         for (var i = 0; i < suffixes.length; i++) {
-            layerId = layerIdMap[lowerName + suffixes[i]];
+            layerId = checkVariants(lowerName + suffixes[i]);
             if (layerId) break;
         }
     }
@@ -211,22 +222,18 @@ function findLayerId(layerIdMap, layerName) {
     // 2. Specialized Fallbacks for EAN
     if (!layerId && lowerName.indexOf("ean") >= 0) {
         var baseSuffix = "";
-        var match = lowerName.match(/_(\w+)$/);
-        if (match) baseSuffix = "_" + match[1];
+        var match = lowerName.match(/[_ ](\w+)$/);
+        if (match) baseSuffix = match[1];
 
-        var eanVars = ["ean", "ean:", "ean_label", "ean-number"];
+        var eanVars = ["ean", "ean:", "ean_label", "ean-number", "ean number"];
         for (var i = 0; i < eanVars.length; i++) {
-            var v = eanVars[i] + baseSuffix;
-            if (layerIdMap[v]) {
-                layerId = layerIdMap[v];
-                break;
-            }
-            // Try with variants of the suffix too
-            for (var j = 0; j < suffixes.length; j++) {
-                if (layerIdMap[v + suffixes[j]]) {
-                    layerId = layerIdMap[v + suffixes[j]];
-                    break;
-                }
+            var v = eanVars[i];
+            
+            // Try with suffix variations
+            var candidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix];
+            for (var c = 0; c < candidates.length; c++) {
+                layerId = checkVariants(candidates[c]);
+                if (layerId) break;
             }
             if (layerId) break;
         }
@@ -235,11 +242,15 @@ function findLayerId(layerIdMap, layerName) {
     // 3. Specialized Fallbacks for Dostupnost
     if (!layerId && lowerName.indexOf("dostupnost") >= 0) {
         var baseSuffix = "";
-        var match = lowerName.match(/_(\w+)$/);
-        if (match) baseSuffix = "_" + match[1];
+        var match = lowerName.match(/[_ ](\w+)$/);
+        if (match) baseSuffix = match[1];
         
-        var v = "dostupnost" + baseSuffix;
-        if (layerIdMap[v]) layerId = layerIdMap[v];
+        var v = "dostupnost";
+        var candidates = [v + "_" + baseSuffix, v + " " + baseSuffix, v + baseSuffix];
+        for (var c = 0; c < candidates.length; c++) {
+            layerId = checkVariants(candidates[c]);
+            if (layerId) break;
+        }
     }
     
     return layerId;
@@ -556,9 +567,20 @@ function processA4Groups(doc, plan, win) {
                  var child = layerObj.layers[k];
                  var oldName = child.name;
                  var cleanName = oldName.replace(/\s+copy\s*\d*$/i, "");
-                 if (cleanName.indexOf("_01") >= 0) {
-                     cleanName = cleanName.replace("_01", "_" + newIdx);
+                 
+                 // Smart Suffix Replacement (01 -> XX)
+                 // Handles: _01,  01, : 01, :01
+                 var suffixPatterns = ["_01", " 01", ": 01", ":01"];
+                 var didReplace = false;
+                 for (var s = 0; s < suffixPatterns.length; s++) {
+                     if (cleanName.indexOf(suffixPatterns[s]) >= 0) {
+                         var newSuffix = suffixPatterns[s].replace("01", newIdx);
+                         cleanName = cleanName.replace(suffixPatterns[s], newSuffix);
+                         didReplace = true;
+                         break;
+                     }
                  }
+
                  if (child.name !== cleanName) child.name = cleanName;
                  if (child.typename == "LayerSet") recurse(child, newIdx);
              }
