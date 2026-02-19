@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from typing import Optional, List
 from client.agent.sync_manager import SyncManager
 from client.automation.excel_agent import ExcelAgent
+from client.automation.designer_service import DesignerService
+import subprocess
 
 router = APIRouter(prefix="/automation", tags=["Automation"])
 
@@ -16,13 +18,18 @@ class SheetListRequest(BaseModel):
     excel_path: str
     password: Optional[str] = None
 
-import subprocess
+class OpenExcelRequest(BaseModel):
+    excel_path: str
+    sheet_name: Optional[str] = None
+    password: Optional[str] = None
+
+class RunBuilderRequest(BaseModel):
+    images_path: Optional[str] = None
 
 @router.post("/browse-file")
 async def browse_excel_file():
     """
     Opens a native Windows file dialog via PowerShell.
-    Works in portable environments without tkinter.
     """
     cmd = (
         "powershell -NoProfile -Command \""
@@ -38,11 +45,42 @@ async def browse_excel_file():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Browser Error: {str(e)}")
 
+@router.post("/open-excel")
+async def open_excel_workspace(req: OpenExcelRequest):
+    """
+    Opens the requested Excel file locally.
+    """
+    service = DesignerService()
+    return service.open_excel(req.excel_path, req.sheet_name, req.password)
+
+@router.post("/launch-ps")
+async def launch_photoshop():
+    """
+    Triggers the Photoshop launch/connection.
+    """
+    service = DesignerService()
+    return service.launch_photoshop()
+
+@router.post("/calculate-layouts")
+async def calculate_layouts():
+    service = DesignerService()
+    return service.enrich_active_sheet()
+
+@router.post("/export-plans")
+async def export_plans():
+    service = DesignerService()
+    return service.export_build_plans()
+
+@router.post("/run-builder")
+async def run_builder(req: RunBuilderRequest):
+    """
+    Triggers the Photoshop builder script with injected paths.
+    """
+    service = DesignerService()
+    return service.run_photoshop_builder(images_dir=req.images_path)
+
 @router.post("/sheets")
 async def list_excel_sheets(req: SheetListRequest):
-    """
-    Returns a list of sheet names for the UI dropdown.
-    """
     agent = ExcelAgent()
     try:
         sheets = agent.list_sheets(req.excel_path, req.password)

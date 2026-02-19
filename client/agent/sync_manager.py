@@ -34,7 +34,8 @@ class SyncManager:
 
             # 2. Create NAS Archive
             timestamp = datetime.now().strftime("%Y%m%d_%H%M")
-            filename = f"{timestamp}_{settings.user_id}.xlsx"
+            orig_ext = os.path.splitext(excel_path)[1] # Preserve .xls, .xlsm, etc.
+            filename = f"{timestamp}_{settings.user_id}{orig_ext}"
             rel_archive_dir = f"Archives/Project_{project_id}"
             
             # Ensure the directory exists on the NAS (via L:/)

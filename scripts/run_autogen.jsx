@@ -1,7 +1,7 @@
-#target photoshop
-var g_injected_images_dir = "M:/@BaoVuong/2026_01_24-Letak/images";
-var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster/workspaces/build_plans/260129_0954_Workspace_State_2.xlsx_State_2";
+var g_injected_images_dir = "K:/LetakMaster_Assets/Product_Photos/03-04";
+var g_injected_json_dir = "C:/Users/Bao/Documents/LetakMaster/workspaces/build_plans/260219_1609_Workspace_20260219_1442_Bao";
 var g_injected_automation = true;
+
 
 var scriptFolder = new File($.fileName).parent;
 var projectRoot = scriptFolder.parent;
@@ -57,7 +57,7 @@ function saveManifest(docPath, pageNum) {
 }
 
 // --- Globals & Config ---
-var g_injected_json_dir = typeof g_injected_json_dir !== 'undefined' ? g_injected_json_dir : null;
+var g_injected_json_dir = typeof g_injected_json_dir !== 'undefined' ? g_injected_json_dir : null;      
 var g_injected_images_dir = typeof g_injected_images_dir !== 'undefined' ? g_injected_images_dir : null;
 var g_injected_automation = typeof g_injected_automation !== 'undefined' ? g_injected_automation : false;
 
@@ -93,58 +93,58 @@ function setTextAM(layerId, text) {
 
 // Helper: Scan All Layers via ActionManager (The "Big Gun" optimization)
 function scanLayersAM() {
-    var map = {}; 
-    
+    var map = {};
+
     try {
         var ref = new ActionReference();
         ref.putProperty(charIDToTypeID("Prpr"), charIDToTypeID("NmbL"));
-        ref.putEnumerated(charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        ref.putEnumerated(charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));      
         var desc = executeActionGet(ref);
         var count = desc.getInteger(charIDToTypeID("NmbL"));
-        
+
         logToManifest("AM Scan: Found " + count + " layers.");
-        
+
         var stack = [];
-        
+
         // AM Indexes are 1-based, from Bottom to Top.
-        // To build the hierarchy correctly (Start -> Content -> End), we must iterate Top to Bottom.
+        // To build the hierarchy correctly (Start -> Content -> End), we must iterate Top to Bottom.   
         // So we loop from count down to 1.
         for (var i = count; i >= 1; i--) {
             var layerRef = new ActionReference();
             layerRef.putIndex(charIDToTypeID("Lyr "), i);
             var layerDesc = executeActionGet(layerRef);
-            
+
             var id = layerDesc.getInteger(charIDToTypeID("LyrI"));
             var name = layerDesc.getString(charIDToTypeID("Nm  "));
-            
+
             var type = "content";
             if (layerDesc.hasKey(stringIDToTypeID("layerSection"))) {
                 var ls = typeIDToStringID(layerDesc.getEnumerationValue(stringIDToTypeID("layerSection")));
                 if (ls == "layerSectionStart") type = "groupStart";
                 else if (ls == "layerSectionEnd") type = "groupEnd";
             }
-            
+
             if (type == "groupStart") {
                 var isProduct = (name.indexOf("Product_") === 0 || name.indexOf("A4_") === 0);
-                
-                var entry = { 
+
+                var entry = {
                     name: name,
                     isProduct: isProduct,
                     id: id,
-                    flatChildren: {} 
+                    flatChildren: {}
                 };
-                
+
                 if (isProduct) {
                     map[name] = entry.flatChildren;
-                    map[name]["_self"] = id; 
+                    map[name]["_self"] = id;
                     logToManifest("AM Map: Found Group " + name + " (ID " + id + ")");
                 }
-                
+
                 stack.push(entry);
-                
+
             } else if (type == "groupEnd") {
                 if (stack.length > 0) stack.pop();
-                
+
             } else {
                 for (var s = stack.length - 1; s >= 0; s--) {
                     if (stack[s].isProduct) {
@@ -152,7 +152,7 @@ function scanLayersAM() {
                         if (!stack[s].flatChildren[key]) {
                             stack[s].flatChildren[key] = id;
                         }
-                        break; 
+                        break;
                     }
                 }
             }
@@ -188,7 +188,7 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
     var method = "Direct";
 
     layerId = layerIdMap[layerName.toLowerCase()];
-    
+
     if (!layerId) {
         layerId = layerIdMap[layerName.toLowerCase() + "_k"];
         if (layerId) method = "Suffix_K";
@@ -205,7 +205,7 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         layerId = layerIdMap[layerName.toLowerCase() + "ex"];
         if (layerId) method = "Suffix_EX_NoUnderscore";
     }
-    
+
     // NEW: Try "_A" or "_B" suffix (Common in A4 templates)
     if (!layerId) {
         layerId = layerIdMap[layerName.toLowerCase() + "_a"];
@@ -215,7 +215,7 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         layerId = layerIdMap[layerName.toLowerCase() + "_b"];
         if (layerId) method = "Suffix_B";
     }
-    
+
     if (!layerId && layerName.indexOf("EAN") >= 0) {
         var vars = ["ean", "ean:", "ean_label"];
         for (var i=0; i<vars.length; i++) {
@@ -232,17 +232,17 @@ function updateTextLayerAM(layerIdMap, layerName, text) {
         var safeText = text.toString();
         safeText = safeText.replace(/\\n/g, "\r");
         safeText = safeText.replace(/\r\n/g, "\r").replace(/\n/g, "\r");
-        
+
         logToManifest("Updating " + layerName + " (ID: " + layerId + ") with: " + safeText);
-        
+
         // Use Safer Setter
         setTextAM(layerId, safeText);
-        
+
         return { id: layerId, text: safeText };
     } else {
-        logToManifest("Failed to find layer ID for: " + layerName + " (Method: " + method + ")");
+        logToManifest("Failed to find layer ID for: " + layerName + " (Method: " + method + ")");       
     }
-    
+
     return null;
 }
 
@@ -250,7 +250,7 @@ function findImageFile(dir, basename) {
     var extensions = [".jpg", ".jpeg", ".png", ".tif", ".tiff", ".psd", ".webp"];
     var f = new File(dir.fsName + "/" + basename);
     if (f.exists) return f;
-    
+
     for (var i = 0; i < extensions.length; i++) {
         f = new File(dir.fsName + "/" + basename + extensions[i]);
         if (f.exists) return f;
@@ -262,19 +262,20 @@ function findImageFile(dir, basename) {
 
 function placeAndAlign(doc, group, placeholder, file) {
     try {
-        var bounds = placeholder.bounds; 
+        var bounds = placeholder.bounds;
         var pLeft = bounds[0].value;
         var pTop = bounds[1].value;
         var pRight = bounds[2].value;
         var pBottom = bounds[3].value;
-        
+
         var pWidth = pRight - pLeft;
         var pHeight = pBottom - pTop;
         var pCenterX = pLeft + (pWidth / 2);
         var pCenterY = pTop + (pHeight / 2);
 
+        // Ensure placeholder is active
         doc.activeLayer = placeholder;
-        
+
         var idPlc = charIDToTypeID("Plc ");
         var desc = new ActionDescriptor();
         var idnull = charIDToTypeID("null");
@@ -282,39 +283,55 @@ function placeAndAlign(doc, group, placeholder, file) {
         var idFTcs = charIDToTypeID("FTcs");
         var idQCSt = charIDToTypeID("QCSt");
         var idQcsa = charIDToTypeID("Qcsa");
-        desc.putEnumerated(idFTcs, idQCSt, idQcsa); 
-        executeAction(idPlc, desc, DialogModes.NO);
+        desc.putEnumerated(idFTcs, idQCSt, idQcsa);
         
+        try {
+            executeAction(idPlc, desc, DialogModes.NO);
+        } catch(e) {
+            logToManifest("Place Command Failed for " + file.name + ": " + e);
+            return null;
+        }
+
         var newLayer = doc.activeLayer;
-        
+
         var nBounds = newLayer.bounds;
         var nWidth = nBounds[2].value - nBounds[0].value;
         var nHeight = nBounds[3].value - nBounds[1].value;
-        
+
         if (nWidth > 0 && nHeight > 0) {
             var wRatio = pWidth / nWidth;
             var hRatio = pHeight / nHeight;
             var scale = Math.min(wRatio, hRatio) * 100;
             newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
         }
-        
+
         nBounds = newLayer.bounds;
         var nLeft = nBounds[0].value;
         var nTop = nBounds[1].value;
         var nRight = nBounds[2].value;
         var nBottom = nBounds[3].value;
-        
+
         var nCenterX = nLeft + ((nRight - nLeft) / 2);
         var nCenterY = nTop + ((nBottom - nTop) / 2);
-        
+
         var dx = pCenterX - nCenterX;
         var dy = pCenterY - nCenterY;
-        
+
         newLayer.translate(dx, dy);
+
+        // Final check: if placeholder was inside a group, the new layer might be outside 
+        // depending on placement mode. Ensure it's inside the parent of placeholder.
+        if (placeholder.parent && newLayer.parent != placeholder.parent) {
+             newLayer.move(placeholder, ElementPlacement.PLACEBEFORE);
+        }
         
         placeholder.visible = false;
-        
-    } catch(e) { }
+        return newLayer;
+
+    } catch(e) { 
+        logToManifest("placeAndAlign Critical Error: " + e);
+    }
+    return null;
 }
 
 // Helper: Set Layer Label Color
@@ -335,74 +352,97 @@ function setLayerLabelColorAM(id, colorStr) {
 
 function replaceProductImageAM(layerMap, imageNamesStr, imageDir, colorLabel) {
     if (!imageNamesStr) return;
-    
+
     var imageNames = imageNamesStr.toString().split('\n');
     var baseNames = ["image", "obraz", "photo", "packshot"];
-    
+    var suffixes = ["a", "b", "c", "d", "e"];
+
     for (var i = 0; i < imageNames.length; i++) {
         var imageName = imageNames[i];
         if (!imageName || imageName.length === 0) continue;
-        
+
         var file = findImageFile(imageDir, imageName);
         if (!file) {
             logToManifest("Image not found: " + imageName);
             continue;
         }
-        
+
         var targetId = null;
-        for (var key in layerMap) {
-            if (key == "_self") continue;
+        var currentSuffix = suffixes[i] || "";
+        
+        // 1. Try to find placeholder with specific suffix for this image index
+        if (currentSuffix) {
             for (var b=0; b<baseNames.length; b++) {
-                if (key.indexOf(baseNames[b]) >= 0) {
+                var key = baseNames[b] + "_" + currentSuffix;
+                if (layerMap[key]) {
+                    targetId = layerMap[key];
+                    break;
+                }
+                // Try without underscore
+                key = baseNames[b] + currentSuffix;
+                if (layerMap[key]) {
                     targetId = layerMap[key];
                     break;
                 }
             }
-            if (targetId) break;
         }
-        
-        if (targetId) {
-            if (i === 0) {
-                selectLayerAM(targetId);
-                var doc = app.activeDocument;
-                var placeholder = doc.activeLayer; 
-                placeAndAlign(doc, null, placeholder, file);
-                if (colorLabel) setLayerLabelColorAM(doc.activeLayer.id, colorLabel);
+
+        // 2. Fallback: Try to find ANY placeholder if this is the first image
+        if (!targetId && i === 0) {
+            for (var key in layerMap) {
+                if (key == "_self") continue;
+                for (var b=0; b<baseNames.length; b++) {
+                    if (key.indexOf(baseNames[b]) >= 0) {
+                        targetId = layerMap[key];
+                        break;
+                    }
+                }
+                if (targetId) break;
             }
+        }
+
+        if (targetId) {
+            logToManifest("Replacing Placeholder (ID: " + targetId + ") with " + imageName);
+            selectLayerAM(targetId);
+            var doc = app.activeDocument;
+            var placeholder = doc.activeLayer; 
+            var newLyr = placeAndAlign(doc, null, placeholder, file);
+            if (newLyr && colorLabel) setLayerLabelColorAM(newLyr.id, colorLabel);
         } else if (layerMap["_self"]) {
+            // 3. Fallback: Place to the side of the group if no placeholder found
             try {
                 selectLayerAM(layerMap["_self"]);
                 var doc = app.activeDocument;
                 var group = doc.activeLayer;
                 var groupBounds = group.bounds;
-                
+
                 var idPlc = charIDToTypeID("Plc ");
                 var desc = new ActionDescriptor();
                 desc.putPath(charIDToTypeID("null"), file);
                 executeAction(idPlc, desc, DialogModes.NO);
-                
+
                 var newLayer = doc.activeLayer;
                 newLayer.name = imageName;
                 if (colorLabel) setLayerLabelColorAM(newLayer.id, colorLabel);
-                
+
                 var nBounds = newLayer.bounds;
                 var nWidth = nBounds[2].value - nBounds[0].value;
                 var nHeight = nBounds[3].value - nBounds[1].value;
-                
+
                 var targetSize = 500;
                 var scale = (targetSize / Math.max(nWidth, nHeight)) * 100;
                 newLayer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
-                
+
                 var gRight = groupBounds[2].value;
                 var gTop = groupBounds[1].value;
-                
+
                 var currentBounds = newLayer.bounds;
                 var dx = (gRight + 50 + (i * 550)) - currentBounds[0].value;
                 var dy = (gTop + 50) - currentBounds[1].value;
-                
+
                 newLayer.translate(dx, dy);
                 newLayer.move(group, ElementPlacement.PLACEAFTER);
-                
+
                 logToManifest("Placed standardized image " + imageName + " to the right of " + group.name);
             } catch(e) {
                 logToManifest("Error placing image " + imageName + ": " + e);
@@ -420,7 +460,7 @@ function duplicateLayerAM(id) {
     ref.putIdentifier(charIDToTypeID("Lyr "), id);
     desc.putReference(charIDToTypeID("null"), ref);
     executeAction(charIDToTypeID("Dplc"), desc, DialogModes.NO);
-    return app.activeDocument.activeLayer.id; 
+    return app.activeDocument.activeLayer.id;
 }
 
 // Helper: Rename Layer by ID
@@ -446,7 +486,7 @@ function getLayerNameAM(id) {
 function processA4Groups(doc, plan, win) {
     var targets = [];
     var seen = {};
-    
+
     for (var i=0; i<plan.actions.length; i++) {
         var grp = plan.actions[i].group;
         if (grp.indexOf("A4_Grp_") === 0) {
@@ -456,55 +496,55 @@ function processA4Groups(doc, plan, win) {
             }
         }
     }
-    
+
     if (targets.length === 0) return false;
-    
+
     logToManifest("A4 Groups Requested: " + targets.join(", "));
-    
+
     var map = scanLayersAM();
     var templateId = null;
     var templateHeight = 0;
-    
+
     if (map["A4_01"]) templateId = map["A4_01"]["_self"];
     if (!templateId && map["A4"]) templateId = map["A4"]["_self"];
     if (!templateId && map["A4_Grp_01"]) templateId = map["A4_Grp_01"]["_self"];
-    
+
     if (!templateId) {
-        logToManifest("CRITICAL: Template Group (A4_01 or A4) not found. Skipping A4 generation.");
+        logToManifest("CRITICAL: Template Group (A4_01 or A4) not found. Skipping A4 generation.");     
         return false;
     }
-    
+
     selectLayerAM(templateId);
     var bounds = app.activeDocument.activeLayer.bounds;
     templateHeight = bounds[3].value - bounds[1].value;
-    
+
     var didChange = false;
     var padding = 100;
-    
+
     for (var i=0; i<targets.length; i++) {
         var targetName = targets[i];
         if (map[targetName]) continue;
-        
+
         if (win) {
             win.pnl.lblStatus.text = "Generating " + targetName + "...";
             win.update();
         }
-        
+
         logToManifest("Generating " + targetName + " from Template...");
         selectLayerAM(templateId);
         var newGroupId = duplicateLayerAM(templateId);
         renameLayerAM(newGroupId, targetName);
-        
+
         var offsetV = i * (templateHeight + padding);
         if (offsetV > 0) {
             translateLayerAM(newGroupId, 0, offsetV);
             logToManifest("Offsetting " + targetName + " by " + offsetV + "px");
         }
-        
+
         var parts = targetName.split("_");
         var suffix = parts[2] || "XX";
         var activeGroup = app.activeDocument.activeLayer;
-        
+
         (function recurse(layerObj, newIdx) {
              for (var k=0; k<layerObj.layers.length; k++) {
                  var child = layerObj.layers[k];
@@ -517,26 +557,34 @@ function processA4Groups(doc, plan, win) {
                  if (child.typename == "LayerSet") recurse(child, newIdx);
              }
         })(activeGroup, suffix);
-        
+
         didChange = true;
     }
-    
+
     if (didChange) setVisibleAM(templateId, false);
-    
+
     return didChange;
 }
 
-function runBuild(doc, plan) {
+function runBuild(doc, plan, planName, folderName) {
     logToManifest("runBuild Started for Page " + plan.page);
     var total = plan.actions.length;
-    
+
     var win = new Window("palette", "LetakMaster Builder");
-    win.pnl = win.add("panel", [10, 10, 440, 100], "Building Page " + plan.page);
-    win.pnl.progBar = win.pnl.add("progressbar", [20, 35, 410, 60], 0, total);
+    // Increased window height to fit plan details
+    win.pnl = win.add("panel", [10, 10, 440, 140], "Building Page " + plan.page);
+    win.pnl.progBar = win.pnl.add("progressbar", [20, 75, 410, 100], 0, total);
     win.pnl.lblStatus = win.pnl.add("statictext", [20, 20, 410, 35], "Scanning Document...");
     
-    win.show();
+    // Explicit feedback on folder and plan source
+    win.pnl.lblFolder = win.pnl.add("statictext", [20, 40, 410, 55], "Folder: " + (folderName || "Unknown"));
+    win.pnl.lblFolder.graphics.font = ScriptUI.newFont("Arial", "BoldItalic", 10);
     
+    win.pnl.lblPlan = win.add("statictext", [20, 55, 410, 70], "File: " + (planName || "Unknown"));
+    win.pnl.lblPlan.graphics.font = ScriptUI.newFont("Arial", "Italic", 9);
+
+    win.show();
+
     var isA4Mode = false;
     try {
         if (processA4Groups(doc, plan, win)) {
@@ -553,7 +601,7 @@ function runBuild(doc, plan) {
     } catch(e) {
         logToManifest("A4 Generation Error: " + e);
     }
-    
+
     logToManifest("Scanning Layers AM...");
     var docMap = scanLayersAM();
     logToManifest("Scan Complete.");
@@ -574,20 +622,20 @@ function runBuild(doc, plan) {
     function hideVariantsAM(currentGroupName, hero) {
         var id = parseInt(currentGroupName.replace("Product_", "").replace("A4_Grp_", ""), 10);
         if (currentGroupName.indexOf("Product_") === -1) return;
-        
+
         var suffixId = (id < 10) ? "0" + id : "" + id;
         var variants = ["Product_" + suffixId, "Product_" + suffixId + "_K", "Product_" + suffixId + "_EX"];
-        
+
         for (var v=0; v<variants.length; v++) {
             if (variants[v] != currentGroupName) {
                 if (docMap[variants[v]]) setVisibleAM(docMap[variants[v]]["_self"], false);
             }
         }
-        
+
         var toHide = [];
         if (hero == 2) toHide.push(id + 4);
         else if (hero == 4) { toHide.push(id + 1); toHide.push(id + 4); toHide.push(id + 5); }
-        
+
         for (var i=0; i<toHide.length; i++) {
             var hId = toHide[i];
             if (hId <= 16) {
@@ -601,7 +649,7 @@ function runBuild(doc, plan) {
     }
 
     logToManifest("Starting Action Processing (Total: " + total + ")");
-    
+
     // Cycle Colors for Visual Clarity
     var colors = ["Red", "Orange", "Yellow", "Green", "Blue", "Violet", "Gray"];
 
@@ -609,64 +657,64 @@ function runBuild(doc, plan) {
         var action = plan.actions[i];
         var groupName = action.group;
         var targetGroup = groupName;
-        
+
         // QOL: Highlight Color
         var groupColor = colors[i % colors.length];
-        
-        if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4_01"]) targetGroup = "A4_01";
-        else if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4"]) targetGroup = "A4";
-        
+
+        if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4_01"]) targetGroup = "A4_01";  
+        else if (groupName === "A4_Grp_01" && !docMap[groupName] && docMap["A4"]) targetGroup = "A4";   
+
         logToManifest("Processing Action: " + groupName + " (Target: " + targetGroup + ")");
-        
+
         if (i % 3 === 0 || i === total - 1) {
             win.pnl.progBar.value = i + 1;
             win.pnl.lblStatus.text = "Processing " + groupName + "...";
-            win.update(); 
+            win.update();
         }
-        
+
         var groupLayers = docMap[targetGroup];
         if (!groupLayers) {
             logToManifest("WARNING: Group " + targetGroup + " not found in DocMap.");
             continue;
         }
-        
+
         // Apply Color to Group
         if (groupLayers["_self"]) {
             setVisibleAM(groupLayers["_self"], true);
             setLayerLabelColorAM(groupLayers["_self"], groupColor);
         }
-        
+
         try {
-            if (targetGroup.indexOf("Product_") === 0) hideVariantsAM(targetGroup, action.hero);
-            
-            var shiftCandidates = {}; 
+            if (targetGroup.indexOf("Product_") === 0) hideVariantsAM(targetGroup, action.hero);        
+
+            var shiftCandidates = {};
             var mainTitle = null; // Store title for renaming
 
             for (var key in action.data) {
                 if (key.indexOf("image_") === 0) {
                     if (g_imagesDir) {
-                        replaceProductImageAM(groupLayers, action.data[key], g_imagesDir, groupColor);
+                        replaceProductImageAM(groupLayers, action.data[key], g_imagesDir, groupColor);  
                     }
                 } else {
                     var result = updateTextLayerAM(groupLayers, key, action.data[key]);
-                    
+
                     // Capture Main Title for renaming
                     // Matches "nazev_XXA" or just "nazev_XX"
                     if (result && key.toLowerCase().indexOf("nazev_") >= 0) {
                         var parts = key.split("_");
-                        var suffixChar = parts.length > 1 ? parts[1].slice(-1).toUpperCase() : "";
+                        var suffixChar = parts.length > 1 ? parts[1].slice(-1).toUpperCase() : "";      
                         if (suffixChar === "A" || key.toLowerCase() === "nazev_" + parts[1]) {
                             mainTitle = result.text;
                         }
                     }
-                    
+
                     if (result && key.toLowerCase().indexOf("nazev_") >= 0) {
                         var parts = key.split("_");
                         if (parts.length >= 2) {
-                            var idPart = parts[1]; 
+                            var idPart = parts[1];
                             var lastChar = idPart.charAt(idPart.length - 1).toUpperCase();
                             var baseId = idPart.substring(0, idPart.length - 1);
-                            
+
                             if (!shiftCandidates[baseId]) shiftCandidates[baseId] = { idA: null, textA: "", idB: null, textB: "" };
                             if (lastChar === "A") { shiftCandidates[baseId].idA = result.id; shiftCandidates[baseId].textA = result.text; }
                             else if (lastChar === "B") { shiftCandidates[baseId].idB = result.id; shiftCandidates[baseId].textB = result.text; }
@@ -674,7 +722,7 @@ function runBuild(doc, plan) {
                     }
                 }
             }
-            
+
             for (var baseId in shiftCandidates) {
                 var cand = shiftCandidates[baseId];
                 if (cand.idA && cand.idB) {
@@ -687,7 +735,7 @@ function runBuild(doc, plan) {
                     }
                 }
             }
-            
+
             if (action.visibility) {
                 for (var key in action.visibility) {
                     var lowerKey = key.toLowerCase();
@@ -701,7 +749,7 @@ function runBuild(doc, plan) {
                     if (layerId) setVisibleAM(layerId, action.visibility[key]);
                 }
             }
-            
+
             // QOL: Rename Group to Title
             if (mainTitle && groupLayers["_self"]) {
                 // Ensure name is safe (max length, chars)
@@ -711,12 +759,12 @@ function runBuild(doc, plan) {
                     renameLayerAM(groupLayers["_self"], safeName);
                 }
             }
-            
+
         } catch(e) {
             logToManifest("Error processing group " + groupName + ": " + e);
         }
     }
-    
+
     win.close();
 }
 
@@ -726,7 +774,7 @@ function main() {
     app.displayDialogs = DialogModes.NO;
     var originalRulerUnits = app.preferences.rulerUnits;
     app.preferences.rulerUnits = Units.PIXELS;
-    
+
     try {
         if (g_injected_images_dir) {
             var d = new Folder(g_injected_images_dir);
@@ -756,7 +804,7 @@ function main() {
                 if (result) mode = "active";
             }
         }
-        
+
         logToManifest("Mode: " + mode);
         if (mode == "active") {
             processDocument(app.activeDocument);
@@ -786,25 +834,25 @@ function updateAllTextLayers() {
 function processDocument(doc) {
     app.activeDocument = doc;
     updateAllTextLayers();
-    
+
     var docName = doc.name;
     var pageNum = null;
     var match = docName.match(/Page\s*(\d+)/i);
-    
+
     if (match && match[1]) {
         pageNum = parseInt(match[1], 10);
     }
-    
+
     if (!pageNum || isNaN(pageNum)) {
         alert("Skipping '" + docName + "': Could not detect 'Page XX' in filename.");
         return;
     }
-    
+
     var jsonName = "build_page_" + pageNum + ".json";
     var scriptPath = File($.fileName).parent.fsName;
-    var projectRoot = new Folder(scriptPath + "/.."); 
+    var projectRoot = new Folder(scriptPath + "/..");
     var jsonFile = null;
-    
+
     if (g_injected_json_dir) {
         var d = new Folder(g_injected_json_dir);
         if (d.exists) {
@@ -812,7 +860,7 @@ function processDocument(doc) {
              if (f.exists) jsonFile = f;
         }
     }
-    
+
     if (!jsonFile && g_config.json_dir) {
         var d = new Folder(g_config.json_dir);
         if (d.exists) {
@@ -820,21 +868,21 @@ function processDocument(doc) {
              if (f.exists) jsonFile = f;
         }
     }
-    
+
     if (!jsonFile) {
         var plansRoot = new Folder(projectRoot.fsName + "/workspaces/build_plans");
         if (plansRoot.exists) {
             // New Scheme: YYMMDD_HHMM_...
             var allFolders = plansRoot.getFiles(function(f) { return f instanceof Folder; });
             var candidateFolders = [];
-            
+
             for (var k = 0; k < allFolders.length; k++) {
                 // Filter for folders starting with digits (timestamp)
                 if (allFolders[k].name.match(/^\d{6}_\d{4}_/)) {
                     candidateFolders.push(allFolders[k]);
                 }
             }
-            
+
             if (candidateFolders.length > 0) {
                 candidateFolders.sort(); // Lexicographical sort works for YYMMDD
                 var selectedFolder = candidateFolders[candidateFolders.length - 1];
@@ -849,7 +897,7 @@ function processDocument(doc) {
                 var stateFolders = plansRoot.getFiles("state_*");
                 if (stateFolders.length > 0) {
                     stateFolders.sort();
-                    var selectedFolder = stateFolders[stateFolders.length - 1]; 
+                    var selectedFolder = stateFolders[stateFolders.length - 1];
                     if (selectedFolder) {
                         var potentialFile = new File(selectedFolder.fsName + "/" + jsonName);
                         if (potentialFile.exists) jsonFile = potentialFile;
@@ -858,7 +906,7 @@ function processDocument(doc) {
             }
         }
     }
-    
+
     if (!jsonFile) {
         var directPaths = [
             doc.path + "/" + jsonName,
@@ -870,12 +918,15 @@ function processDocument(doc) {
             if (f.exists) { jsonFile = f; break; }
         }
     }
-    
+
     if (!jsonFile) {
-        alert("Could not auto-locate " + jsonName + ".\nPlease select the Build Plan JSON file manually.");
+        // OVERRIDE: Allow manual selection if auto-sniff fails
+        var sniffMsg = "Could not auto-locate Plan for Page " + pageNum + ".\n\n" +
+                       "Checked Folder: " + (g_injected_json_dir ? g_injected_json_dir : "N/A");
+        alert(sniffMsg + "\n\nPlease select the Build Plan JSON file manually.");
         jsonFile = File.openDialog("Select " + jsonName, "*.json");
     }
-    
+
     if (!jsonFile) return;
 
     var plan = readJSON(jsonFile.fsName);
@@ -883,9 +934,10 @@ function processDocument(doc) {
     if (!g_imagesDir) {
         g_imagesDir = Folder.selectDialog("Select the directory containing Product Images");
     }
-    
+
     g_manifest = [];
-    doc.suspendHistory("Build Page " + pageNum, "runBuild(doc, plan)");
+    var folderName = jsonFile.parent.name;
+    doc.suspendHistory("Build Page " + pageNum, "runBuild(doc, plan, '" + jsonFile.name + "', '" + folderName + "')");
     saveManifest(jsonFile.fsName, pageNum);
 }
 

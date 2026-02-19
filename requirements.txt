@@ -13,3 +13,4 @@ python-multipart
 websockets
 psycopg2-binary
 requests
+pandas
